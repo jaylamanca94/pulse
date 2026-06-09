@@ -1,0 +1,13 @@
+{
+  "name": "pulse",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public health and wellness dashboard for live health, environmental, and population signals.",
+  "scripts": {
+    "dev": "npx vercel dev",
+    "check": "node --check app.js && node --check config.js && node --check api/airnow.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

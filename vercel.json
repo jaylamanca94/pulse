@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/airnow.js": {
+      "runtime": "nodejs22.x"
+    }
+  }
+}

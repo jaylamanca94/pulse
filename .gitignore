@@ -1,0 +1,7 @@
+.vercel
+.vercel-home
+node_modules
+.npm-cache
+.env
+.env.local
+.DS_Store
