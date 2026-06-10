@@ -111,9 +111,12 @@ const loadWhoNotices = async () => {
     setBusy("[data-who-list]", true);
     const data = await fetchJson(API.who);
     const notices = Array.isArray(data.notices) ? data.notices : [];
-    renderNotices(notices.length ? notices : fallbackNotices, notices.length > 0);
+    const isLive = notices.length > 0;
+    renderNotices(isLive ? notices : fallbackNotices, isLive);
+    return isLive;
   } catch (error) {
     renderNotices(fallbackNotices, false);
+    return false;
   } finally {
     setBusy("[data-who-list]", false);
   }
@@ -154,9 +157,12 @@ const loadAirQuality = async () => {
   try {
     const data = await fetchJson(buildAirNowUrl());
     const readings = Array.isArray(data.readings) ? data.readings : [];
-    renderAirQuality(normalizeAirNowReading(readings), readings.length > 0);
+    const isLive = readings.length > 0;
+    renderAirQuality(normalizeAirNowReading(readings), isLive);
+    return isLive;
   } catch (error) {
     renderAirQuality(fallbackAirQuality, false);
+    return false;
   }
 };
 
@@ -174,14 +180,17 @@ const loadDashboard = async () => {
   setRefreshState(true);
   setText("[data-dashboard-status]", "Refreshing sources");
 
-  const results = await Promise.allSettled([
-    loadWhoNotices(),
-    loadAirQuality()
-  ]);
-  const failedCount = results.filter((result) => result.status === "rejected").length;
+  try {
+    const results = await Promise.allSettled([
+      loadWhoNotices(),
+      loadAirQuality()
+    ]);
+    const fallbackCount = results.filter((result) => result.status === "rejected" || !result.value).length;
 
-  setText("[data-dashboard-status]", failedCount ? "Some sources unavailable" : "Sources refreshed");
-  setRefreshState(false);
+    setText("[data-dashboard-status]", fallbackCount ? "Some sources unavailable" : "Sources refreshed");
+  } finally {
+    setRefreshState(false);
+  }
 };
 
 document.querySelector("#refreshButton")?.addEventListener("click", loadDashboard);
