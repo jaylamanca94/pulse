@@ -6,7 +6,7 @@ This file is intentionally separate because design standards and utilities will 
 
 ## Product Feel
 
-The interface should feel quiet, personal, practical, and easy to scan.
+The interface should feel quiet, practical, trustworthy, and easy to scan during a public health event.
 
 - Prefer Bootstrap conventions before custom UI patterns.
 - Keep visual decisions simple enough for a solo product builder to maintain.
@@ -14,6 +14,8 @@ The interface should feel quiet, personal, practical, and easy to scan.
 - Use familiar, predictable interface patterns.
 - Prioritize clarity, speed, and maintainability over visual novelty.
 - Avoid adding decorative complexity unless it directly improves the product experience.
+- Make update timestamps, source attribution, location, geographic level, and severity easy to find.
+- Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 
 ## UI Foundation
 

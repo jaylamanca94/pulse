@@ -3,10 +3,23 @@
 ## Goals
 
 - Help users see the health of the world.
-- Turn live health, environmental, and population data into actionable insights.
-- Start with official public sources for disease activity, outbreak reports, air quality, healthcare access, and community well-being.
+- Give people a clear place to understand public health and disease outbreak activity when something is happening near them or in a place they care about.
+- Bring the clarity of COVID-era case trackers, maps, county/state/country views, and update timestamps to a broader set of public health outbreaks and disease signals.
+- Turn live health, environmental, and population data into clear situational awareness.
+- Start with official public sources for disease activity, outbreak reports, case counts, air quality, healthcare access, and community well-being.
 - Keep the product quiet, practical, and maintainable.
 - Start with the smallest working dashboard before adding integrations.
+
+## Product Positioning
+
+Pulse is an event-driven public health reference dashboard, not a daily wellness app. Users should be able to open it during an outbreak, public health event, or emerging disease concern and quickly answer:
+
+- What is happening?
+- Where is it happening?
+- How severe or widespread is it?
+- When was the data last updated?
+- Which source is reporting it?
+- What level of geography is available, such as country, state, county, or local area?
 
 ## Scope
 
@@ -39,11 +52,14 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Use the product foundation colors and spacing scale.
 - Favor official public health sources before third-party aggregators.
 - Keep positioning broad enough for local, national, and global health signals.
+- Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
+- Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 
 ## Roadmap
 
 - Add live AirNow API key in deployment environment variables.
 - Deploy to Vercel.
+- Add outbreak-focused geography views, beginning with the highest-quality public source available.
 - Add user-selectable location for air quality observations.
 - Add API fetch and normalization layer for each source category.
 - Add source attribution and freshness timestamps.

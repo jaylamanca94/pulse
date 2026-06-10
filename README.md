@@ -1,6 +1,6 @@
 # Pulse
 
-Pulse is a public health and wellness dashboard that turns live health, environmental, and population data into actionable insights.
+Pulse is an event-driven public health dashboard for understanding outbreaks, disease activity, environmental health signals, and population-level risk when something is happening near you or in a place you care about.
 
 Tagline: See the health of the world.
 
