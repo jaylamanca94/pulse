@@ -58,6 +58,8 @@ module.exports = async (request, response) => {
   try {
     const data = await requestJson(`${AIRNOW_BASE_URL}?${params.toString()}`);
     const payload = {
+      cacheSeconds: AIRNOW_CACHE_SECONDS,
+      fetchedAt: new Date().toISOString(),
       status: "live",
       source: "AirNow",
       zipCode,

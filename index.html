@@ -166,23 +166,67 @@
 
         <div class="col-lg-4">
           <article class="content-surface h-100">
-            <h2 class="section-title">Source roadmap</h2>
-            <ul class="source-list">
+            <h2 class="section-title">Source coverage</h2>
+            <ul class="source-list source-detail-list">
               <li>
-                <span class="source-status is-live">Live</span>
-                <span>WHO Disease Outbreak News</span>
+                <div class="source-row-head">
+                  <span class="source-status" data-who-source-status>Loading</span>
+                  <span class="source-name">WHO Disease Outbreak News</span>
+                </div>
+                <dl class="source-meta-grid">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd>Global public health events</dd>
+                  </div>
+                  <div>
+                    <dt>Freshness</dt>
+                    <dd data-who-source-freshness>Checking proxy</dd>
+                  </div>
+                  <div>
+                    <dt>Caveat</dt>
+                    <dd>Official notices, not exhaustive surveillance</dd>
+                  </div>
+                </dl>
               </li>
               <li>
-                <span class="source-status" data-airnow-status>Ready</span>
-                <span>AirNow current observations</span>
+                <div class="source-row-head">
+                  <span class="source-status" data-airnow-source-status>Ready</span>
+                  <span class="source-name">AirNow current observations</span>
+                </div>
+                <dl class="source-meta-grid">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd>ZIP 10001, 25 mile radius</dd>
+                  </div>
+                  <div>
+                    <dt>Freshness</dt>
+                    <dd data-airnow-source-freshness>Server API key required</dd>
+                  </div>
+                  <div>
+                    <dt>Caveat</dt>
+                    <dd>Preliminary AQI observations when configured</dd>
+                  </div>
+                </dl>
               </li>
               <li>
-                <span class="source-status">Next</span>
-                <span>CDC NORS outbreak data</span>
-              </li>
-              <li>
-                <span class="source-status">Later</span>
-                <span>CDC environmental tracking</span>
+                <div class="source-row-head">
+                  <span class="source-status">Sample</span>
+                  <span class="source-name">Pulse prototype baseline</span>
+                </div>
+                <dl class="source-meta-grid">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd>Planned CDC, access, and well-being metrics</dd>
+                  </div>
+                  <div>
+                    <dt>Freshness</dt>
+                    <dd>Static dashboard values</dd>
+                  </div>
+                  <div>
+                    <dt>Caveat</dt>
+                    <dd>Illustrative until source wiring is complete</dd>
+                  </div>
+                </dl>
               </li>
             </ul>
           </article>

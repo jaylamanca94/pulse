@@ -37,6 +37,41 @@ const setBusy = (selector, value) => {
   if (element) element.setAttribute("aria-busy", String(value));
 };
 
+const formatCheckedAt = (isoString) => {
+  if (!isoString) return "Checked this session";
+
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return "Checked this session";
+
+  return `Checked ${new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(date)}`;
+};
+
+const formatCacheWindow = (seconds) => {
+  const duration = Number(seconds);
+  if (!Number.isFinite(duration) || duration <= 0) return "";
+
+  const minutes = Math.round(duration / 60);
+  return `${minutes} min cache`;
+};
+
+const joinDetails = (...values) => values.filter(Boolean).join("; ");
+
+const setSourceDetail = (sourceKey, detail) => {
+  const status = document.querySelector(`[data-${sourceKey}-source-status]`);
+  if (status) {
+    status.textContent = detail.status;
+    status.classList.toggle("is-live", Boolean(detail.isLive));
+    status.classList.toggle("is-warning", Boolean(detail.isWarning));
+  }
+
+  setText(`[data-${sourceKey}-source-freshness]`, detail.freshness);
+};
+
 const fetchJson = async (url) => {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), SOURCE_TIMEOUT_MS);
@@ -69,7 +104,7 @@ const formatNotice = (notice) => {
   };
 };
 
-const renderNotices = (notices, isLive) => {
+const renderNotices = (notices, isLive, sourceMeta = {}) => {
   const list = document.querySelector("[data-who-list]");
   if (!list) return;
 
@@ -102,8 +137,15 @@ const renderNotices = (notices, isLive) => {
 
   setText("[data-who-count]", String(notices.length));
   setText("[data-who-note]", isLive ? "Live WHO notices" : "Fallback sample");
-  setText("[data-status-badge]", isLive ? "Live source" : "Sample fallback");
   setText("[data-who-updated]", isLive ? "WHO proxy cache" : "Fallback data");
+  setSourceDetail("who", {
+    freshness: isLive
+      ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+      : "Using local fallback notice",
+    isLive,
+    isWarning: !isLive,
+    status: isLive ? "Live" : "Fallback"
+  });
 };
 
 const loadWhoNotices = async () => {
@@ -112,7 +154,7 @@ const loadWhoNotices = async () => {
     const data = await fetchJson(API.who);
     const notices = Array.isArray(data.notices) ? data.notices : [];
     const isLive = notices.length > 0;
-    renderNotices(isLive ? notices : fallbackNotices, isLive);
+    renderNotices(isLive ? notices : fallbackNotices, isLive, data);
     return isLive;
   } catch (error) {
     renderNotices(fallbackNotices, false);
@@ -131,15 +173,17 @@ const buildAirNowUrl = () => {
   return `${API.airnow}?${params.toString()}`;
 };
 
-const renderAirQuality = (reading, isLive) => {
+const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${reading.category} near ${reading.area}` : reading.category);
-  setText("[data-airnow-status]", isLive ? "Live" : "Ready");
-
-  const status = document.querySelector("[data-airnow-status]");
-  if (status) {
-    status.classList.toggle("is-live", isLive);
-  }
+  setSourceDetail("airnow", {
+    freshness: isLive
+      ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+      : "Server API key required for live AQI",
+    isLive,
+    isWarning: !isLive,
+    status: isLive ? "Live" : "Ready"
+  });
 };
 
 const normalizeAirNowReading = (items) => {
@@ -158,7 +202,7 @@ const loadAirQuality = async () => {
     const data = await fetchJson(buildAirNowUrl());
     const readings = Array.isArray(data.readings) ? data.readings : [];
     const isLive = readings.length > 0;
-    renderAirQuality(normalizeAirNowReading(readings), isLive);
+    renderAirQuality(normalizeAirNowReading(readings), isLive, data);
     return isLive;
   } catch (error) {
     renderAirQuality(fallbackAirQuality, false);
@@ -186,8 +230,10 @@ const loadDashboard = async () => {
       loadAirQuality()
     ]);
     const fallbackCount = results.filter((result) => result.status === "rejected" || !result.value).length;
+    const liveCount = results.length - fallbackCount;
 
     setText("[data-dashboard-status]", fallbackCount ? "Some sources unavailable" : "Sources refreshed");
+    setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Sample fallback");
   } finally {
     setRefreshState(false);
   }

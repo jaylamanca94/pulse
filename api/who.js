@@ -46,6 +46,8 @@ function normalizeWhoPayload(payload) {
     .slice(0, 5);
 
   return {
+    cacheSeconds: WHO_CACHE_SECONDS,
+    fetchedAt: new Date().toISOString(),
     notices,
     source: "WHO Disease Outbreak News"
   };

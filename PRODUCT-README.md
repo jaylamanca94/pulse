@@ -32,6 +32,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - Refresh action for live source checks
+- Source coverage rows that show status, scope, freshness, and caveats for live and sample data
 - Signal trend snapshot
 - Priority list for first public data areas
 - Sample data label so the prototype does not imply live tracking
@@ -53,6 +54,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Favor official public health sources before third-party aggregators.
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
+- Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 
 ## Roadmap
