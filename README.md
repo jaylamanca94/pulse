@@ -11,14 +11,14 @@ Tagline: See the health of the world.
 - Font Awesome Free via CDN
 - WHO Disease Outbreak News public API
 - AirNow current observations API, when configured
-- Vercel Serverless Functions for API-key-backed sources
+- Vercel Serverless Functions for cached public and API-key-backed sources
 
 ## Planned Data Sources
 
 - CDC National Notifiable Diseases Surveillance System data
 - CDC National Outbreak Reporting System data
-- WHO Disease Outbreak News: `https://www.who.int/api/hubs/diseaseoutbreaknews`
-- AirNow current observations: `https://www.airnowapi.org/aq/observation/zipCode/current/`
+- WHO Disease Outbreak News, proxied through `/api/who`
+- AirNow current observations, proxied through `/api/airnow`
 - Healthcare access and community well-being datasets
 
 ## Configuration
@@ -32,6 +32,8 @@ window.PULSE_CONFIG = {
 };
 ```
 
+WHO notices are loaded through `/api/who`, which normalizes and caches the public source response.
+
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 
 ## Local Setup
@@ -40,6 +42,18 @@ Install dependencies when working with the serverless API route:
 
 ```sh
 npm install
+```
+
+Create a local environment file:
+
+```sh
+cp .env.example .env.local
+```
+
+Add your AirNow key to `.env.local` when available:
+
+```text
+AIRNOW_API_KEY=your_key_here
 ```
 
 For the full local app with `/api/airnow`:
@@ -70,13 +84,26 @@ npm run check
 
 ## File Overview
 
+- `AGENT-README.md` - Pulse product-agent workflow, approval rules, work modes, and output format
 - `PRODUCT-README.md` - Pulse mission, goals, scope, decisions, roadmap, and known limitations
+- `DESIGN-README.md` - Pulse design standards, UI utilities, and interaction guidance
 - `index.html` - dashboard markup
 - `styles.css` - dashboard styling
 - `app.js` - frontend data loading and rendering
 - `config.js` - optional static prototype API configuration
+- `api/_pulse.js` - shared API helper, timeout, response, and cache utilities
+- `api/who.js` - serverless WHO Disease Outbreak News proxy
 - `api/airnow.js` - serverless AirNow proxy
 - `vercel.json` - Vercel function runtime configuration
+
+## Caching
+
+The serverless API routes include lightweight in-memory and Vercel edge caching:
+
+- WHO Disease Outbreak News: 30 minutes
+- AirNow current observations: 15 minutes
+
+This reduces rate-limit pressure and keeps the dashboard usable during normal traffic. The in-memory cache is per warm function instance and may reset.
 
 ## Deployment
 

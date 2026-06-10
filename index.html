@@ -17,7 +17,12 @@
           <p class="eyebrow mb-1">Today</p>
           <h1 class="page-title mb-0">Pulse</h1>
         </div>
-        <span class="sample-badge" data-status-badge>Loading sources</span>
+        <div class="header-actions">
+          <span class="sample-badge" data-status-badge>Loading sources</span>
+          <button class="btn btn-outline-secondary btn-sm" id="refreshButton" type="button">
+            <i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh
+          </button>
+        </div>
       </header>
 
       <section class="summary-surface" aria-labelledby="summary-title">
@@ -39,7 +44,7 @@
       <section aria-labelledby="metrics-title">
         <div class="section-heading">
           <h2 id="metrics-title" class="section-title mb-0">Signal sources</h2>
-          <span class="small text-secondary">Prototype snapshot</span>
+          <span class="small text-secondary" data-dashboard-status>Loading live sources</span>
         </div>
 
         <div class="row g-4">

@@ -1,13 +1,33 @@
-const AIRNOW_BASE_URL = "https://www.airnowapi.org/aq/observation/zipCode/current/";
+const {
+  getCached,
+  requestJson,
+  sendJson,
+  setCached
+} = require("./_pulse");
 
-const sendJson = (response, statusCode, payload) => {
-  response.statusCode = statusCode;
-  response.setHeader("Content-Type", "application/json");
-  response.setHeader("Cache-Control", "s-maxage=900, stale-while-revalidate=1800");
-  response.end(JSON.stringify(payload));
-};
+const AIRNOW_BASE_URL = "https://www.airnowapi.org/aq/observation/zipCode/current/";
+const AIRNOW_CACHE_SECONDS = 60 * 15;
+
+function normalizeZipCode(value) {
+  return /^\d{5}$/.test(value) ? value : "10001";
+}
+
+function normalizeDistance(value) {
+  const distance = Number(value);
+  return Number.isFinite(distance) && distance > 0 && distance <= 250 ? String(Math.round(distance)) : "25";
+}
 
 module.exports = async (request, response) => {
+  if (request.method !== "GET") {
+    sendJson(response, 405, {
+      error: {
+        code: "METHOD_NOT_ALLOWED",
+        message: "Use GET for this endpoint."
+      }
+    });
+    return;
+  }
+
   const apiKey = process.env.AIRNOW_API_KEY;
 
   if (!apiKey) {
@@ -18,8 +38,16 @@ module.exports = async (request, response) => {
     return;
   }
 
-  const zipCode = request.query.zipCode || "10001";
-  const distance = request.query.distance || "25";
+  const zipCode = normalizeZipCode(request.query.zipCode || "10001");
+  const distance = normalizeDistance(request.query.distance || "25");
+  const cacheKey = `airnow:${zipCode}:${distance}`;
+  const cached = getCached(cacheKey);
+
+  if (cached) {
+    sendJson(response, 200, cached, AIRNOW_CACHE_SECONDS);
+    return;
+  }
+
   const params = new URLSearchParams({
     format: "application/json",
     zipCode,
@@ -28,26 +56,23 @@ module.exports = async (request, response) => {
   });
 
   try {
-    const airnowResponse = await fetch(`${AIRNOW_BASE_URL}?${params.toString()}`);
-
-    if (!airnowResponse.ok) {
-      sendJson(response, airnowResponse.status, {
-        status: "error",
-        message: "AirNow request failed."
-      });
-      return;
-    }
-
-    const data = await airnowResponse.json();
-    sendJson(response, 200, {
+    const data = await requestJson(`${AIRNOW_BASE_URL}?${params.toString()}`);
+    const payload = {
       status: "live",
       source: "AirNow",
+      zipCode,
+      distance,
       readings: Array.isArray(data) ? data : []
-    });
+    };
+
+    setCached(cacheKey, payload, AIRNOW_CACHE_SECONDS);
+    sendJson(response, 200, payload, AIRNOW_CACHE_SECONDS);
   } catch (error) {
-    sendJson(response, 502, {
-      status: "error",
-      message: "AirNow request could not be completed."
+    sendJson(response, error.status || 502, error.payload || {
+      error: {
+        code: "AIRNOW_PROXY_ERROR",
+        message: "AirNow request could not be completed."
+      }
     });
   }
 };

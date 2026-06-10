@@ -1,14 +1,17 @@
-const WHO_DON_URL =
-  "https://www.who.int/api/hubs/diseaseoutbreaknews?$orderby=PublicationDateAndTime%20desc&$top=5";
+const API = {
+  who: "/api/who",
+  airnow: "/api/airnow"
+};
 
 const config = window.PULSE_CONFIG || {};
+const SOURCE_TIMEOUT_MS = 10000;
 
 const fallbackNotices = [
   {
-    Title: "WHO Disease Outbreak News source ready",
-    FormattedDate: "Fallback",
-    Summary: "Live notices will appear here when the public WHO endpoint is reachable.",
-    ItemDefaultUrl: "/emergencies/disease-outbreak-news"
+    title: "WHO Disease Outbreak News source ready",
+    date: "Fallback",
+    summary: "Live notices will appear here when the public WHO endpoint is reachable.",
+    url: "https://www.who.int/emergencies/disease-outbreak-news"
   }
 ];
 
@@ -29,15 +32,38 @@ const setText = (selector, value) => {
   if (element) element.textContent = value;
 };
 
+const setBusy = (selector, value) => {
+  const element = document.querySelector(selector);
+  if (element) element.setAttribute("aria-busy", String(value));
+};
+
+const fetchJson = async (url) => {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), SOURCE_TIMEOUT_MS);
+
+  const response = await fetch(url, {
+    signal: controller.signal
+  }).finally(() => window.clearTimeout(timeoutId));
+
+  if (!response.ok) {
+    const error = new Error(`Request failed with status ${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
 const formatNotice = (notice) => {
-  const summary = stripHtml(notice.Summary || notice.Overview);
-  const url = notice.ItemDefaultUrl?.startsWith("http")
-    ? notice.ItemDefaultUrl
-    : `https://www.who.int${notice.ItemDefaultUrl || "/emergencies/disease-outbreak-news"}`;
+  const summary = notice.summary || stripHtml(notice.Summary || notice.Overview);
+  const sourceUrl = notice.url || notice.ItemDefaultUrl || "/emergencies/disease-outbreak-news";
+  const url = sourceUrl.startsWith("http")
+    ? sourceUrl
+    : `https://www.who.int${sourceUrl}`;
 
   return {
-    title: notice.Title || "Untitled WHO notice",
-    date: notice.FormattedDate || "Date unavailable",
+    title: notice.title || notice.Title || "Untitled WHO notice",
+    date: notice.date || notice.FormattedDate || "Date unavailable",
     summary: summary || "No summary available from source.",
     url
   };
@@ -77,19 +103,19 @@ const renderNotices = (notices, isLive) => {
   setText("[data-who-count]", String(notices.length));
   setText("[data-who-note]", isLive ? "Live WHO notices" : "Fallback sample");
   setText("[data-status-badge]", isLive ? "Live source" : "Sample fallback");
-  setText("[data-who-updated]", isLive ? "WHO public API" : "Fallback data");
+  setText("[data-who-updated]", isLive ? "WHO proxy cache" : "Fallback data");
 };
 
 const loadWhoNotices = async () => {
   try {
-    const response = await fetch(WHO_DON_URL);
-    if (!response.ok) throw new Error(`WHO request failed: ${response.status}`);
-
-    const data = await response.json();
-    const notices = Array.isArray(data.value) ? data.value : [];
+    setBusy("[data-who-list]", true);
+    const data = await fetchJson(API.who);
+    const notices = Array.isArray(data.notices) ? data.notices : [];
     renderNotices(notices.length ? notices : fallbackNotices, notices.length > 0);
   } catch (error) {
     renderNotices(fallbackNotices, false);
+  } finally {
+    setBusy("[data-who-list]", false);
   }
 };
 
@@ -99,7 +125,7 @@ const buildAirNowUrl = () => {
     distance: String(config.AIRNOW_DISTANCE_MILES || 25)
   });
 
-  return `/api/airnow?${params.toString()}`;
+  return `${API.airnow}?${params.toString()}`;
 };
 
 const renderAirQuality = (reading, isLive) => {
@@ -126,10 +152,7 @@ const normalizeAirNowReading = (items) => {
 
 const loadAirQuality = async () => {
   try {
-    const response = await fetch(buildAirNowUrl());
-    if (!response.ok) throw new Error(`AirNow request failed: ${response.status}`);
-
-    const data = await response.json();
+    const data = await fetchJson(buildAirNowUrl());
     const readings = Array.isArray(data.readings) ? data.readings : [];
     renderAirQuality(normalizeAirNowReading(readings), readings.length > 0);
   } catch (error) {
@@ -137,5 +160,29 @@ const loadAirQuality = async () => {
   }
 };
 
-loadWhoNotices();
-loadAirQuality();
+const setRefreshState = (isRefreshing) => {
+  const button = document.querySelector("#refreshButton");
+  if (!button) return;
+
+  button.disabled = isRefreshing;
+  button.innerHTML = isRefreshing
+    ? `<i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refreshing`
+    : `<i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh`;
+};
+
+const loadDashboard = async () => {
+  setRefreshState(true);
+  setText("[data-dashboard-status]", "Refreshing sources");
+
+  const results = await Promise.allSettled([
+    loadWhoNotices(),
+    loadAirQuality()
+  ]);
+  const failedCount = results.filter((result) => result.status === "rejected").length;
+
+  setText("[data-dashboard-status]", failedCount ? "Some sources unavailable" : "Sources refreshed");
+  setRefreshState(false);
+};
+
+document.querySelector("#refreshButton")?.addEventListener("click", loadDashboard);
+loadDashboard();

@@ -55,6 +55,14 @@ body {
   gap: 16px;
 }
 
+.header-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .page-title {
   font-size: 40px;
   line-height: 48px;
@@ -203,6 +211,14 @@ body {
   width: 20px;
 }
 
+.btn {
+  border-radius: 8px;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(47, 111, 98, 0.25);
+}
+
 .notice-list,
 .source-list {
   display: grid;
@@ -285,6 +301,10 @@ body {
   .app-header,
   .section-heading {
     align-items: flex-start;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
   }
 
   .page-title {
