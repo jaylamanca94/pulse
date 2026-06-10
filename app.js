@@ -17,7 +17,7 @@ const fallbackNotices = [
 
 const fallbackAirQuality = {
   aqi: "--",
-  category: "AirNow key not configured",
+  category: "API key needed for live AQI",
   area: "AirNow current observations"
 };
 
@@ -83,6 +83,7 @@ const fetchJson = async (url) => {
   if (!response.ok) {
     const error = new Error(`Request failed with status ${response.status}`);
     error.status = response.status;
+    error.payload = await response.json().catch(() => null);
     throw error;
   }
 
@@ -179,10 +180,10 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
-      : "Server API key required for live AQI",
+      : sourceMeta.freshness || "Add server API key for live AQI",
     isLive,
     isWarning: !isLive,
-    status: isLive ? "Live" : "Ready"
+    status: isLive ? "Live" : sourceMeta.statusLabel || "Needs key"
   });
 };
 
@@ -205,7 +206,14 @@ const loadAirQuality = async () => {
     renderAirQuality(normalizeAirNowReading(readings), isLive, data);
     return isLive;
   } catch (error) {
-    renderAirQuality(fallbackAirQuality, false);
+    const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";
+    renderAirQuality({
+      ...fallbackAirQuality,
+      category: isUnconfigured ? fallbackAirQuality.category : "Live AQI unavailable"
+    }, false, {
+      freshness: isUnconfigured ? "Add server API key for live AQI" : "Try refreshing again later",
+      statusLabel: isUnconfigured ? "Needs key" : "Unavailable"
+    });
     return false;
   }
 };
@@ -232,8 +240,8 @@ const loadDashboard = async () => {
     const fallbackCount = results.filter((result) => result.status === "rejected" || !result.value).length;
     const liveCount = results.length - fallbackCount;
 
-    setText("[data-dashboard-status]", fallbackCount ? "Some sources unavailable" : "Sources refreshed");
-    setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Sample fallback");
+    setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : "Sources refreshed");
+    setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data");
   } finally {
     setRefreshState(false);
   }

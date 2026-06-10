@@ -19,7 +19,7 @@
         </div>
         <div class="header-actions">
           <span class="sample-badge" data-status-badge>Loading sources</span>
-          <button class="btn btn-outline-secondary btn-sm" id="refreshButton" type="button">
+          <button class="btn btn-outline-secondary btn-sm" id="refreshButton" type="button" aria-label="Refresh source data">
             <i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh
           </button>
         </div>
@@ -44,7 +44,7 @@
       <section aria-labelledby="metrics-title">
         <div class="section-heading">
           <h2 id="metrics-title" class="section-title mb-0">Signal sources</h2>
-          <span class="small text-secondary" data-dashboard-status>Loading live sources</span>
+          <span class="small text-secondary" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
         </div>
 
         <div class="row g-4">
@@ -74,7 +74,7 @@
               <div>
                 <p class="metric-label">Air quality</p>
                 <p class="metric-value" data-airnow-aqi>--</p>
-                <p class="metric-note text-secondary" data-airnow-note>AirNow key not configured</p>
+                <p class="metric-note text-secondary" data-airnow-note>API key needed for live AQI</p>
               </div>
             </article>
           </div>
@@ -158,7 +158,7 @@
               <h2 class="section-title mb-0">Recent WHO notices</h2>
               <span class="small text-secondary" data-who-updated>Source loading</span>
             </div>
-            <div class="notice-list" data-who-list>
+            <div class="notice-list" data-who-list aria-live="polite">
               <p class="empty-copy mb-0">Checking WHO Disease Outbreak News.</p>
             </div>
           </article>
@@ -190,7 +190,7 @@
               </li>
               <li>
                 <div class="source-row-head">
-                  <span class="source-status" data-airnow-source-status>Ready</span>
+                  <span class="source-status" data-airnow-source-status>Needs key</span>
                   <span class="source-name">AirNow current observations</span>
                 </div>
                 <dl class="source-meta-grid">
@@ -200,7 +200,7 @@
                   </div>
                   <div>
                     <dt>Freshness</dt>
-                    <dd data-airnow-source-freshness>Server API key required</dd>
+                    <dd data-airnow-source-freshness>Add server API key for live AQI</dd>
                   </div>
                   <div>
                     <dt>Caveat</dt>
