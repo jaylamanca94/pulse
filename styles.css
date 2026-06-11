@@ -68,6 +68,14 @@ body {
   justify-content: flex-end;
 }
 
+.dashboard-status-wrap {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
 .page-title {
   font-size: 40px;
   line-height: 48px;
@@ -429,6 +437,11 @@ body {
   .header-actions {
     justify-content: flex-start;
     width: 100%;
+  }
+
+  .dashboard-status-wrap {
+    align-items: flex-start;
+    text-align: left;
   }
 
   .page-title {

@@ -42,6 +42,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
 - Refresh action for live source checks
+- Dashboard-level last-checked timestamp after source refresh
 - Source coverage rows that show status, scope, freshness, caveats, and official-source links for live public data
 - Distinct no-data source state when a configured source responds without nearby observations
 - Signal trend snapshot

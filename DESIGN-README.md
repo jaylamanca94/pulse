@@ -15,6 +15,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Prioritize clarity, speed, and maintainability over visual novelty.
 - Avoid adding decorative complexity unless it directly improves the product experience.
 - Make update timestamps, source attribution, location, geographic level, and severity easy to find.
+- Show dashboard-level source check timestamps near refresh status so users can judge recency at a glance.
 - Use compact source detail rows when a data surface mixes live, ready, no-data, fallback, or sample states.
 - Keep official-source links close to source status, freshness, and caveats when the dashboard depends on external public data.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.

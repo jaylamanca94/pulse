@@ -72,6 +72,13 @@ const formatCheckedAt = (isoString) => {
   }).format(date)}`;
 };
 
+const formatLastChecked = (date = new Date()) => `Last checked ${new Intl.DateTimeFormat(undefined, {
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit"
+}).format(date)}`;
+
 const formatCacheWindow = (seconds) => {
   const duration = Number(seconds);
   if (!Number.isFinite(duration) || duration <= 0) return "";
@@ -287,6 +294,7 @@ const loadDashboard = async () => {
 
     setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : "Sources refreshed");
     setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data");
+    setText("[data-dashboard-checked]", formatLastChecked());
   } finally {
     setRefreshState(false);
     setAirNowFormState(false);
