@@ -333,6 +333,23 @@ body {
   font-weight: 700;
 }
 
+.source-link {
+  align-items: center;
+  color: var(--muted);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 4px;
+  line-height: 16px;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.source-link:hover,
+.source-link:focus-visible {
+  color: var(--accent);
+}
+
 .source-meta-grid {
   display: grid;
   gap: 8px;
