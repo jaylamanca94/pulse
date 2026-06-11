@@ -8,6 +8,7 @@ const {
 } = require("./_pulse");
 
 const WHO_DON_URL = "https://www.who.int/api/hubs/diseaseoutbreaknews";
+const WHO_DON_PAGE_PREFIX = "https://www.who.int/emergencies/disease-outbreak-news/item";
 const WHO_CACHE_SECONDS = 60 * 30;
 
 function stripHtml(value) {
@@ -17,14 +18,39 @@ function stripHtml(value) {
     .trim();
 }
 
+function getLocationFromTitle(title) {
+  const parts = title.split(",").map((part) => part.trim()).filter(Boolean);
+
+  if (parts.length < 2) {
+    return "Location not specified";
+  }
+
+  return parts.slice(1).join(", ");
+}
+
+function getNoticeUrl(relativeUrl, donId) {
+  const directUrl = safeHttpUrl(relativeUrl);
+
+  if (directUrl) {
+    return directUrl;
+  }
+
+  if (donId) {
+    return `${WHO_DON_PAGE_PREFIX}/${encodeURIComponent(donId)}`;
+  }
+
+  return "https://www.who.int/emergencies/disease-outbreak-news";
+}
+
 function normalizeNotice(notice) {
   if (!notice || typeof notice !== "object") {
     return null;
   }
 
   const title = getText(notice.Title);
+  const donId = getText(notice.DonId);
   const relativeUrl = getText(notice.ItemDefaultUrl);
-  const url = safeHttpUrl(relativeUrl) || safeHttpUrl(`https://www.who.int${relativeUrl || "/emergencies/disease-outbreak-news"}`);
+  const url = getNoticeUrl(relativeUrl, donId);
 
   if (!title) {
     return null;
@@ -33,6 +59,8 @@ function normalizeNotice(notice) {
   return {
     title,
     date: getText(notice.FormattedDate, "Date unavailable"),
+    donId: donId || undefined,
+    location: getLocationFromTitle(title),
     publishedAt: getText(notice.PublicationDateAndTime),
     summary: stripHtml(notice.Summary || notice.Overview) || "No summary available from source.",
     url

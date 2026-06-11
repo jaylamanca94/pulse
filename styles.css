@@ -292,6 +292,20 @@ body {
   margin: 0;
 }
 
+.notice-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 4px;
+}
+
+.notice-meta {
+  background: var(--bar-bg);
+  border-radius: 999px;
+  display: inline-flex;
+  padding: 2px 8px;
+}
+
 .notice-title {
   font-size: 18px;
   line-height: 24px;

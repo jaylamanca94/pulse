@@ -39,6 +39,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Public health signal summary
 - Metric cards for planned health, environmental, access, and population data areas
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
+- Per-notice WHO metadata for date, geography, and DON identifier when available
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
 - Refresh action for live source checks
@@ -67,6 +68,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Favor official public health sources before third-party aggregators.
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
+- Keep outbreak notice rows specific enough to show event date, affected geography, and source identifier when the upstream source provides them.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.

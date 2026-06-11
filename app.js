@@ -10,6 +10,8 @@ const fallbackNotices = [
   {
     title: "WHO Disease Outbreak News source ready",
     date: "Fallback",
+    donId: "WHO DON",
+    location: "Global",
     summary: "Live notices will appear here when the public WHO endpoint is reachable.",
     url: "https://www.who.int/emergencies/disease-outbreak-news"
   }
@@ -128,13 +130,20 @@ const fetchJson = async (url) => {
 const formatNotice = (notice) => {
   const summary = notice.summary || stripHtml(notice.Summary || notice.Overview);
   const sourceUrl = notice.url || notice.ItemDefaultUrl || "/emergencies/disease-outbreak-news";
+  const donId = notice.donId || notice.DonId || "WHO DON";
   const url = sourceUrl.startsWith("http")
     ? sourceUrl
-    : `https://www.who.int${sourceUrl}`;
+    : donId !== "WHO DON"
+      ? `https://www.who.int/emergencies/disease-outbreak-news/item/${encodeURIComponent(donId)}`
+      : "https://www.who.int/emergencies/disease-outbreak-news";
+  const title = notice.title || notice.Title || "Untitled WHO notice";
+  const titleParts = title.split(",").map((part) => part.trim()).filter(Boolean);
 
   return {
-    title: notice.title || notice.Title || "Untitled WHO notice",
+    title,
     date: notice.date || notice.FormattedDate || "Date unavailable",
+    donId,
+    location: notice.location || (titleParts.length > 1 ? titleParts.slice(1).join(", ") : "Location not specified"),
     summary: summary || "No summary available from source.",
     url
   };
@@ -150,8 +159,14 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
     article.className = "notice-item";
 
     const meta = document.createElement("p");
-    meta.className = "notice-meta";
-    meta.textContent = notice.date;
+    meta.className = "notice-meta-row";
+
+    [notice.date, notice.location, notice.donId].forEach((value) => {
+      const item = document.createElement("span");
+      item.className = "notice-meta";
+      item.textContent = value;
+      meta.append(item);
+    });
 
     const title = document.createElement("h3");
     title.className = "notice-title";
