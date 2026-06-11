@@ -174,6 +174,7 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
   setText("[data-who-count]", String(notices.length));
   setText("[data-who-note]", isLive ? "Live WHO notices" : "Fallback sample");
   setText("[data-who-updated]", isLive ? "WHO proxy cache" : "Fallback data");
+  setText("[data-who-signal-basis]", isLive ? "Live event notices" : "Fallback notice");
   setSourceDetail("who", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
@@ -213,6 +214,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   syncAirNowLocationText();
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${reading.category} near ${reading.area}` : reading.category);
+  setText("[data-airnow-signal-basis]", isLive ? `Live near ${reading.area}` : sourceMeta.statusLabel || "Needs key");
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))

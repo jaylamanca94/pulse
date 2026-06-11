@@ -121,6 +121,34 @@ body {
   line-height: 24px;
 }
 
+.signal-basis {
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 16px 0 0;
+  padding-top: 16px;
+}
+
+.signal-basis div {
+  display: grid;
+  gap: 2px;
+}
+
+.signal-basis dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.signal-basis dd {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
 .score-wrap {
   gap: 16px;
 }
@@ -460,6 +488,10 @@ body {
 
   .trend-grid {
     gap: 8px;
+  }
+
+  .signal-basis {
+    grid-template-columns: 1fr;
   }
 
   .airnow-form-grid {
