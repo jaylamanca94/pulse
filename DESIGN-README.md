@@ -15,7 +15,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Prioritize clarity, speed, and maintainability over visual novelty.
 - Avoid adding decorative complexity unless it directly improves the product experience.
 - Make update timestamps, source attribution, location, geographic level, and severity easy to find.
-- Use compact source detail rows when a data surface mixes live, ready, fallback, or sample states.
+- Use compact source detail rows when a data surface mixes live, ready, no-data, fallback, or sample states.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 

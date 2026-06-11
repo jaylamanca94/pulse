@@ -21,6 +21,12 @@ const fallbackAirQuality = {
   area: "AirNow current observations"
 };
 
+const noAirQualityReading = {
+  aqi: "--",
+  category: "No current observations",
+  area: "selected area"
+};
+
 const normalizeZipCode = (value) => {
   const zipCode = String(value || "").trim();
   return /^\d{5}$/.test(zipCode) ? zipCode : "10001";
@@ -226,7 +232,13 @@ const loadAirQuality = async () => {
     const data = await fetchJson(buildAirNowUrl());
     const readings = Array.isArray(data.readings) ? data.readings : [];
     const isLive = readings.length > 0;
-    renderAirQuality(normalizeAirNowReading(readings), isLive, data);
+    renderAirQuality(isLive ? normalizeAirNowReading(readings) : noAirQualityReading, isLive, {
+      ...data,
+      freshness: isLive
+        ? undefined
+        : joinDetails(formatCheckedAt(data.fetchedAt), formatCacheWindow(data.cacheSeconds)) || "No observations returned",
+      statusLabel: isLive ? undefined : "No data"
+    });
     return isLive;
   } catch (error) {
     const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";

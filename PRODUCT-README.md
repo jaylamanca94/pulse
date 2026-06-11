@@ -34,6 +34,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - User-selectable ZIP code and radius for AirNow current observations
 - Refresh action for live source checks
 - Source coverage rows that show status, scope, freshness, and caveats for live and sample data
+- Distinct no-data source state when a configured source responds without nearby observations
 - Signal trend snapshot
 - Priority list for first public data areas
 - Sample data label so the prototype does not imply live tracking
@@ -56,6 +57,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
+- Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 
 ## Roadmap
