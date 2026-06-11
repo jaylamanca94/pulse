@@ -10,6 +10,15 @@
 - Keep the product quiet, practical, and maintainable.
 - Start with the smallest working dashboard before adding integrations.
 
+## Product Discipline
+
+Pulse must stay focused on its core job: clear situational awareness for public health, outbreak, environmental, and community health signals.
+
+- Do not broaden Pulse into a general wellness, hospital operations, social network, news, or analytics platform unless the founder explicitly changes the product direction.
+- Prefer focused public-health clarity over feature volume.
+- Say no or defer when a feature is interesting but does not strengthen the current public health dashboard mission.
+- Keep scope decisions grounded in user value, source quality, geographic clarity, freshness, trust, and maintainability.
+
 ## Product Positioning
 
 Pulse is an event-driven public health reference dashboard, not a daily wellness app. Users should be able to open it during an outbreak, public health event, or emerging disease concern and quickly answer:
