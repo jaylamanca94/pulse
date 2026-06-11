@@ -110,6 +110,16 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 - Standard spacing between utility icons and text: `8px`
 - Caption-sized or very small UI may use tighter spacing when needed.
 
+## Favicon And App Icon
+
+- Every web or mobile product should eventually have a simple recognizable favicon/app icon.
+- Use a Font Awesome Free icon as the preferred starting point when it fits the product.
+- Pick an icon that represents the product mission, not a generic decoration.
+- Keep the icon simple enough to work at small sizes.
+- Include standard browser favicon support when the product has a web app scaffold.
+- Add mobile/app touch icon support when the product is ready for mobile polish.
+- Document the icon choice in `DESIGN-README.md` or `README.md`.
+
 ## Forms
 
 - Form sections use `48px` padding on desktop.
