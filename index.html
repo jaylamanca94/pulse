@@ -196,7 +196,7 @@
                 <dl class="source-meta-grid">
                   <div>
                     <dt>Scope</dt>
-                    <dd>ZIP 10001, 25 mile radius</dd>
+                    <dd data-airnow-source-scope>ZIP 10001, 25-mile radius</dd>
                   </div>
                   <div>
                     <dt>Freshness</dt>
@@ -207,6 +207,28 @@
                     <dd>Preliminary AQI observations when configured</dd>
                   </div>
                 </dl>
+                <form class="airnow-form" data-airnow-form>
+                  <div class="airnow-form-grid">
+                    <div>
+                      <label class="form-label" for="airnowZip">ZIP code</label>
+                      <input class="form-control form-control-sm" id="airnowZip" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" required>
+                    </div>
+                    <div>
+                      <label class="form-label" for="airnowDistance">Radius</label>
+                      <select class="form-select form-select-sm" id="airnowDistance" name="distance">
+                        <option value="10">10 mi</option>
+                        <option value="25">25 mi</option>
+                        <option value="50">50 mi</option>
+                        <option value="100">100 mi</option>
+                        <option value="250">250 mi</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm airnow-submit" type="submit">
+                      <i class="fa-solid fa-location-dot me-2" aria-hidden="true"></i>Update
+                    </button>
+                  </div>
+                  <p class="form-text small mb-0" id="airnowFormHelp" data-airnow-location-note aria-live="polite">Showing ZIP 10001, 25-mile radius.</p>
+                </form>
               </li>
               <li>
                 <div class="source-row-head">

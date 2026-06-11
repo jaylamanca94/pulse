@@ -21,6 +21,21 @@ const fallbackAirQuality = {
   area: "AirNow current observations"
 };
 
+const normalizeZipCode = (value) => {
+  const zipCode = String(value || "").trim();
+  return /^\d{5}$/.test(zipCode) ? zipCode : "10001";
+};
+
+const normalizeDistance = (value) => {
+  const distance = Number(value);
+  return Number.isFinite(distance) && distance > 0 && distance <= 250 ? Math.round(distance) : 25;
+};
+
+const airNowQuery = {
+  zipCode: normalizeZipCode(config.AIRNOW_ZIP_CODE),
+  distance: normalizeDistance(config.AIRNOW_DISTANCE_MILES)
+};
+
 const stripHtml = (value) => {
   const template = document.createElement("template");
   template.innerHTML = value || "";
@@ -60,6 +75,13 @@ const formatCacheWindow = (seconds) => {
 };
 
 const joinDetails = (...values) => values.filter(Boolean).join("; ");
+
+const getAirNowScope = () => `ZIP ${airNowQuery.zipCode}, ${airNowQuery.distance}-mile radius`;
+
+const syncAirNowLocationText = () => {
+  setText("[data-airnow-source-scope]", getAirNowScope());
+  setText("[data-airnow-location-note]", `Showing ${getAirNowScope()}.`);
+};
 
 const setSourceDetail = (sourceKey, detail) => {
   const status = document.querySelector(`[data-${sourceKey}-source-status]`);
@@ -167,14 +189,15 @@ const loadWhoNotices = async () => {
 
 const buildAirNowUrl = () => {
   const params = new URLSearchParams({
-    zipCode: config.AIRNOW_ZIP_CODE || "10001",
-    distance: String(config.AIRNOW_DISTANCE_MILES || 25)
+    zipCode: airNowQuery.zipCode,
+    distance: String(airNowQuery.distance)
   });
 
   return `${API.airnow}?${params.toString()}`;
 };
 
 const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
+  syncAirNowLocationText();
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${reading.category} near ${reading.area}` : reading.category);
   setSourceDetail("airnow", {
@@ -228,8 +251,18 @@ const setRefreshState = (isRefreshing) => {
     : `<i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh`;
 };
 
+const setAirNowFormState = (isRefreshing) => {
+  const form = document.querySelector("[data-airnow-form]");
+  if (!form) return;
+
+  form.querySelectorAll("input, select, button").forEach((control) => {
+    control.disabled = isRefreshing;
+  });
+};
+
 const loadDashboard = async () => {
   setRefreshState(true);
+  setAirNowFormState(true);
   setText("[data-dashboard-status]", "Refreshing sources");
 
   try {
@@ -244,8 +277,33 @@ const loadDashboard = async () => {
     setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data");
   } finally {
     setRefreshState(false);
+    setAirNowFormState(false);
   }
 };
 
+const initializeAirNowForm = () => {
+  const form = document.querySelector("[data-airnow-form]");
+  if (!form) return;
+
+  const zipInput = form.elements.namedItem("zipCode");
+  const distanceInput = form.elements.namedItem("distance");
+
+  if (zipInput) zipInput.value = airNowQuery.zipCode;
+  if (distanceInput) distanceInput.value = String(airNowQuery.distance);
+  syncAirNowLocationText();
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    airNowQuery.zipCode = normalizeZipCode(zipInput?.value);
+    airNowQuery.distance = normalizeDistance(distanceInput?.value);
+    syncAirNowLocationText();
+    loadDashboard();
+  });
+};
+
 document.querySelector("#refreshButton")?.addEventListener("click", loadDashboard);
+initializeAirNowForm();
 loadDashboard();

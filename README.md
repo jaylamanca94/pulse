@@ -24,6 +24,7 @@ Tagline: See the health of the world.
 ## Configuration
 
 `config.js` controls optional live API settings for the static prototype.
+These values set the default AirNow location; users can change the ZIP code and radius in the dashboard.
 
 ```js
 window.PULSE_CONFIG = {

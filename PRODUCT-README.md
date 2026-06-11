@@ -31,6 +31,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Metric cards for planned health, environmental, access, and population data areas
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
+- User-selectable ZIP code and radius for AirNow current observations
 - Refresh action for live source checks
 - Source coverage rows that show status, scope, freshness, and caveats for live and sample data
 - Signal trend snapshot
@@ -62,7 +63,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Add live AirNow API key in deployment environment variables.
 - Deploy to Vercel.
 - Add outbreak-focused geography views, beginning with the highest-quality public source available.
-- Add user-selectable location for air quality observations.
+- Expand user-selectable environmental observations beyond ZIP code and radius when source coverage supports it.
 - Add API fetch and normalization layer for each source category.
 - Add source attribution and freshness timestamps.
 - Cache API responses if source rate limits or reliability require it.
