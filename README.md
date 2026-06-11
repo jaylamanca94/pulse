@@ -79,6 +79,12 @@ Check JavaScript syntax:
 npm run check
 ```
 
+Run helper tests:
+
+```sh
+npm test
+```
+
 ## Environment Variables
 
 - `AIRNOW_API_KEY`: AirNow API key used by `/api/airnow`

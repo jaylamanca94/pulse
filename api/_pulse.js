@@ -36,6 +36,15 @@ function getText(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function normalizeZipCode(value, fallback = "10001") {
+  return /^\d{5}$/.test(String(value || "").trim()) ? String(value).trim() : fallback;
+}
+
+function normalizeDistance(value, fallback = "25") {
+  const distance = Number(value);
+  return Number.isFinite(distance) && distance > 0 && distance <= 250 ? String(Math.round(distance)) : fallback;
+}
+
 function safeHttpUrl(value) {
   try {
     const url = new URL(value);
@@ -72,6 +81,8 @@ async function requestJson(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
 module.exports = {
   getCached,
   getText,
+  normalizeDistance,
+  normalizeZipCode,
   requestJson,
   safeHttpUrl,
   sendJson,

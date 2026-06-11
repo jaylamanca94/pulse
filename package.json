@@ -4,8 +4,9 @@
   "private": true,
   "description": "Public health and wellness dashboard for live health, environmental, and population signals.",
   "scripts": {
+    "check": "node --check app.js && node --check config.js && node --check api/_pulse.js && node --check api/airnow.js && node --check api/who.js",
     "dev": "npx vercel dev",
-    "check": "node --check app.js && node --check config.js && node --check api/_pulse.js && node --check api/airnow.js && node --check api/who.js"
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18"

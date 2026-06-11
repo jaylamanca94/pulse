@@ -1,5 +1,7 @@
 const {
   getCached,
+  normalizeDistance,
+  normalizeZipCode,
   requestJson,
   sendJson,
   setCached
@@ -7,15 +9,6 @@ const {
 
 const AIRNOW_BASE_URL = "https://www.airnowapi.org/aq/observation/zipCode/current/";
 const AIRNOW_CACHE_SECONDS = 60 * 15;
-
-function normalizeZipCode(value) {
-  return /^\d{5}$/.test(value) ? value : "10001";
-}
-
-function normalizeDistance(value) {
-  const distance = Number(value);
-  return Number.isFinite(distance) && distance > 0 && distance <= 250 ? String(Math.round(distance)) : "25";
-}
 
 module.exports = async (request, response) => {
   if (request.method !== "GET") {
