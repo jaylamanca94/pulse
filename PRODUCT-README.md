@@ -43,6 +43,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
+- AirNow pollutant and observation timestamp when live observations are available
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
@@ -75,6 +76,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
+- Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and sample inputs.

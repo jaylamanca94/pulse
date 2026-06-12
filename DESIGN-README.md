@@ -24,6 +24,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Order outbreak geography summaries by repeated notice count first and recency second so users can scan for concentration and fresh signals.
 - Keep official-source links close to source status, freshness, and caveats when the dashboard depends on external public data.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.
+- Show upstream observation times near source freshness when a live source provides both values.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 
 ## UI Foundation
