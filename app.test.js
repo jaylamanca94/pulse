@@ -75,6 +75,31 @@ test("AirNow severity band follows official AQI category ranges", () => {
   ]));
 });
 
+test("AirNow reading derives official category from numeric AQI when missing", () => {
+  const result = runAppHelper(`(() => {
+    const reading = normalizeAirNowReading([
+      {
+        AQI: 214,
+        DateObserved: "2026-06-12",
+        HourObserved: 16,
+        LocalTimeZone: "EST",
+        ParameterName: "PM2.5",
+        ReportingArea: "New York"
+      }
+    ]);
+
+    return {
+      category: reading.category,
+      healthGuidance: reading.healthGuidance,
+      severityBand: getAqiSeverityBand(reading.category)
+    };
+  })()`);
+
+  assert.equal(result.category, "Very Unhealthy");
+  assert.equal(result.healthGuidance, "Health alert; everyone faces increased risk from outdoor air.");
+  assert.equal(result.severityBand, "Very Unhealthy, 201-300");
+});
+
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {
   const result = runAppHelper(`(() => {
     airNowQuery.zipCode = "10001";

@@ -169,6 +169,18 @@ const formatAirNowArea = (reading = {}) => {
   return stateCode ? `${area}, ${stateCode}` : area;
 };
 
+const getAqiCategoryFromValue = (aqi) => {
+  const value = Number(aqi);
+  if (!Number.isFinite(value) || value < 0) return "";
+
+  if (value <= 50) return "Good";
+  if (value <= 100) return "Moderate";
+  if (value <= 150) return "Unhealthy for Sensitive Groups";
+  if (value <= 200) return "Unhealthy";
+  if (value <= 300) return "Very Unhealthy";
+  return "Hazardous";
+};
+
 const getAqiHealthGuidance = (category) => {
   const normalizedCategory = String(category || "").trim().toLowerCase();
   const guidance = {
@@ -457,11 +469,13 @@ const normalizeAirNowReading = (items) => {
     : items[0];
   if (!reading) return fallbackAirQuality;
 
+  const category = reading.Category?.Name || getAqiCategoryFromValue(reading.AQI) || "Category unavailable";
+
   return {
     aqi: reading.AQI ?? "--",
     observedAt: formatAirNowObservedAt(reading),
-    category: reading.Category?.Name || "Category unavailable",
-    healthGuidance: getAqiHealthGuidance(reading.Category?.Name),
+    category,
+    healthGuidance: getAqiHealthGuidance(category),
     area: reading.ReportingArea || "AirNow reporting area",
     stateCode: reading.StateCode || "",
     pollutant: reading.ParameterName || "AQI",
