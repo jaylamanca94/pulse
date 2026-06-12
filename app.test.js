@@ -79,6 +79,7 @@ test("AirNow category tone classes follow official AQI levels", () => {
   const result = runAppHelper(`(() => ([
     getAqiToneClass("Good"),
     getAqiToneClass("Moderate"),
+    getAqiToneClass(" unhealthy-sensitive "),
     getAqiToneClass("Unhealthy for Sensitive Groups"),
     getAqiToneClass("Unhealthy"),
     getAqiToneClass("Very Unhealthy"),
@@ -89,6 +90,7 @@ test("AirNow category tone classes follow official AQI levels", () => {
   assert.equal(JSON.stringify(result), JSON.stringify([
     "aqi-good",
     "aqi-moderate",
+    "aqi-unhealthy-sensitive",
     "aqi-unhealthy-sensitive",
     "aqi-unhealthy",
     "aqi-very-unhealthy",
@@ -120,6 +122,58 @@ test("AirNow reading derives official category from numeric AQI when missing", (
   assert.equal(result.category, "Very Unhealthy");
   assert.equal(result.healthGuidance, "Health alert; everyone faces increased risk from outdoor air.");
   assert.equal(result.severityBand, "Very Unhealthy, 201-300");
+});
+
+test("AirNow reading normalizes source category labels before deriving meaning", () => {
+  const result = runAppHelper(`(() => {
+    const reading = normalizeAirNowReading([
+      {
+        AQI: 135,
+        Category: { Name: " unhealthy-sensitive " },
+        DateObserved: "2026-06-12",
+        HourObserved: 11,
+        LocalTimeZone: "EST",
+        ParameterName: "OZONE",
+        ReportingArea: "New York"
+      }
+    ]);
+
+    return {
+      category: reading.category,
+      healthGuidance: reading.healthGuidance,
+      severityBand: getAqiSeverityBand(reading.category),
+      toneClass: getAqiToneClass(reading.category)
+    };
+  })()`);
+
+  assert.equal(result.category, "Unhealthy for Sensitive Groups");
+  assert.equal(result.healthGuidance, "Sensitive groups should reduce prolonged or heavy outdoor exertion.");
+  assert.equal(result.severityBand, "Unhealthy for Sensitive Groups, 101-150");
+  assert.equal(result.toneClass, "aqi-unhealthy-sensitive");
+});
+
+test("AirNow reading uses numeric AQI when source category label is not recognized", () => {
+  const result = runAppHelper(`(() => {
+    const reading = normalizeAirNowReading([
+      {
+        AQI: 82,
+        Category: { Name: "Not Available" },
+        DateObserved: "2026-06-12",
+        HourObserved: 12,
+        LocalTimeZone: "EST",
+        ParameterName: "PM2.5",
+        ReportingArea: "New York"
+      }
+    ]);
+
+    return {
+      category: reading.category,
+      severityBand: getAqiSeverityBand(reading.category)
+    };
+  })()`);
+
+  assert.equal(result.category, "Moderate");
+  assert.equal(result.severityBand, "Moderate, 51-100");
 });
 
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {

@@ -181,8 +181,28 @@ const getAqiCategoryFromValue = (aqi) => {
   return "Hazardous";
 };
 
+const normalizeAqiCategory = (category, aqi) => {
+  const rawCategory = String(category || "").trim();
+  const normalizedCategory = rawCategory
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+  const categories = {
+    good: "Good",
+    moderate: "Moderate",
+    "unhealthy for sensitive groups": "Unhealthy for Sensitive Groups",
+    "unhealthy sensitive": "Unhealthy for Sensitive Groups",
+    "sensitive groups": "Unhealthy for Sensitive Groups",
+    unhealthy: "Unhealthy",
+    "very unhealthy": "Very Unhealthy",
+    hazardous: "Hazardous"
+  };
+
+  return categories[normalizedCategory] || getAqiCategoryFromValue(aqi) || rawCategory;
+};
+
 const getAqiHealthGuidance = (category) => {
-  const normalizedCategory = String(category || "").trim().toLowerCase();
+  const normalizedCategory = normalizeAqiCategory(category).toLowerCase();
   const guidance = {
     good: "Air quality is satisfactory for most people.",
     moderate: "Acceptable air quality; unusually sensitive people should watch symptoms.",
@@ -196,7 +216,7 @@ const getAqiHealthGuidance = (category) => {
 };
 
 const getAqiSeverityBand = (category) => {
-  const normalizedCategory = String(category || "").trim().toLowerCase();
+  const normalizedCategory = normalizeAqiCategory(category).toLowerCase();
   const bands = {
     good: "Good, 0-50",
     moderate: "Moderate, 51-100",
@@ -219,7 +239,7 @@ const AQI_TONE_CLASSES = [
 ];
 
 const getAqiToneClass = (category) => {
-  const normalizedCategory = String(category || "").trim().toLowerCase();
+  const normalizedCategory = normalizeAqiCategory(category).toLowerCase();
   const tones = {
     good: "aqi-good",
     moderate: "aqi-moderate",
@@ -503,7 +523,7 @@ const normalizeAirNowReading = (items) => {
     : items[0];
   if (!reading) return fallbackAirQuality;
 
-  const category = reading.Category?.Name || getAqiCategoryFromValue(reading.AQI) || "Category unavailable";
+  const category = normalizeAqiCategory(reading.Category?.Name, reading.AQI) || "Category unavailable";
 
   return {
     aqi: reading.AQI ?? "--",

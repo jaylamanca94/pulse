@@ -50,6 +50,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - AirNow AQI basis detail showing how many pollutant AQI readings were considered and which pollutant drives the displayed value
 - AirNow AQI severity band showing the official category range for the displayed value
 - AirNow numeric AQI fallback that derives the official category, severity band, and health meaning when the source omits a category label
+- AirNow category-label normalization that keeps severity, health meaning, and color cues available when source labels vary in casing, spacing, or separators
 - AirNow category color cues on live AQI text and severity-band details using the official AQI level semantics
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
 - Refresh action for live source checks
@@ -92,6 +93,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - When displaying the highest AirNow pollutant AQI, show the pollutant-reading count and selected pollutant near source details so users understand the value's basis.
 - Show the official AQI severity band beside AirNow details so the displayed category is anchored to its numeric range.
 - If AirNow returns a numeric AQI without a category label, derive the official AQI category from the value range before showing severity and health meaning.
+- Normalize recognized AirNow category label variants to official AQI categories before showing severity bands, health meaning, or color cues.
 - Use official AQI category color cues only on live AQI severity text and details, not on source-readiness status.
 - Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
