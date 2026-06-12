@@ -17,6 +17,17 @@ const fallbackNotices = [
   }
 ];
 
+const fallbackAreaSummaries = [
+  {
+    area: "Global",
+    latestDate: "Fallback",
+    latestDonId: "WHO DON",
+    latestTitle: "WHO Disease Outbreak News source ready",
+    latestUrl: "https://www.who.int/emergencies/disease-outbreak-news",
+    noticeCount: 1
+  }
+];
+
 const fallbackAirQuality = {
   aqi: "--",
   category: "API key needed for live AQI",
@@ -149,6 +160,65 @@ const formatNotice = (notice) => {
   };
 };
 
+const formatAreaSummary = (summary) => ({
+  area: summary.area || "Location not specified",
+  latestDate: summary.latestDate || "Date unavailable",
+  latestDonId: summary.latestDonId || "WHO DON",
+  latestTitle: summary.latestTitle || "Untitled WHO notice",
+  latestUrl: summary.latestUrl || "https://www.who.int/emergencies/disease-outbreak-news",
+  noticeCount: Number.isFinite(summary.noticeCount) ? summary.noticeCount : 1
+});
+
+const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
+  const list = document.querySelector("[data-who-area-list]");
+  if (!list) return;
+
+  const summaries = areas.map(formatAreaSummary);
+  list.innerHTML = "";
+
+  if (!summaries.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty-copy mb-0";
+    empty.textContent = "No affected areas were available from the current WHO response.";
+    list.append(empty);
+  } else {
+    summaries.forEach((summary) => {
+      const item = document.createElement("article");
+      item.className = "area-item";
+
+      const content = document.createElement("div");
+
+      const meta = document.createElement("p");
+      meta.className = "area-meta";
+      meta.textContent = `${summary.noticeCount} ${summary.noticeCount === 1 ? "notice" : "notices"}; latest ${summary.latestDate}; ${summary.latestDonId}`;
+
+      const title = document.createElement("h3");
+      title.className = "area-title";
+      title.textContent = summary.area;
+
+      const note = document.createElement("p");
+      note.className = "area-note";
+      note.textContent = summary.latestTitle;
+
+      content.append(meta, title, note);
+
+      const link = document.createElement("a");
+      link.className = "source-link";
+      link.href = summary.latestUrl;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.innerHTML = `Open notice <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>`;
+
+      item.append(content, link);
+      list.append(item);
+    });
+  }
+
+  setText("[data-who-area-updated]", isLive
+    ? joinDetails("Derived from WHO notices", formatCheckedAt(sourceMeta.fetchedAt))
+    : "Fallback geography");
+};
+
 const renderNotices = (notices, isLive, sourceMeta = {}) => {
   const list = document.querySelector("[data-who-list]");
   if (!list) return;
@@ -198,6 +268,11 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
     isWarning: !isLive,
     status: isLive ? "Live" : "Fallback"
   });
+  renderAreaSummary(
+    Array.isArray(sourceMeta.areas) && sourceMeta.areas.length ? sourceMeta.areas : fallbackAreaSummaries,
+    isLive,
+    sourceMeta
+  );
 };
 
 const loadWhoNotices = async () => {

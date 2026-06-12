@@ -28,6 +28,19 @@ function getLocationFromTitle(title) {
   return parts.slice(1).join(", ");
 }
 
+function getAreasFromLocation(location) {
+  const cleanLocation = getText(location, "Location not specified");
+
+  if (cleanLocation === "Location not specified") {
+    return [cleanLocation];
+  }
+
+  return cleanLocation
+    .split(/\s[&;]\s/g)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 function getNoticeUrl(relativeUrl, donId) {
   const directUrl = safeHttpUrl(relativeUrl);
 
@@ -67,6 +80,30 @@ function normalizeNotice(notice) {
   };
 }
 
+function summarizeAreas(notices) {
+  const areas = new Map();
+
+  notices.forEach((notice) => {
+    const noticeAreas = new Set(getAreasFromLocation(notice.location));
+
+    noticeAreas.forEach((area) => {
+      const summary = areas.get(area) || {
+        area,
+        latestDate: notice.date,
+        latestDonId: notice.donId,
+        latestTitle: notice.title,
+        latestUrl: notice.url,
+        noticeCount: 0
+      };
+
+      summary.noticeCount += 1;
+      areas.set(area, summary);
+    });
+  });
+
+  return Array.from(areas.values()).slice(0, 5);
+}
+
 function normalizeWhoPayload(payload) {
   const notices = (Array.isArray(payload?.value) ? payload.value : [])
     .map(normalizeNotice)
@@ -74,6 +111,7 @@ function normalizeWhoPayload(payload) {
     .slice(0, 5);
 
   return {
+    areas: summarizeAreas(notices),
     cacheSeconds: WHO_CACHE_SECONDS,
     fetchedAt: new Date().toISOString(),
     notices,

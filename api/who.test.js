@@ -43,6 +43,12 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
     assert.equal(response.statusCode, 200);
     assert.equal(payload.notices[0].donId, "2026-DON606");
     assert.equal(payload.notices[0].location, "Democratic Republic of the Congo & Uganda");
+    assert.deepEqual(payload.areas.map((area) => area.area), [
+      "Democratic Republic of the Congo",
+      "Uganda"
+    ]);
+    assert.equal(payload.areas[0].latestDonId, "2026-DON606");
+    assert.equal(payload.areas[0].noticeCount, 1);
     assert.equal(
       payload.notices[0].url,
       "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON606"

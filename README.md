@@ -33,7 +33,7 @@ window.PULSE_CONFIG = {
 };
 ```
 
-WHO notices are loaded through `/api/who`, which normalizes and caches the public source response.
+WHO notices are loaded through `/api/who`, which normalizes and caches the public source response and derives a compact affected-area summary from recent notices.
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 
@@ -99,7 +99,7 @@ npm test
 - `app.js` - frontend data loading and rendering
 - `config.js` - optional static prototype API configuration
 - `api/_pulse.js` - shared API helper, timeout, response, and cache utilities
-- `api/who.js` - serverless WHO Disease Outbreak News proxy
+- `api/who.js` - serverless WHO Disease Outbreak News proxy and geography summary normalizer
 - `api/airnow.js` - serverless AirNow proxy
 - `vercel.json` - Vercel function runtime configuration
 

@@ -132,17 +132,11 @@
         <div class="col-lg-8">
           <article class="content-surface h-100">
             <div class="section-heading">
-              <h2 class="section-title mb-0">Signal trend</h2>
-              <span class="small text-secondary">Last 7 reports</span>
+              <h2 id="geography-title" class="section-title mb-0">Outbreak geography scan</h2>
+              <span class="small text-secondary" data-who-area-updated>Source loading</span>
             </div>
-            <div class="trend-grid" role="list" aria-label="Public health signal trend">
-              <div class="trend-day" role="listitem"><span style="height: 42%"></span><small>W1</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 46%"></span><small>W2</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 55%"></span><small>W3</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 52%"></span><small>W4</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 61%"></span><small>W5</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 58%"></span><small>W6</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 66%"></span><small>W7</small></div>
+            <div class="area-list" data-who-area-list aria-live="polite">
+              <p class="empty-copy mb-0">Checking affected areas from WHO notices.</p>
             </div>
           </article>
         </div>
@@ -164,6 +158,46 @@
                 <span>Healthcare access and well-being</span>
               </li>
             </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="row g-4" aria-label="Signal trend and priorities">
+        <div class="col-lg-8">
+          <article class="content-surface h-100">
+            <div class="section-heading">
+              <h2 class="section-title mb-0">Signal trend</h2>
+              <span class="small text-secondary">Last 7 reports</span>
+            </div>
+            <div class="trend-grid" role="list" aria-label="Public health signal trend">
+              <div class="trend-day" role="listitem"><span style="height: 42%"></span><small>W1</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 46%"></span><small>W2</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 55%"></span><small>W3</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 52%"></span><small>W4</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 61%"></span><small>W5</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 58%"></span><small>W6</small></div>
+              <div class="trend-day" role="listitem"><span style="height: 66%"></span><small>W7</small></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-lg-4">
+          <article class="content-surface h-100">
+            <h2 class="section-title">Signal priorities</h2>
+            <dl class="priority-list">
+              <div>
+                <dt>Where</dt>
+                <dd>Affected areas from official notices</dd>
+              </div>
+              <div>
+                <dt>When</dt>
+                <dd>Most recent publication date and source check time</dd>
+              </div>
+              <div>
+                <dt>What</dt>
+                <dd>Disease, environmental, access, and population signals</dd>
+              </div>
+            </dl>
           </article>
         </div>
       </section>
