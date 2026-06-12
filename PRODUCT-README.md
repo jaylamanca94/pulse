@@ -53,6 +53,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - AirNow category-label normalization that keeps severity, health meaning, and color cues available when source labels vary in casing, spacing, or separators
 - AirNow category color cues on live AQI text and severity-band details using the official AQI level semantics
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
+- Distinct AirNow route-unavailable state when the dashboard is opened without the serverless API route
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
@@ -87,6 +88,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
+- Treat a missing serverless source route as route unavailable, not as a temporary source outage.
 - Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
 - Show AirNow's returned reporting area and state separately from the user-selected ZIP/radius so local relevance is auditable.
 - When AirNow returns multiple pollutant observations for a selected area, use the highest numeric AQI as the displayed current severity.

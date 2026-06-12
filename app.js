@@ -565,6 +565,54 @@ const normalizeAirNowReading = (items) => {
   };
 };
 
+const getAirNowFallbackState = (error = {}) => {
+  const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";
+  const isRouteUnavailable = error.status === 404;
+
+  return {
+    category: isUnconfigured
+      ? fallbackAirQuality.category
+      : isRouteUnavailable
+        ? "AirNow route unavailable"
+        : "Live AQI unavailable",
+    freshness: isUnconfigured
+      ? "Add server API key for live AQI"
+      : isRouteUnavailable
+        ? "Run with server API routes for live AQI"
+        : "Try refreshing again later",
+    healthGuidance: isUnconfigured
+      ? "Available after configuring AirNow"
+      : isRouteUnavailable
+        ? "Available when the AirNow route responds"
+        : "Unavailable until the source responds",
+    observed: isUnconfigured
+      ? "Requires AirNow API key"
+      : isRouteUnavailable
+        ? "AirNow route unavailable"
+        : "Live observation unavailable",
+    areaMatch: isUnconfigured
+      ? "Requires AirNow API key"
+      : isRouteUnavailable
+        ? "AirNow route unavailable"
+        : "Live reporting area unavailable",
+    aqiBasis: isUnconfigured
+      ? "Requires AirNow API key"
+      : isRouteUnavailable
+        ? "AirNow route unavailable"
+        : "Live AQI basis unavailable",
+    severityBand: isUnconfigured
+      ? "Requires AirNow API key"
+      : isRouteUnavailable
+        ? "AirNow route unavailable"
+        : "Live AQI severity band unavailable",
+    statusLabel: isUnconfigured
+      ? "Needs key"
+      : isRouteUnavailable
+        ? "Route missing"
+        : "Unavailable"
+  };
+};
+
 const loadAirQuality = async () => {
   try {
     const data = await fetchJson(buildAirNowUrl());
@@ -581,18 +629,18 @@ const loadAirQuality = async () => {
     });
     return isLive;
   } catch (error) {
-    const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";
+    const fallback = getAirNowFallbackState(error);
     renderAirQuality({
       ...fallbackAirQuality,
-      category: isUnconfigured ? fallbackAirQuality.category : "Live AQI unavailable"
+      category: fallback.category
     }, false, {
-      freshness: isUnconfigured ? "Add server API key for live AQI" : "Try refreshing again later",
-      healthGuidance: isUnconfigured ? "Available after configuring AirNow" : "Unavailable until the source responds",
-      observed: isUnconfigured ? "Requires AirNow API key" : "Live observation unavailable",
-      areaMatch: isUnconfigured ? "Requires AirNow API key" : "Live reporting area unavailable",
-      aqiBasis: isUnconfigured ? "Requires AirNow API key" : "Live AQI basis unavailable",
-      severityBand: isUnconfigured ? "Requires AirNow API key" : "Live AQI severity band unavailable",
-      statusLabel: isUnconfigured ? "Needs key" : "Unavailable"
+      freshness: fallback.freshness,
+      healthGuidance: fallback.healthGuidance,
+      observed: fallback.observed,
+      areaMatch: fallback.areaMatch,
+      aqiBasis: fallback.aqiBasis,
+      severityBand: fallback.severityBand,
+      statusLabel: fallback.statusLabel
     });
     return false;
   }

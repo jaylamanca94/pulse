@@ -74,6 +74,7 @@ npm run dev
 ```
 
 For a direct static preview, open `index.html` in a browser.
+Static previews do not run serverless API routes, so API-backed source rows may show a route-unavailable state.
 
 For a local web preview:
 

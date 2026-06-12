@@ -294,3 +294,12 @@ test("AirNow area match keeps the reporting area distinct from the request scope
   assert.equal(result.area, "New York City Region, NY");
   assert.equal(result.match, "New York City Region, NY for ZIP 10001, 50-mile radius");
 });
+
+test("AirNow fallback state distinguishes missing API routes from source outages", () => {
+  const result = runAppHelper(`(() => getAirNowFallbackState({ status: 404 }))()`);
+
+  assert.equal(result.category, "AirNow route unavailable");
+  assert.equal(result.freshness, "Run with server API routes for live AQI");
+  assert.equal(result.observed, "AirNow route unavailable");
+  assert.equal(result.statusLabel, "Route missing");
+});
