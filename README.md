@@ -33,7 +33,7 @@ window.PULSE_CONFIG = {
 };
 ```
 
-WHO notices are loaded through `/api/who`, which normalizes and caches the public source response and derives a compact affected-area summary from recent notices.
+WHO notices are loaded through `/api/who`, which normalizes and caches the public source response and derives a compact affected-area summary from recent notices. Affected areas are ranked by repeated notice count, then latest publication recency.
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 

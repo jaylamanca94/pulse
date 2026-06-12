@@ -20,6 +20,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, fallback, no-data, and sample inputs.
 - Use compact source detail rows when a data surface mixes live, ready, no-data, fallback, or sample states.
 - Keep outbreak geography summaries as compact rows with affected area, notice count, latest date, source identifier, and a direct source link.
+- Order outbreak geography summaries by repeated notice count first and recency second so users can scan for concentration and fresh signals.
 - Keep official-source links close to source status, freshness, and caveats when the dashboard depends on external public data.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.

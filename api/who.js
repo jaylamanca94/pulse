@@ -55,6 +55,11 @@ function getNoticeUrl(relativeUrl, donId) {
   return "https://www.who.int/emergencies/disease-outbreak-news";
 }
 
+function getNoticeTime(notice) {
+  const time = Date.parse(notice.publishedAt);
+  return Number.isNaN(time) ? 0 : time;
+}
+
 function normalizeNotice(notice) {
   if (!notice || typeof notice !== "object") {
     return null;
@@ -85,23 +90,43 @@ function summarizeAreas(notices) {
 
   notices.forEach((notice) => {
     const noticeAreas = new Set(getAreasFromLocation(notice.location));
+    const noticeTime = getNoticeTime(notice);
 
     noticeAreas.forEach((area) => {
       const summary = areas.get(area) || {
         area,
         latestDate: notice.date,
         latestDonId: notice.donId,
+        latestPublishedAt: notice.publishedAt,
         latestTitle: notice.title,
         latestUrl: notice.url,
+        latestTime: 0,
         noticeCount: 0
       };
 
       summary.noticeCount += 1;
+
+      if (noticeTime >= summary.latestTime) {
+        summary.latestDate = notice.date;
+        summary.latestDonId = notice.donId;
+        summary.latestPublishedAt = notice.publishedAt;
+        summary.latestTitle = notice.title;
+        summary.latestUrl = notice.url;
+        summary.latestTime = noticeTime;
+      }
+
       areas.set(area, summary);
     });
   });
 
-  return Array.from(areas.values()).slice(0, 5);
+  return Array.from(areas.values())
+    .sort((areaA, areaB) => (
+      areaB.noticeCount - areaA.noticeCount
+      || areaB.latestTime - areaA.latestTime
+      || areaA.area.localeCompare(areaB.area)
+    ))
+    .slice(0, 5)
+    .map(({ latestTime, ...area }) => area);
 }
 
 function normalizeWhoPayload(payload) {
