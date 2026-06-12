@@ -36,7 +36,7 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
           ItemDefaultUrl: "/2026-DON606",
           PublicationDateAndTime: "2026-06-08T12:35:09Z",
           Summary: "<p>Confirmed cases reported.</p>",
-          Title: "Ebola disease caused by Bundibugyo virus, Democratic Republic of the Congo & Uganda"
+          Title: "Ebola disease caused by Bundibugyo virus, Democratic Republic of the Congo and Uganda"
         },
         {
           DonId: "2026-DON605",
@@ -45,6 +45,14 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
           PublicationDateAndTime: "2026-06-01T16:00:00Z",
           Summary: "<p>Earlier update.</p>",
           Title: "Measles, Uganda"
+        },
+        {
+          DonId: "2026-DON604",
+          FormattedDate: "29 May 2026",
+          ItemDefaultUrl: "/2026-DON604",
+          PublicationDateAndTime: "2026-05-29T12:00:00Z",
+          Summary: "<p>Named area should stay intact.</p>",
+          Title: "Dengue, Trinidad and Tobago"
         }
       ]
     })
@@ -58,19 +66,20 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
 
     assert.equal(response.statusCode, 200);
     assert.equal(payload.notices[1].donId, "2026-DON606");
-    assert.equal(payload.notices[1].location, "Democratic Republic of the Congo & Uganda");
+    assert.equal(payload.notices[1].location, "Democratic Republic of the Congo and Uganda");
     assert.deepEqual(payload.areas.map((area) => area.area), [
       "Uganda",
       "Germany",
       "Democratic Republic of the Congo",
+      "Trinidad and Tobago",
     ]);
     assert.equal(payload.areas[0].latestDonId, "2026-DON606");
     assert.equal(payload.areas[0].latestPublishedAt, "2026-06-08T12:35:09Z");
     assert.equal(payload.areas[0].noticeCount, 2);
     assert.deepEqual(payload.noticeWindow, {
-      count: 3,
+      count: 4,
       latestDate: "10 June 2026",
-      oldestDate: "1 June 2026"
+      oldestDate: "29 May 2026"
     });
     assert.equal(
       payload.notices[1].url,

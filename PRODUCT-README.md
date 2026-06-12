@@ -41,6 +41,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for date, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
+- WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
 - WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
@@ -79,6 +80,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Keep outbreak notice rows specific enough to show event date, affected geography, and source identifier when the upstream source provides them.
 - Show the recent notice window behind WHO-derived summaries so users can judge how much of the latest feed the dashboard is using.
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
+- Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.

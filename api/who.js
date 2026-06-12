@@ -10,6 +10,17 @@ const {
 const WHO_DON_URL = "https://www.who.int/api/hubs/diseaseoutbreaknews";
 const WHO_DON_PAGE_PREFIX = "https://www.who.int/emergencies/disease-outbreak-news/item";
 const WHO_CACHE_SECONDS = 60 * 30;
+const JOINED_AREA_NAMES = [
+  "Antigua and Barbuda",
+  "Bosnia and Herzegovina",
+  "Saint Kitts and Nevis",
+  "Saint Vincent and the Grenadines",
+  "Sao Tome and Principe",
+  "Trinidad and Tobago",
+  "Turks and Caicos Islands",
+  "United Kingdom of Great Britain and Northern Ireland",
+  "Wallis and Futuna"
+];
 
 function stripHtml(value) {
   return getText(value)
@@ -28,15 +39,31 @@ function getLocationFromTitle(title) {
   return parts.slice(1).join(", ");
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function getAreasFromLocation(location) {
-  const cleanLocation = getText(location, "Location not specified");
+  let cleanLocation = getText(location, "Location not specified");
 
   if (cleanLocation === "Location not specified") {
     return [cleanLocation];
   }
 
+  const protectedAreas = new Map();
+
+  JOINED_AREA_NAMES.forEach((areaName, index) => {
+    const token = `__PULSE_AREA_${index}__`;
+    const pattern = new RegExp(`\\b${escapeRegExp(areaName)}\\b`, "gi");
+    cleanLocation = cleanLocation.replace(pattern, (match) => {
+      protectedAreas.set(token, match);
+      return token;
+    });
+  });
+
   return cleanLocation
-    .split(/\s[&;]\s/g)
+    .split(/\s*(?:[&;]|\band\b)\s*/i)
+    .map((part) => protectedAreas.get(part) || part)
     .map((part) => part.trim())
     .filter(Boolean);
 }
