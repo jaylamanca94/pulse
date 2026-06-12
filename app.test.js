@@ -16,7 +16,8 @@ function runAppHelper(expression) {
 }
 
 test("AirNow reading normalization selects the highest AQI observation", () => {
-  const reading = runAppHelper(`normalizeAirNowReading([
+  const result = runAppHelper(`(() => {
+    const reading = normalizeAirNowReading([
     {
       AQI: 42,
       Category: { Name: "Good" },
@@ -35,10 +36,19 @@ test("AirNow reading normalization selects the highest AQI observation", () => {
       ParameterName: "PM2.5",
       ReportingArea: "New York"
     }
-  ])`);
+    ]);
+
+    return {
+      reading,
+      basis: formatAirNowAqiBasis(reading, true)
+    };
+  })()`);
+  const { basis, reading } = result;
 
   assert.equal(reading.aqi, 151);
   assert.equal(reading.category, "Unhealthy");
   assert.equal(reading.pollutant, "PM2.5");
   assert.equal(reading.observedAt, "2026-06-12 10:00 AM EST");
+  assert.equal(reading.aqiReadingCount, 2);
+  assert.equal(basis, "2 pollutant AQI readings; displayed PM2.5 as highest AQI");
 });

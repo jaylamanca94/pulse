@@ -175,6 +175,19 @@ const getAqiHealthGuidance = (category) => {
   return guidance[normalizedCategory] || "";
 };
 
+const formatAirNowAqiBasis = (reading, isLive) => {
+  if (!isLive) {
+    return "Available when live AQI observations return";
+  }
+
+  const count = Number(reading.aqiReadingCount);
+  const pollutantCount = Number.isFinite(count) && count > 0 ? Math.round(count) : 1;
+  const pollutant = reading.pollutant && reading.pollutant !== "AQI" ? reading.pollutant : "current pollutant";
+  const plural = pollutantCount === 1 ? "reading" : "readings";
+
+  return `${pollutantCount} pollutant AQI ${plural}; displayed ${pollutant} as highest AQI`;
+};
+
 const syncAirNowLocationText = () => {
   setText("[data-airnow-source-scope]", getAirNowScope());
   setText("[data-airnow-location-note]", `Showing ${getAirNowScope()}.`);
@@ -389,6 +402,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setText("[data-airnow-source-observed]", isLive
     ? reading.observedAt || "Observation time unavailable"
     : sourceMeta.observed || "Waiting for live observations");
+  setText("[data-airnow-aqi-basis]", sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive));
   setText("[data-airnow-health-guidance]", healthGuidance);
   setSourceDetail("airnow", {
     freshness: isLive
@@ -413,7 +427,8 @@ const normalizeAirNowReading = (items) => {
     category: reading.Category?.Name || "Category unavailable",
     healthGuidance: getAqiHealthGuidance(reading.Category?.Name),
     area: reading.ReportingArea || "AirNow reporting area",
-    pollutant: reading.ParameterName || "AQI"
+    pollutant: reading.ParameterName || "AQI",
+    aqiReadingCount: readingsWithAqi.length || items.length
   };
 };
 
@@ -439,6 +454,7 @@ const loadAirQuality = async () => {
       freshness: isUnconfigured ? "Add server API key for live AQI" : "Try refreshing again later",
       healthGuidance: isUnconfigured ? "Available after configuring AirNow" : "Unavailable until the source responds",
       observed: isUnconfigured ? "Requires AirNow API key" : "Live observation unavailable",
+      aqiBasis: isUnconfigured ? "Requires AirNow API key" : "Live AQI basis unavailable",
       statusLabel: isUnconfigured ? "Needs key" : "Unavailable"
     });
     return false;
