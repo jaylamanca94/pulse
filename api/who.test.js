@@ -81,6 +81,32 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
       latestDate: "10 June 2026",
       oldestDate: "29 May 2026"
     });
+    assert.deepEqual(payload.trend.map((item) => ({
+      count: item.count,
+      date: item.date,
+      latestTitle: item.latestTitle
+    })), [
+      {
+        count: 1,
+        date: "2026-05-29",
+        latestTitle: "Dengue, Trinidad and Tobago"
+      },
+      {
+        count: 1,
+        date: "2026-06-01",
+        latestTitle: "Measles, Uganda"
+      },
+      {
+        count: 1,
+        date: "2026-06-08",
+        latestTitle: "Ebola disease caused by Bundibugyo virus, Democratic Republic of the Congo and Uganda"
+      },
+      {
+        count: 1,
+        date: "2026-06-10",
+        latestTitle: "Marburg virus disease, Germany"
+      }
+    ]);
     assert.equal(
       payload.notices[1].url,
       "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON606"

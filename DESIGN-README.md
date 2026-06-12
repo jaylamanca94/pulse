@@ -19,8 +19,8 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Keep source-window metadata visible when a source surface summarizes only the latest batch of notices or observations.
 - Show dashboard-level source check timestamps near refresh status so users can judge recency at a glance.
 - Use the hero score position for source readiness until Pulse has enough live inputs to support a real aggregate health signal.
-- Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, fallback, no-data, route-unavailable, and sample inputs.
-- Use compact source detail rows when a data surface mixes live, ready, no-data, route-unavailable, fallback, or sample states.
+- Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, no-data, route-unavailable, unconfigured, and pending inputs.
+- Use compact source detail rows when a data surface mixes live, ready, no-data, route-unavailable, unconfigured, or pending states.
 - Distinguish missing serverless source routes from live-source outages so static-preview states do not imply a temporary public-data failure.
 - Keep outbreak geography summaries as compact rows with affected area, notice count, latest date, source identifier, and a direct source link.
 - Order outbreak geography summaries by repeated notice count first and recency second so users can scan for concentration and fresh signals.

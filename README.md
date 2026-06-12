@@ -45,7 +45,7 @@ Pulse also normalizes recognized AirNow category label variants before showing s
 When live AirNow observations are available, Pulse uses restrained official AQI category color cues on the metric note and severity-band detail.
 It also translates the returned AQI category into a concise health-meaning note in the source coverage panel.
 
-The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 fallback`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
+The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
 
 ## Local Setup
 

@@ -18,7 +18,7 @@
           <h1 class="page-title mb-0">Pulse</h1>
         </div>
         <div class="header-actions">
-          <span class="sample-badge" data-status-badge>Loading sources</span>
+          <span class="status-badge" data-status-badge>Loading sources</span>
           <button class="btn btn-outline-secondary btn-sm" id="refreshButton" type="button" aria-label="Refresh source data">
             <i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh
           </button>
@@ -48,7 +48,7 @@
               </div>
               <div>
                 <dt>Baseline</dt>
-                <dd>Sample values only</dd>
+                <dd>Additional sources pending</dd>
               </div>
             </dl>
           </div>
@@ -70,8 +70,8 @@
               <div class="metric-icon"><i class="fa-solid fa-table-list" aria-hidden="true"></i></div>
               <div>
                 <p class="metric-label">Disease trends</p>
-                <p class="metric-value">128</p>
-                <p class="metric-note text-secondary">CDC conditions tracked</p>
+                <p class="metric-value">--</p>
+                <p class="metric-note text-secondary">CDC source pending</p>
               </div>
             </article>
           </div>
@@ -100,8 +100,8 @@
               <div class="metric-icon"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></div>
               <div>
                 <p class="metric-label">Healthcare access</p>
-                <p class="metric-value">59</p>
-                <p class="metric-note text-secondary">Regions monitored</p>
+                <p class="metric-value">--</p>
+                <p class="metric-note text-secondary">Source pending</p>
               </div>
             </article>
           </div>
@@ -110,8 +110,8 @@
               <div class="metric-icon"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
               <div>
                 <p class="metric-label">Community well-being</p>
-                <p class="metric-value">Weekly</p>
-                <p class="metric-note text-success">Updated by source</p>
+                <p class="metric-value">--</p>
+                <p class="metric-note text-secondary">Source pending</p>
               </div>
             </article>
           </div>
@@ -120,8 +120,8 @@
               <div class="metric-icon"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div>
               <div>
                 <p class="metric-label">Population signals</p>
-                <p class="metric-value">Watch</p>
-                <p class="metric-note text-warning">Needs source wiring</p>
+                <p class="metric-value">--</p>
+                <p class="metric-note text-secondary">Source pending</p>
               </div>
             </article>
           </div>
@@ -167,16 +167,10 @@
           <article class="content-surface h-100">
             <div class="section-heading">
               <h2 class="section-title mb-0">Signal trend</h2>
-              <span class="small text-secondary">Last 7 reports</span>
+              <span class="small text-secondary" data-who-trend-updated>Source loading</span>
             </div>
-            <div class="trend-grid" role="list" aria-label="Public health signal trend">
-              <div class="trend-day" role="listitem"><span style="height: 42%"></span><small>W1</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 46%"></span><small>W2</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 55%"></span><small>W3</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 52%"></span><small>W4</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 61%"></span><small>W5</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 58%"></span><small>W6</small></div>
-              <div class="trend-day" role="listitem"><span style="height: 66%"></span><small>W7</small></div>
+            <div class="trend-grid" data-who-trend-grid role="list" aria-label="Recent WHO notice trend">
+              <p class="empty-copy mb-0">Checking WHO notice trend.</p>
             </div>
           </article>
         </div>
@@ -313,8 +307,8 @@
               </li>
               <li>
                 <div class="source-row-head">
-                  <span class="source-status">Sample</span>
-                  <span class="source-name">Pulse prototype baseline</span>
+                  <span class="source-status is-warning">Pending</span>
+                  <span class="source-name">Additional public health sources</span>
                 </div>
                 <dl class="source-meta-grid">
                   <div>
@@ -323,11 +317,11 @@
                   </div>
                   <div>
                     <dt>Freshness</dt>
-                    <dd>Static dashboard values</dd>
+                    <dd>Not connected yet</dd>
                   </div>
                   <div>
                     <dt>Caveat</dt>
-                    <dd>Illustrative until source wiring is complete</dd>
+                    <dd>Hidden from aggregate scoring until source wiring is complete</dd>
                   </div>
                 </dl>
               </li>

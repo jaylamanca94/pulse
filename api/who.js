@@ -173,19 +173,57 @@ function getNoticeWindow(notices) {
   };
 }
 
+function getNoticeTrend(notices) {
+  const noticesByDate = new Map();
+
+  notices.forEach((notice) => {
+    const time = getNoticeTime(notice);
+
+    if (!time) {
+      return;
+    }
+
+    const date = new Date(time).toISOString().slice(0, 10);
+    const summary = noticesByDate.get(date) || {
+      count: 0,
+      date,
+      latestPublishedAt: notice.publishedAt,
+      latestTitle: notice.title,
+      latestTime: 0
+    };
+
+    summary.count += 1;
+
+    if (time >= summary.latestTime) {
+      summary.latestPublishedAt = notice.publishedAt;
+      summary.latestTitle = notice.title;
+      summary.latestTime = time;
+    }
+
+    noticesByDate.set(date, summary);
+  });
+
+  return Array.from(noticesByDate.values())
+    .sort((trendA, trendB) => trendA.date.localeCompare(trendB.date))
+    .slice(-7)
+    .map(({ latestTime, ...trend }) => trend);
+}
+
 function normalizeWhoPayload(payload) {
-  const notices = (Array.isArray(payload?.value) ? payload.value : [])
+  const recentNotices = (Array.isArray(payload?.value) ? payload.value : [])
     .map(normalizeNotice)
     .filter(Boolean)
-    .slice(0, 5);
+    .slice(0, 20);
+  const notices = recentNotices.slice(0, 5);
 
   return {
-    areas: summarizeAreas(notices),
+    areas: summarizeAreas(recentNotices),
     cacheSeconds: WHO_CACHE_SECONDS,
     fetchedAt: new Date().toISOString(),
-    noticeWindow: getNoticeWindow(notices),
+    noticeWindow: getNoticeWindow(recentNotices),
     notices,
-    source: "WHO Disease Outbreak News"
+    source: "WHO Disease Outbreak News",
+    trend: getNoticeTrend(recentNotices)
   };
 }
 
@@ -198,7 +236,7 @@ async function requestWhoNotices() {
 
   const url = new URL(WHO_DON_URL);
   url.searchParams.set("$orderby", "PublicationDateAndTime desc");
-  url.searchParams.set("$top", "5");
+  url.searchParams.set("$top", "20");
 
   const payload = await requestJson(url);
   const normalizedPayload = normalizeWhoPayload(payload);

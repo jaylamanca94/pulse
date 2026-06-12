@@ -32,7 +32,7 @@ Pulse is an event-driven public health reference dashboard, not a daily wellness
 
 ## Scope
 
-Current scope is a static dashboard MVP with sample public health and wellness metrics plus serverless proxies for first live public data sources.
+Current scope is a static dashboard MVP with serverless proxies for first live public data sources and clear pending states for planned sources that are not wired yet.
 
 ## Features
 
@@ -43,13 +43,13 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
 - WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
-- AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
+- AirNow-ready air quality card using a serverless API route with an unconfigured state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
 - Highest returned AirNow pollutant AQI and observation timestamp when live observations are available
 - AirNow reporting-area match showing which returned area and state backs the selected ZIP/radius query
 - AirNow AQI basis detail showing how many pollutant AQI readings were considered and which pollutant drives the displayed value
 - AirNow AQI severity band showing the official category range for the displayed value
-- AirNow numeric AQI fallback that derives the official category, severity band, and health meaning when the source omits a category label
+- AirNow numeric AQI normalization that derives the official category, severity band, and health meaning when the source omits a category label
 - AirNow category-label normalization that keeps severity, health meaning, and color cues available when source labels vary in casing, spacing, or separators
 - AirNow category color cues on live AQI text and severity-band details using the official AQI level semantics
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
@@ -57,20 +57,20 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
-- Top-level signal basis rows that distinguish live, fallback, no-data, and sample inputs behind the summary view
+- Top-level signal basis rows that distinguish live, no-data, route-unavailable, unconfigured, and pending inputs behind the summary view
 - Source coverage rows that show status, scope, freshness, caveats, and official-source links for live public data
 - Distinct no-data source state when a configured source responds without nearby observations
-- Signal trend snapshot
+- WHO-derived signal trend snapshot
 - Priority list for first public data areas
-- Sample data label so the prototype does not imply live tracking
+- Pending-source labels so the prototype does not imply live tracking where source wiring is incomplete
 - Responsive desktop, tablet, and mobile layout
 - Light and dark mode using the user's system setting
 
 ## Design Decisions
 
 - Use Bootstrap conventions for layout and components.
-- Use simple static data until real data sources are selected.
-- Use graceful fallback content when public APIs are unavailable.
+- Use pending states until real data sources are selected.
+- Use graceful unavailable or no-data states when public APIs are unavailable.
 - Keep API-key-dependent sources in a clear configured/unconfigured state.
 - Proxy WHO Disease Outbreak News through `/api/who` for normalization, timeout handling, and caching.
 - Keep API keys server-side through Vercel Serverless Functions.
@@ -86,7 +86,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
-- Keep live, fallback, ready, and sample data states visible in source coverage details.
+- Keep live, ready, no-data, route-unavailable, unconfigured, and pending data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Treat a missing serverless source route as route unavailable, not as a temporary source outage.
 - Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
@@ -100,7 +100,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
-- Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and sample inputs.
+- Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
 
 ## Roadmap
 
@@ -115,7 +115,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 
 ## Known Limitations
 
-- Data is currently sample-only.
+- WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; planned CDC, access, well-being, and population sources are still pending.
 - No authentication or database exists yet.
 - Charts are simple CSS/HTML indicators, not a charting library.
 - Public source APIs vary in freshness, coverage, and format.

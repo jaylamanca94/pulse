@@ -213,7 +213,7 @@ body {
 }
 
 .score-label,
-.sample-badge {
+.status-badge {
   background: var(--accent-soft);
   border-radius: 999px;
   color: var(--accent);
@@ -226,7 +226,7 @@ body {
   text-align: center;
 }
 
-.sample-badge.is-warning {
+.status-badge.is-warning {
   background: var(--warning-soft);
   color: var(--warning);
 }
@@ -312,7 +312,7 @@ body {
 .trend-day {
   display: grid;
   gap: 8px;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr auto auto;
   height: 220px;
   text-align: center;
 }
@@ -328,6 +328,17 @@ body {
   color: var(--muted);
   font-size: 12px;
   line-height: 16px;
+}
+
+.trend-day strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.trend-grid .empty-copy {
+  align-self: start;
+  grid-column: 1 / -1;
 }
 
 .focus-list {

@@ -6,28 +6,6 @@ const API = {
 const config = window.PULSE_CONFIG || {};
 const SOURCE_TIMEOUT_MS = 10000;
 
-const fallbackNotices = [
-  {
-    title: "WHO Disease Outbreak News source ready",
-    date: "Fallback",
-    donId: "WHO DON",
-    location: "Global",
-    summary: "Live notices will appear here when the public WHO endpoint is reachable.",
-    url: "https://www.who.int/emergencies/disease-outbreak-news"
-  }
-];
-
-const fallbackAreaSummaries = [
-  {
-    area: "Global",
-    latestDate: "Fallback",
-    latestDonId: "WHO DON",
-    latestTitle: "WHO Disease Outbreak News source ready",
-    latestUrl: "https://www.who.int/emergencies/disease-outbreak-news",
-    noticeCount: 1
-  }
-];
-
 const fallbackAirQuality = {
   aqi: "--",
   category: "API key needed for live AQI",
@@ -91,7 +69,7 @@ const updateSourceReadiness = (liveCount, totalCount) => {
       ? "live"
       : liveCount > 0
         ? "partial"
-        : "fallback";
+        : "unavailable";
 
   setText("[data-source-readiness-value]", value);
   setText("[data-source-readiness-label]", label);
@@ -375,7 +353,9 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
   if (!summaries.length) {
     const empty = document.createElement("p");
     empty.className = "empty-copy mb-0";
-    empty.textContent = "No affected areas were available from the current WHO response.";
+    empty.textContent = isLive
+      ? "No affected areas were available from the current WHO response."
+      : "Affected areas are unavailable until WHO notices load.";
     list.append(empty);
   } else {
     summaries.forEach((summary) => {
@@ -412,7 +392,62 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
 
   setText("[data-who-area-updated]", isLive
     ? joinDetails("Derived from WHO notices", formatCheckedAt(sourceMeta.fetchedAt))
-    : "Fallback geography");
+    : sourceMeta.areaStatus || "WHO geography unavailable");
+};
+
+const formatTrendLabel = (isoDate) => {
+  if (!isoDate) return "No date";
+
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return isoDate;
+
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC"
+  }).format(date);
+};
+
+const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
+  const grid = document.querySelector("[data-who-trend-grid]");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  if (!isLive || !trend.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty-copy mb-0";
+    empty.textContent = isLive
+      ? "No dated WHO notices were available for the trend."
+      : "WHO trend is unavailable until live notices load.";
+    grid.append(empty);
+    setText("[data-who-trend-updated]", isLive ? "No dated notices" : "Source unavailable");
+    return;
+  }
+
+  const maxCount = Math.max(...trend.map((item) => Number(item.count) || 0), 1);
+
+  trend.forEach((item) => {
+    const count = Number(item.count) || 0;
+    const bar = document.createElement("div");
+    bar.className = "trend-day";
+    bar.setAttribute("role", "listitem");
+
+    const fill = document.createElement("span");
+    fill.style.height = `${Math.max(18, Math.round((count / maxCount) * 100))}%`;
+    fill.title = `${count} ${count === 1 ? "notice" : "notices"} on ${formatTrendLabel(item.date)}`;
+
+    const label = document.createElement("small");
+    label.textContent = formatTrendLabel(item.date);
+
+    const value = document.createElement("strong");
+    value.textContent = String(count);
+
+    bar.append(fill, label, value);
+    grid.append(bar);
+  });
+
+  setText("[data-who-trend-updated]", joinDetails("Recent WHO notice dates", formatCheckedAt(sourceMeta.fetchedAt)));
 };
 
 const renderNotices = (notices, isLive, sourceMeta = {}) => {
@@ -420,7 +455,18 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
   if (!list) return;
 
   list.innerHTML = "";
-  notices.map(formatNotice).forEach((notice) => {
+  const formattedNotices = notices.map(formatNotice);
+
+  if (!formattedNotices.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty-copy mb-0";
+    empty.textContent = isLive
+      ? "No WHO Disease Outbreak News notices were returned."
+      : "WHO notices are unavailable right now.";
+    list.append(empty);
+  }
+
+  formattedNotices.forEach((notice) => {
     const article = document.createElement("article");
     article.className = "notice-item";
 
@@ -463,25 +509,37 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
   });
 
   setText("[data-who-count]", String(notices.length));
-  setText("[data-who-note]", isLive ? "Live WHO notices" : "Fallback sample");
-  setText("[data-who-updated]", isLive ? "WHO proxy cache" : "Fallback data");
-  setText("[data-who-signal-basis]", isLive ? "Live event notices" : "Fallback notice");
+  setText("[data-who-note]", isLive ? "Live WHO notices" : sourceMeta.statusLabel || "No live WHO data");
+  setText("[data-who-updated]", isLive ? "WHO proxy cache" : sourceMeta.freshness || "Source unavailable");
+  setText("[data-who-signal-basis]", isLive ? "Live event notices" : sourceMeta.statusLabel || "Source unavailable");
   setText("[data-who-source-window]", isLive
     ? formatWhoNoticeWindow(sourceMeta.noticeWindow)
-    : "Fallback notice only");
+    : sourceMeta.sourceWindow || "No live notice window");
   setSourceDetail("who", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
-      : "Using local fallback notice",
+      : sourceMeta.freshness || "WHO source unavailable",
     isLive,
     isWarning: !isLive,
-    status: isLive ? "Live" : "Fallback"
+    status: isLive ? "Live" : sourceMeta.statusLabel || "Unavailable"
   });
   renderAreaSummary(
-    Array.isArray(sourceMeta.areas) && sourceMeta.areas.length ? sourceMeta.areas : fallbackAreaSummaries,
+    Array.isArray(sourceMeta.areas) ? sourceMeta.areas : [],
     isLive,
     sourceMeta
   );
+  renderWhoTrend(Array.isArray(sourceMeta.trend) ? sourceMeta.trend : [], isLive, sourceMeta);
+};
+
+const getWhoUnavailableState = (error = {}) => {
+  const isRouteUnavailable = error.status === 404;
+
+  return {
+    areaStatus: isRouteUnavailable ? "WHO route unavailable" : "WHO geography unavailable",
+    freshness: isRouteUnavailable ? "Run with server API routes for WHO notices" : "Try refreshing again later",
+    sourceWindow: isRouteUnavailable ? "WHO route unavailable" : "Live notice window unavailable",
+    statusLabel: isRouteUnavailable ? "Route missing" : "Unavailable"
+  };
 };
 
 const loadWhoNotices = async () => {
@@ -490,10 +548,19 @@ const loadWhoNotices = async () => {
     const data = await fetchJson(API.who);
     const notices = Array.isArray(data.notices) ? data.notices : [];
     const isLive = notices.length > 0;
-    renderNotices(isLive ? notices : fallbackNotices, isLive, data);
+    renderNotices(notices, isLive, {
+      ...data,
+      areaStatus: isLive ? undefined : "No affected areas returned",
+      freshness: isLive
+        ? undefined
+        : joinDetails(formatCheckedAt(data.fetchedAt), formatCacheWindow(data.cacheSeconds)) || "No notices returned",
+      sourceWindow: isLive ? undefined : "No notices returned",
+      statusLabel: isLive ? undefined : "No data"
+    });
     return isLive;
   } catch (error) {
-    renderNotices(fallbackNotices, false);
+    const unavailable = getWhoUnavailableState(error);
+    renderNotices([], false, unavailable);
     return false;
   } finally {
     setBusy("[data-who-list]", false);
@@ -684,7 +751,7 @@ const loadDashboard = async () => {
 
     updateSourceReadiness(liveCount, results.length);
     setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : "Sources refreshed");
-    setStatusBadge(liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data", isPartial || hasNoLiveSources);
+    setStatusBadge(liveCount ? `${liveCount}/${results.length} live sources` : "No live sources", isPartial || hasNoLiveSources);
     setText("[data-dashboard-checked]", formatLastChecked());
   } finally {
     setRefreshState(false);
