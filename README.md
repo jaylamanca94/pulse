@@ -108,6 +108,8 @@ npm test
 - `index.html` - dashboard markup
 - `styles.css` - dashboard styling
 - `app.js` - frontend data loading and rendering
+- `assets/favicon.svg` - vector heart-pulse favicon/app icon with theme-aware gradient background
+- `site.webmanifest` - browser app manifest pointing to the SVG icon
 - `config.js` - optional static prototype API configuration
 - `api/_pulse.js` - shared API helper, timeout, response, and cache utilities
 - `api/who.js` - serverless WHO Disease Outbreak News proxy and geography summary normalizer
