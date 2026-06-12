@@ -147,6 +147,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .score-wrap {
@@ -204,6 +205,7 @@ body {
 .metric-value,
 .metric-note {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .metric-note.text-warning {
@@ -278,6 +280,10 @@ body {
   gap: 16px;
   justify-content: space-between;
   padding-top: 12px;
+}
+
+.area-item > div {
+  min-width: 0;
 }
 
 .area-item:first-child {
@@ -371,8 +377,16 @@ body {
 
 .notice-title a {
   color: var(--text);
+  overflow-wrap: anywhere;
   text-decoration-color: var(--accent);
   text-underline-offset: 4px;
+}
+
+.notice-title a:focus-visible,
+.source-link:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid rgba(47, 111, 98, 0.28);
+  outline-offset: 2px;
 }
 
 .source-list {
@@ -438,6 +452,8 @@ body {
 
 .source-name {
   font-weight: 700;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .source-link {
@@ -448,6 +464,8 @@ body {
   font-weight: 700;
   gap: 4px;
   line-height: 16px;
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-decoration-color: var(--accent);
   text-underline-offset: 3px;
 }
@@ -480,6 +498,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .airnow-form {
