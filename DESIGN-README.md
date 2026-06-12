@@ -116,6 +116,12 @@ Typography values are defined as font size and line height.
 
 Use `8px` or less for normal cards and repeated list items unless a larger container treatment is explicitly requested.
 
+## Surface Treatment
+
+- Dashboard surfaces use a restrained `1px` border with a soft shadow to separate content from the page background without creating heavy elevation.
+- The hero summary surface may use a narrow accent rail when it helps establish the primary page hierarchy.
+- Metadata groups should use dividers, spacing, and compact labels before adding nested card treatments.
+
 ## Icons
 
 - Use Font Awesome Free for icons when needed.
