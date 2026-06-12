@@ -144,6 +144,23 @@ const formatWhoNoticeWindow = (windowMeta = {}) => {
   return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} from ${oldestDate} to ${latestDate}`;
 };
 
+const formatWhoPublishedAt = (isoString, fallback = "Date unavailable") => {
+  if (!isoString) return fallback;
+
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  return `Published ${new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short"
+  }).format(date)}`;
+};
+
 const formatAirNowObservedAt = (reading) => {
   const date = typeof reading.DateObserved === "string" ? reading.DateObserved.trim() : "";
   const hour = Number(reading.HourObserved);
@@ -333,6 +350,7 @@ const formatNotice = (notice) => {
     date: notice.date || notice.FormattedDate || "Date unavailable",
     donId,
     location: notice.location || (titleParts.length > 1 ? titleParts.slice(1).join(", ") : "Location not specified"),
+    publishedAt: notice.publishedAt || notice.PublicationDateAndTime || "",
     summary: summary || "No summary available from source.",
     url
   };
@@ -409,7 +427,17 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
     const meta = document.createElement("p");
     meta.className = "notice-meta-row";
 
-    [notice.date, notice.location, notice.donId].forEach((value) => {
+    const published = document.createElement(notice.publishedAt ? "time" : "span");
+    published.className = "notice-meta";
+    published.textContent = notice.publishedAt
+      ? formatWhoPublishedAt(notice.publishedAt, notice.date)
+      : notice.date;
+    if (notice.publishedAt) {
+      published.dateTime = notice.publishedAt;
+    }
+    meta.append(published);
+
+    [notice.location, notice.donId].forEach((value) => {
       const item = document.createElement("span");
       item.className = "notice-meta";
       item.textContent = value;

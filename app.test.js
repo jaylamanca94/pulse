@@ -176,6 +176,97 @@ test("AirNow reading uses numeric AQI when source category label is not recogniz
   assert.equal(result.severityBand, "Moderate, 51-100");
 });
 
+test("WHO notice helpers preserve exact source publication time", () => {
+  const result = runAppHelper(`(() => {
+    const notice = formatNotice({
+      title: "Marburg virus disease, Germany",
+      date: "10 June 2026",
+      donId: "2026-DON607",
+      location: "Germany",
+      publishedAt: "2026-06-10T09:15:00Z",
+      summary: "New event reported.",
+      url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON607"
+    });
+
+    return {
+      label: formatWhoPublishedAt(notice.publishedAt, notice.date),
+      publishedAt: notice.publishedAt
+    };
+  })()`);
+
+  assert.equal(result.publishedAt, "2026-06-10T09:15:00Z");
+  assert.match(result.label, /^Published /);
+  assert.match(result.label, /2026/);
+  assert.match(result.label, /UTC/);
+});
+
+test("WHO notice rows render source publication time as datetime metadata", () => {
+  const result = runAppHelper(`(() => {
+    const makeElement = (tagName) => ({
+      tagName,
+      children: [],
+      classList: {
+        add() {},
+        remove() {},
+        toggle() {}
+      },
+      append(...nodes) {
+        this.children.push(...nodes);
+      },
+      set innerHTML(value) {
+        this.children = [];
+      }
+    });
+    const targets = new Map();
+
+    globalThis.document = {
+      createElement: makeElement,
+      querySelector(selector) {
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement("div"));
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    renderNotices([
+      {
+        title: "Marburg virus disease, Germany",
+        date: "10 June 2026",
+        donId: "2026-DON607",
+        location: "Germany",
+        publishedAt: "2026-06-10T09:15:00Z",
+        summary: "New event reported.",
+        url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON607"
+      }
+    ], true, {
+      areas: [],
+      fetchedAt: "2026-06-12T09:00:00Z",
+      noticeWindow: {
+        count: 1,
+        latestDate: "10 June 2026",
+        oldestDate: "10 June 2026"
+      }
+    });
+
+    const list = targets.get("[data-who-list]");
+    const article = list.children[0];
+    const metaRow = article.children[0];
+    const published = metaRow.children[0];
+
+    return {
+      dateTime: published.dateTime,
+      tagName: published.tagName,
+      text: published.textContent
+    };
+  })()`);
+
+  assert.equal(result.tagName, "time");
+  assert.equal(result.dateTime, "2026-06-10T09:15:00Z");
+  assert.match(result.text, /^Published /);
+});
+
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {
   const result = runAppHelper(`(() => {
     airNowQuery.zipCode = "10001";

@@ -33,7 +33,7 @@ window.PULSE_CONFIG = {
 };
 ```
 
-WHO notices are loaded through `/api/who`, which normalizes and caches the public source response, reports the recent notice window being summarized, and derives a compact affected-area summary from recent notices. Obvious multi-area title geography is split into separate summary rows when the source uses separators such as `and`, `&`, or `;`, while joined place names such as Trinidad and Tobago stay intact. Affected areas are ranked by repeated notice count, then latest publication recency.
+WHO notices are loaded through `/api/who`, which normalizes and caches the public source response, reports the recent notice window being summarized, and derives a compact affected-area summary from recent notices. Recent notice rows show the source publication timestamp when available. Obvious multi-area title geography is split into separate summary rows when the source uses separators such as `and`, `&`, or `;`, while joined place names such as Trinidad and Tobago stay intact. Affected areas are ranked by repeated notice count, then latest publication recency.
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.

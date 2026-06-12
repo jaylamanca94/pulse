@@ -39,7 +39,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Public health signal summary
 - Metric cards for planned health, environmental, access, and population data areas
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
-- Per-notice WHO metadata for date, geography, and DON identifier when available
+- Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
 - WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
@@ -80,7 +80,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Favor official public health sources before third-party aggregators.
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
-- Keep outbreak notice rows specific enough to show event date, affected geography, and source identifier when the upstream source provides them.
+- Keep outbreak notice rows specific enough to show source publication time, affected geography, and source identifier when the upstream source provides them.
 - Show the recent notice window behind WHO-derived summaries so users can judge how much of the latest feed the dashboard is using.
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
