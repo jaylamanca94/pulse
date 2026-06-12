@@ -33,10 +33,10 @@ window.PULSE_CONFIG = {
 };
 ```
 
-WHO notices are loaded through `/api/who`, which normalizes and caches the public source response and derives a compact affected-area summary from recent notices. Affected areas are ranked by repeated notice count, then latest publication recency.
+WHO notices are loaded through `/api/who`, which normalizes and caches the public source response, reports the recent notice window being summarized, and derives a compact affected-area summary from recent notices. Affected areas are ranked by repeated notice count, then latest publication recency.
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
-When live AirNow observations are available, the dashboard shows the reported pollutant and upstream observation time separately from the dashboard fetch time.
+When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.
 It also translates the returned AQI category into a concise health-meaning note in the source coverage panel.
 
 The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 fallback`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.

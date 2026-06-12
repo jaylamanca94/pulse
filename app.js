@@ -126,6 +126,24 @@ const formatCacheWindow = (seconds) => {
   return `${minutes} min cache`;
 };
 
+const formatWhoNoticeWindow = (windowMeta = {}) => {
+  const count = Number(windowMeta.count);
+  const noticeCount = Number.isFinite(count) && count > 0 ? Math.round(count) : 0;
+
+  if (!noticeCount) {
+    return "No recent notices returned";
+  }
+
+  const latestDate = windowMeta.latestDate || "latest date unavailable";
+  const oldestDate = windowMeta.oldestDate || "oldest date unavailable";
+
+  if (latestDate === oldestDate) {
+    return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} from ${latestDate}`;
+  }
+
+  return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} from ${oldestDate} to ${latestDate}`;
+};
+
 const formatAirNowObservedAt = (reading) => {
   const date = typeof reading.DateObserved === "string" ? reading.DateObserved.trim() : "";
   const hour = Number(reading.HourObserved);
@@ -313,6 +331,9 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
   setText("[data-who-note]", isLive ? "Live WHO notices" : "Fallback sample");
   setText("[data-who-updated]", isLive ? "WHO proxy cache" : "Fallback data");
   setText("[data-who-signal-basis]", isLive ? "Live event notices" : "Fallback notice");
+  setText("[data-who-source-window]", isLive
+    ? formatWhoNoticeWindow(sourceMeta.noticeWindow)
+    : "Fallback notice only");
   setSourceDetail("who", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
@@ -380,7 +401,10 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
 };
 
 const normalizeAirNowReading = (items) => {
-  const reading = items.find((item) => Number.isFinite(item.AQI)) || items[0];
+  const readingsWithAqi = items.filter((item) => Number.isFinite(item.AQI));
+  const reading = readingsWithAqi.length
+    ? readingsWithAqi.reduce((highest, item) => (item.AQI > highest.AQI ? item : highest))
+    : items[0];
   if (!reading) return fallbackAirQuality;
 
   return {

@@ -67,6 +67,11 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
     assert.equal(payload.areas[0].latestDonId, "2026-DON606");
     assert.equal(payload.areas[0].latestPublishedAt, "2026-06-08T12:35:09Z");
     assert.equal(payload.areas[0].noticeCount, 2);
+    assert.deepEqual(payload.noticeWindow, {
+      count: 3,
+      latestDate: "10 June 2026",
+      oldestDate: "1 June 2026"
+    });
     assert.equal(
       payload.notices[1].url,
       "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON606"

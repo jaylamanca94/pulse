@@ -41,9 +41,10 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for date, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
+- WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
-- AirNow pollutant and observation timestamp when live observations are available
+- Highest returned AirNow pollutant AQI and observation timestamp when live observations are available
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
@@ -73,11 +74,13 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
 - Keep outbreak notice rows specific enough to show event date, affected geography, and source identifier when the upstream source provides them.
+- Show the recent notice window behind WHO-derived summaries so users can judge how much of the latest feed the dashboard is using.
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
+- When AirNow returns multiple pollutant observations for a selected area, use the highest numeric AQI as the displayed current severity.
 - Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.

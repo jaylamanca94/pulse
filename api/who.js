@@ -129,6 +129,23 @@ function summarizeAreas(notices) {
     .map(({ latestTime, ...area }) => area);
 }
 
+function getNoticeWindow(notices) {
+  const datedNotices = notices
+    .map((notice) => ({
+      date: notice.date,
+      publishedAt: notice.publishedAt,
+      time: getNoticeTime(notice)
+    }))
+    .filter((notice) => notice.time > 0)
+    .sort((noticeA, noticeB) => noticeB.time - noticeA.time);
+
+  return {
+    count: notices.length,
+    latestDate: datedNotices[0]?.date || "Date unavailable",
+    oldestDate: datedNotices[datedNotices.length - 1]?.date || "Date unavailable"
+  };
+}
+
 function normalizeWhoPayload(payload) {
   const notices = (Array.isArray(payload?.value) ? payload.value : [])
     .map(normalizeNotice)
@@ -139,6 +156,7 @@ function normalizeWhoPayload(payload) {
     areas: summarizeAreas(notices),
     cacheSeconds: WHO_CACHE_SECONDS,
     fetchedAt: new Date().toISOString(),
+    noticeWindow: getNoticeWindow(notices),
     notices,
     source: "WHO Disease Outbreak News"
   };
