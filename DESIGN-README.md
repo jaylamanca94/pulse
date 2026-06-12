@@ -26,6 +26,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Keep official-source links close to source status, freshness, and caveats when the dashboard depends on external public data.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.
 - Show upstream observation times near source freshness when a live source provides both values.
+- Show source-returned location matches near source details when a user-selected place is resolved through a reporting area.
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
 - Show concise health meaning near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.

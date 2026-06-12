@@ -52,3 +52,31 @@ test("AirNow reading normalization selects the highest AQI observation", () => {
   assert.equal(reading.aqiReadingCount, 2);
   assert.equal(basis, "2 pollutant AQI readings; displayed PM2.5 as highest AQI");
 });
+
+test("AirNow area match keeps the reporting area distinct from the request scope", () => {
+  const result = runAppHelper(`(() => {
+    airNowQuery.zipCode = "10001";
+    airNowQuery.distance = 50;
+
+    const reading = normalizeAirNowReading([
+      {
+        AQI: 74,
+        Category: { Name: "Moderate" },
+        DateObserved: "2026-06-12",
+        HourObserved: 13,
+        LocalTimeZone: "EST",
+        ParameterName: "OZONE",
+        ReportingArea: "New York City Region",
+        StateCode: "NY"
+      }
+    ]);
+
+    return {
+      area: formatAirNowArea(reading),
+      match: formatAirNowAreaMatch(reading, true)
+    };
+  })()`);
+
+  assert.equal(result.area, "New York City Region, NY");
+  assert.equal(result.match, "New York City Region, NY for ZIP 10001, 50-mile radius");
+});

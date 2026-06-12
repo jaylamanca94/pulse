@@ -37,6 +37,7 @@ WHO notices are loaded through `/api/who`, which normalizes and caches the publi
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.
+It also shows the returned AirNow reporting area and state that backs the selected ZIP/radius query.
 It also shows how many pollutant AQI readings were considered and which pollutant drives the displayed highest-AQI value.
 It also translates the returned AQI category into a concise health-meaning note in the source coverage panel.
 

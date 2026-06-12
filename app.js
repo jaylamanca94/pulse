@@ -161,6 +161,14 @@ const joinDetails = (...values) => values.filter(Boolean).join("; ");
 
 const getAirNowScope = () => `ZIP ${airNowQuery.zipCode}, ${airNowQuery.distance}-mile radius`;
 
+const formatAirNowArea = (reading = {}) => {
+  const area = typeof reading.area === "string" ? reading.area.trim() : "";
+  const stateCode = typeof reading.stateCode === "string" ? reading.stateCode.trim() : "";
+
+  if (!area) return "AirNow reporting area";
+  return stateCode ? `${area}, ${stateCode}` : area;
+};
+
 const getAqiHealthGuidance = (category) => {
   const normalizedCategory = String(category || "").trim().toLowerCase();
   const guidance = {
@@ -186,6 +194,14 @@ const formatAirNowAqiBasis = (reading, isLive) => {
   const plural = pollutantCount === 1 ? "reading" : "readings";
 
   return `${pollutantCount} pollutant AQI ${plural}; displayed ${pollutant} as highest AQI`;
+};
+
+const formatAirNowAreaMatch = (reading, isLive) => {
+  if (!isLive) {
+    return "Available when live AQI observations return";
+  }
+
+  return `${formatAirNowArea(reading)} for ${getAirNowScope()}`;
 };
 
 const syncAirNowLocationText = () => {
@@ -389,6 +405,7 @@ const buildAirNowUrl = () => {
 
 const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   syncAirNowLocationText();
+  const areaLabel = formatAirNowArea(reading);
   const pollutantLabel = reading.pollutant && reading.pollutant !== "AQI"
     ? `${reading.pollutant}: ${reading.category}`
     : reading.category;
@@ -397,11 +414,12 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
     : sourceMeta.healthGuidance || "Available when live AQI is returned";
 
   setText("[data-airnow-aqi]", String(reading.aqi));
-  setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${reading.area}` : reading.category);
-  setText("[data-airnow-signal-basis]", isLive ? `Live near ${reading.area}` : sourceMeta.statusLabel || "Needs key");
+  setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
+  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "Needs key");
   setText("[data-airnow-source-observed]", isLive
     ? reading.observedAt || "Observation time unavailable"
     : sourceMeta.observed || "Waiting for live observations");
+  setText("[data-airnow-area-match]", sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive));
   setText("[data-airnow-aqi-basis]", sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive));
   setText("[data-airnow-health-guidance]", healthGuidance);
   setSourceDetail("airnow", {
@@ -427,6 +445,7 @@ const normalizeAirNowReading = (items) => {
     category: reading.Category?.Name || "Category unavailable",
     healthGuidance: getAqiHealthGuidance(reading.Category?.Name),
     area: reading.ReportingArea || "AirNow reporting area",
+    stateCode: reading.StateCode || "",
     pollutant: reading.ParameterName || "AQI",
     aqiReadingCount: readingsWithAqi.length || items.length
   };
@@ -442,6 +461,7 @@ const loadAirQuality = async () => {
       freshness: isLive
         ? undefined
         : joinDetails(formatCheckedAt(data.fetchedAt), formatCacheWindow(data.cacheSeconds)) || "No observations returned",
+      areaMatch: isLive ? undefined : "No reporting area returned for selected scope",
       statusLabel: isLive ? undefined : "No data"
     });
     return isLive;
@@ -454,6 +474,7 @@ const loadAirQuality = async () => {
       freshness: isUnconfigured ? "Add server API key for live AQI" : "Try refreshing again later",
       healthGuidance: isUnconfigured ? "Available after configuring AirNow" : "Unavailable until the source responds",
       observed: isUnconfigured ? "Requires AirNow API key" : "Live observation unavailable",
+      areaMatch: isUnconfigured ? "Requires AirNow API key" : "Live reporting area unavailable",
       aqiBasis: isUnconfigured ? "Requires AirNow API key" : "Live AQI basis unavailable",
       statusLabel: isUnconfigured ? "Needs key" : "Unavailable"
     });

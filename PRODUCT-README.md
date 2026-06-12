@@ -45,6 +45,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - AirNow-ready air quality card using a serverless API route with fallback state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
 - Highest returned AirNow pollutant AQI and observation timestamp when live observations are available
+- AirNow reporting-area match showing which returned area and state backs the selected ZIP/radius query
 - AirNow AQI basis detail showing how many pollutant AQI readings were considered and which pollutant drives the displayed value
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
 - Refresh action for live source checks
@@ -81,6 +82,7 @@ Current scope is a static dashboard MVP with sample public health and wellness m
 - Keep live, fallback, ready, and sample data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
+- Show AirNow's returned reporting area and state separately from the user-selected ZIP/radius so local relevance is auditable.
 - When AirNow returns multiple pollutant observations for a selected area, use the highest numeric AQI as the displayed current severity.
 - When displaying the highest AirNow pollutant AQI, show the pollutant-reading count and selected pollutant near source details so users understand the value's basis.
 - Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
