@@ -31,6 +31,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
 - Show official severity bands near environmental source details when a source returns a recognized AQI category.
 - When a live environmental source returns a numeric AQI without a category label, show the category and health meaning derived from the official numeric band rather than leaving those rows unavailable.
+- Use official AQI category color cues as restrained text emphasis on live AQI category and severity-band details, while keeping source-readiness status visually separate.
 - Show concise health meaning near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 

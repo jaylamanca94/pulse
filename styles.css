@@ -10,6 +10,12 @@
   --bar-bg: rgba(33, 37, 41, 0.08);
   --warning: #805f00;
   --warning-soft: rgba(255, 193, 7, 0.18);
+  --aqi-good: #2f6f62;
+  --aqi-moderate: #7a6200;
+  --aqi-unhealthy-sensitive: #a75612;
+  --aqi-unhealthy: #b02a37;
+  --aqi-very-unhealthy: #6f42c1;
+  --aqi-hazardous: #7f1d1d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +30,12 @@
     --bar-bg: rgba(248, 249, 250, 0.12);
     --warning: #ffd968;
     --warning-soft: rgba(255, 217, 104, 0.16);
+    --aqi-good: #7cc7b4;
+    --aqi-moderate: #ffe08a;
+    --aqi-unhealthy-sensitive: #ffb36b;
+    --aqi-unhealthy: #ff8a8f;
+    --aqi-very-unhealthy: #d5b3ff;
+    --aqi-hazardous: #ff9aa2;
   }
 }
 
@@ -210,6 +222,30 @@ body {
 
 .metric-note.text-warning {
   color: var(--warning) !important;
+}
+
+.aqi-good {
+  color: var(--aqi-good) !important;
+}
+
+.aqi-moderate {
+  color: var(--aqi-moderate) !important;
+}
+
+.aqi-unhealthy-sensitive {
+  color: var(--aqi-unhealthy-sensitive) !important;
+}
+
+.aqi-unhealthy {
+  color: var(--aqi-unhealthy) !important;
+}
+
+.aqi-very-unhealthy {
+  color: var(--aqi-very-unhealthy) !important;
+}
+
+.aqi-hazardous {
+  color: var(--aqi-hazardous) !important;
 }
 
 .metric-value {

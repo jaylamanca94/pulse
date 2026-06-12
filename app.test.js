@@ -75,6 +75,28 @@ test("AirNow severity band follows official AQI category ranges", () => {
   ]));
 });
 
+test("AirNow category tone classes follow official AQI levels", () => {
+  const result = runAppHelper(`(() => ([
+    getAqiToneClass("Good"),
+    getAqiToneClass("Moderate"),
+    getAqiToneClass("Unhealthy for Sensitive Groups"),
+    getAqiToneClass("Unhealthy"),
+    getAqiToneClass("Very Unhealthy"),
+    getAqiToneClass("Hazardous"),
+    getAqiToneClass("Unknown")
+  ]))()`);
+
+  assert.equal(JSON.stringify(result), JSON.stringify([
+    "aqi-good",
+    "aqi-moderate",
+    "aqi-unhealthy-sensitive",
+    "aqi-unhealthy",
+    "aqi-very-unhealthy",
+    "aqi-hazardous",
+    ""
+  ]));
+});
+
 test("AirNow reading derives official category from numeric AQI when missing", () => {
   const result = runAppHelper(`(() => {
     const reading = normalizeAirNowReading([

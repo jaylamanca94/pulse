@@ -209,6 +209,38 @@ const getAqiSeverityBand = (category) => {
   return bands[normalizedCategory] || "";
 };
 
+const AQI_TONE_CLASSES = [
+  "aqi-good",
+  "aqi-moderate",
+  "aqi-unhealthy-sensitive",
+  "aqi-unhealthy",
+  "aqi-very-unhealthy",
+  "aqi-hazardous"
+];
+
+const getAqiToneClass = (category) => {
+  const normalizedCategory = String(category || "").trim().toLowerCase();
+  const tones = {
+    good: "aqi-good",
+    moderate: "aqi-moderate",
+    "unhealthy for sensitive groups": "aqi-unhealthy-sensitive",
+    unhealthy: "aqi-unhealthy",
+    "very unhealthy": "aqi-very-unhealthy",
+    hazardous: "aqi-hazardous"
+  };
+
+  return tones[normalizedCategory] || "";
+};
+
+const setAqiTone = (selector, category) => {
+  const element = document.querySelector(selector);
+  if (!element) return;
+
+  element.classList.remove(...AQI_TONE_CLASSES);
+  const toneClass = getAqiToneClass(category);
+  if (toneClass) element.classList.add(toneClass);
+};
+
 const formatAirNowAqiBasis = (reading, isLive) => {
   if (!isLive) {
     return "Available when live AQI observations return";
@@ -452,6 +484,8 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setText("[data-airnow-aqi-basis]", sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive));
   setText("[data-airnow-severity-band]", severityBand);
   setText("[data-airnow-health-guidance]", healthGuidance);
+  setAqiTone("[data-airnow-note]", isLive ? reading.category : "");
+  setAqiTone("[data-airnow-severity-band]", isLive ? reading.category : "");
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
