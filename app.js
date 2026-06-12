@@ -71,6 +71,28 @@ const setBusy = (selector, value) => {
   if (element) element.setAttribute("aria-busy", String(value));
 };
 
+const setStatusBadge = (label, isWarning = false) => {
+  const badge = document.querySelector("[data-status-badge]");
+  if (!badge) return;
+
+  badge.textContent = label;
+  badge.classList.toggle("is-warning", isWarning);
+};
+
+const updateSourceReadiness = (liveCount, totalCount) => {
+  const value = totalCount > 0 ? `${liveCount}/${totalCount}` : "--";
+  const label = totalCount === 0
+    ? "checking"
+    : liveCount === totalCount
+      ? "live"
+      : liveCount > 0
+        ? "partial"
+        : "fallback";
+
+  setText("[data-source-readiness-value]", value);
+  setText("[data-source-readiness-label]", label);
+};
+
 const formatCheckedAt = (isoString) => {
   if (!isoString) return "Checked this session";
 
@@ -374,6 +396,8 @@ const setAirNowFormState = (isRefreshing) => {
 const loadDashboard = async () => {
   setRefreshState(true);
   setAirNowFormState(true);
+  updateSourceReadiness(0, 0);
+  setStatusBadge("Checking sources");
   setText("[data-dashboard-status]", "Refreshing sources");
 
   try {
@@ -383,9 +407,12 @@ const loadDashboard = async () => {
     ]);
     const fallbackCount = results.filter((result) => result.status === "rejected" || !result.value).length;
     const liveCount = results.length - fallbackCount;
+    const isPartial = liveCount > 0 && fallbackCount > 0;
+    const hasNoLiveSources = liveCount === 0;
 
+    updateSourceReadiness(liveCount, results.length);
     setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : "Sources refreshed");
-    setText("[data-status-badge]", liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data");
+    setStatusBadge(liveCount ? `${liveCount}/${results.length} live sources` : "Using sample data", isPartial || hasNoLiveSources);
     setText("[data-dashboard-checked]", formatLastChecked());
   } finally {
     setRefreshState(false);

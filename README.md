@@ -37,6 +37,8 @@ WHO notices are loaded through `/api/who`, which normalizes and caches the publi
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
 
+The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 fallback`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
+
 ## Local Setup
 
 Install dependencies when working with the serverless API route:

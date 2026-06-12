@@ -17,6 +17,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Make update timestamps, source attribution, location, geographic level, and severity easy to find.
 - Keep notice-level date, geography, and source identifiers visible as compact metadata, not buried in paragraph text.
 - Show dashboard-level source check timestamps near refresh status so users can judge recency at a glance.
+- Use the hero score position for source readiness until Pulse has enough live inputs to support a real aggregate health signal.
 - Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, fallback, no-data, and sample inputs.
 - Use compact source detail rows when a data surface mixes live, ready, no-data, fallback, or sample states.
 - Keep outbreak geography summaries as compact rows with affected area, notice count, latest date, source identifier, and a direct source link.
