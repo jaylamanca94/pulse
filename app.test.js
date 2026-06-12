@@ -40,10 +40,11 @@ test("AirNow reading normalization selects the highest AQI observation", () => {
 
     return {
       reading,
-      basis: formatAirNowAqiBasis(reading, true)
+      basis: formatAirNowAqiBasis(reading, true),
+      severityBand: getAqiSeverityBand(reading.category)
     };
   })()`);
-  const { basis, reading } = result;
+  const { basis, reading, severityBand } = result;
 
   assert.equal(reading.aqi, 151);
   assert.equal(reading.category, "Unhealthy");
@@ -51,6 +52,27 @@ test("AirNow reading normalization selects the highest AQI observation", () => {
   assert.equal(reading.observedAt, "2026-06-12 10:00 AM EST");
   assert.equal(reading.aqiReadingCount, 2);
   assert.equal(basis, "2 pollutant AQI readings; displayed PM2.5 as highest AQI");
+  assert.equal(severityBand, "Unhealthy, 151-200");
+});
+
+test("AirNow severity band follows official AQI category ranges", () => {
+  const result = runAppHelper(`(() => ([
+    getAqiSeverityBand("Good"),
+    getAqiSeverityBand("Moderate"),
+    getAqiSeverityBand("Unhealthy for Sensitive Groups"),
+    getAqiSeverityBand("Very Unhealthy"),
+    getAqiSeverityBand("Hazardous"),
+    getAqiSeverityBand("Unknown")
+  ]))()`);
+
+  assert.equal(JSON.stringify(result), JSON.stringify([
+    "Good, 0-50",
+    "Moderate, 51-100",
+    "Unhealthy for Sensitive Groups, 101-150",
+    "Very Unhealthy, 201-300",
+    "Hazardous, 301+",
+    ""
+  ]));
 });
 
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {

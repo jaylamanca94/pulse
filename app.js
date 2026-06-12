@@ -183,6 +183,20 @@ const getAqiHealthGuidance = (category) => {
   return guidance[normalizedCategory] || "";
 };
 
+const getAqiSeverityBand = (category) => {
+  const normalizedCategory = String(category || "").trim().toLowerCase();
+  const bands = {
+    good: "Good, 0-50",
+    moderate: "Moderate, 51-100",
+    "unhealthy for sensitive groups": "Unhealthy for Sensitive Groups, 101-150",
+    unhealthy: "Unhealthy, 151-200",
+    "very unhealthy": "Very Unhealthy, 201-300",
+    hazardous: "Hazardous, 301+"
+  };
+
+  return bands[normalizedCategory] || "";
+};
+
 const formatAirNowAqiBasis = (reading, isLive) => {
   if (!isLive) {
     return "Available when live AQI observations return";
@@ -412,6 +426,9 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   const healthGuidance = isLive
     ? reading.healthGuidance || getAqiHealthGuidance(reading.category) || "Health meaning unavailable for this AQI category"
     : sourceMeta.healthGuidance || "Available when live AQI is returned";
+  const severityBand = isLive
+    ? getAqiSeverityBand(reading.category) || "Severity band unavailable for this AQI category"
+    : sourceMeta.severityBand || "Available when live AQI is returned";
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
@@ -421,6 +438,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
     : sourceMeta.observed || "Waiting for live observations");
   setText("[data-airnow-area-match]", sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive));
   setText("[data-airnow-aqi-basis]", sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive));
+  setText("[data-airnow-severity-band]", severityBand);
   setText("[data-airnow-health-guidance]", healthGuidance);
   setSourceDetail("airnow", {
     freshness: isLive
@@ -462,7 +480,8 @@ const loadAirQuality = async () => {
         ? undefined
         : joinDetails(formatCheckedAt(data.fetchedAt), formatCacheWindow(data.cacheSeconds)) || "No observations returned",
       areaMatch: isLive ? undefined : "No reporting area returned for selected scope",
-      statusLabel: isLive ? undefined : "No data"
+      statusLabel: isLive ? undefined : "No data",
+      severityBand: isLive ? undefined : "No AQI severity band returned for selected scope"
     });
     return isLive;
   } catch (error) {
@@ -476,6 +495,7 @@ const loadAirQuality = async () => {
       observed: isUnconfigured ? "Requires AirNow API key" : "Live observation unavailable",
       areaMatch: isUnconfigured ? "Requires AirNow API key" : "Live reporting area unavailable",
       aqiBasis: isUnconfigured ? "Requires AirNow API key" : "Live AQI basis unavailable",
+      severityBand: isUnconfigured ? "Requires AirNow API key" : "Live AQI severity band unavailable",
       statusLabel: isUnconfigured ? "Needs key" : "Unavailable"
     });
     return false;

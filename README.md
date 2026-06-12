@@ -39,6 +39,7 @@ AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the k
 When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.
 It also shows the returned AirNow reporting area and state that backs the selected ZIP/radius query.
 It also shows how many pollutant AQI readings were considered and which pollutant drives the displayed highest-AQI value.
+It also shows the official AQI severity band for the returned category.
 It also translates the returned AQI category into a concise health-meaning note in the source coverage panel.
 
 The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 fallback`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
