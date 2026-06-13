@@ -555,7 +555,7 @@ const getWhoUnavailableState = (error = {}) => {
     areaStatus: isRouteUnavailable ? "WHO route unavailable" : "WHO geography unavailable",
     freshness: isRouteUnavailable ? "Run with server API routes for WHO notices" : "Try refreshing again later",
     sourceWindow: isRouteUnavailable ? "WHO route unavailable" : "Live notice window unavailable",
-    statusLabel: isRouteUnavailable ? "Route missing" : "Unavailable"
+    statusLabel: isRouteUnavailable ? "Route unavailable" : "Unavailable"
   };
 };
 
@@ -692,7 +692,7 @@ const getAirNowFallbackState = (error = {}) => {
     statusLabel: isUnconfigured
       ? "Key needed"
       : isRouteUnavailable
-        ? "Route missing"
+        ? "Route unavailable"
         : "Unavailable"
   };
 };

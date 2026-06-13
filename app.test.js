@@ -367,7 +367,16 @@ test("AirNow fallback state distinguishes missing API routes from source outages
   assert.equal(result.category, "AirNow route unavailable");
   assert.equal(result.freshness, "Run with server API routes for live AQI");
   assert.equal(result.observed, "AirNow route unavailable");
-  assert.equal(result.statusLabel, "Route missing");
+  assert.equal(result.statusLabel, "Route unavailable");
+});
+
+test("WHO fallback state uses route-unavailable status language", () => {
+  const result = runAppHelper(`(() => getWhoUnavailableState({ status: 404 }))()`);
+
+  assert.equal(result.areaStatus, "WHO route unavailable");
+  assert.equal(result.freshness, "Run with server API routes for WHO notices");
+  assert.equal(result.sourceWindow, "WHO route unavailable");
+  assert.equal(result.statusLabel, "Route unavailable");
 });
 
 test("AirNow fallback state uses audience-facing unconfigured language", () => {
