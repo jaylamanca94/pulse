@@ -30,6 +30,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Show upstream observation times near source freshness when a live source provides both values.
 - Show source-returned location matches near source details when a user-selected place is resolved through a reporting area.
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
+- Use a compact local environmental snapshot when source details can answer what the selected place means at a glance before the user reaches the full source coverage panel.
 - Use plain source-state labels: `not connected yet` for planned data, `API key not configured` for unconfigured API-key sources, and `route unavailable` for missing serverless routes.
 - Use `Limit` for source constraints in compact metadata rows; reserve technical caveats for documentation.
 - Show official severity bands near environmental source details when a source returns a recognized AQI category.

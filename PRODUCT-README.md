@@ -55,6 +55,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - AirNow category color cues on live AQI text and severity-band details using the official AQI level semantics
 - AirNow AQI health meaning derived from the official AQI category when live observations are available
 - Distinct AirNow route-unavailable state when the dashboard is opened without the serverless API route
+- Local environmental snapshot that summarizes the selected ZIP/radius, returned reporting area, observation time, AQI basis, severity band, and health meaning
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
@@ -100,6 +101,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Normalize recognized AirNow category label variants to official AQI categories before showing severity bands, health meaning, or color cues.
 - Use official AQI category color cues only on live AQI severity text and details, not on source-readiness status.
 - Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
+- Surface the selected-place AirNow summary above detailed source coverage so local environmental relevance is visible before users inspect source metadata.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
