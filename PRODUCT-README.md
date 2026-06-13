@@ -42,6 +42,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
+- WHO affected-area metadata showing the latest source publication time when available
 - WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
 - AirNow-ready air quality card using a serverless API route with an unconfigured state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
@@ -86,6 +87,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
+- Show the latest source publication time in affected-area summaries when WHO provides the exact timestamp, not only the formatted notice date.
 - Keep live, ready, no-data, route-unavailable, unconfigured, and pending data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Treat a missing serverless source route as route unavailable, not as a temporary source outage.

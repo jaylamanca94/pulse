@@ -22,7 +22,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, no-data, route-unavailable, unconfigured, and pending inputs.
 - Use compact source detail rows when a data surface mixes live, ready, no-data, route-unavailable, unconfigured, or pending states.
 - Distinguish missing serverless source routes from live-source outages so static-preview states do not imply a temporary public-data failure.
-- Keep outbreak geography summaries as compact rows with affected area, notice count, latest date, source identifier, and a direct source link.
+- Keep outbreak geography summaries as compact rows with affected area, notice count, latest source publication time when available, source identifier, and a direct source link.
 - Order outbreak geography summaries by repeated notice count first and recency second so users can scan for concentration and fresh signals.
 - When source-normalized geography splits one WHO notice into multiple affected areas, keep the rows visually identical and let notice count plus latest source metadata explain why repeated areas rank first.
 - Keep official-source links close to source status, freshness, and limits when the dashboard depends on external public data.

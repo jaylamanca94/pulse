@@ -139,6 +139,13 @@ const formatWhoPublishedAt = (isoString, fallback = "Date unavailable") => {
   }).format(date)}`;
 };
 
+const formatWhoLatestAt = (isoString, fallback = "Date unavailable") => {
+  const label = formatWhoPublishedAt(isoString, fallback);
+  return label.startsWith("Published ")
+    ? `latest ${label.slice("Published ".length)}`
+    : `latest ${label}`;
+};
+
 const formatAirNowObservedAt = (reading) => {
   const date = typeof reading.DateObserved === "string" ? reading.DateObserved.trim() : "";
   const hour = Number(reading.HourObserved);
@@ -338,6 +345,7 @@ const formatAreaSummary = (summary) => ({
   area: summary.area || "Location not specified",
   latestDate: summary.latestDate || "Date unavailable",
   latestDonId: summary.latestDonId || "WHO DON",
+  latestPublishedAt: summary.latestPublishedAt || "",
   latestTitle: summary.latestTitle || "Untitled WHO notice",
   latestUrl: summary.latestUrl || "https://www.who.int/emergencies/disease-outbreak-news",
   noticeCount: Number.isFinite(summary.noticeCount) ? summary.noticeCount : 1
@@ -366,7 +374,16 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
 
       const meta = document.createElement("p");
       meta.className = "area-meta";
-      meta.textContent = `${summary.noticeCount} ${summary.noticeCount === 1 ? "notice" : "notices"}; latest ${summary.latestDate}; ${summary.latestDonId}`;
+      const latest = document.createElement(summary.latestPublishedAt ? "time" : "span");
+      latest.textContent = formatWhoLatestAt(summary.latestPublishedAt, summary.latestDate);
+      if (summary.latestPublishedAt) {
+        latest.dateTime = summary.latestPublishedAt;
+      }
+      meta.append(
+        document.createTextNode(`${summary.noticeCount} ${summary.noticeCount === 1 ? "notice" : "notices"}; `),
+        latest,
+        document.createTextNode(`; ${summary.latestDonId}`)
+      );
 
       const title = document.createElement("h3");
       title.className = "area-title";
