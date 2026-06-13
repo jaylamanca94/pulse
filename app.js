@@ -8,7 +8,7 @@ const SOURCE_TIMEOUT_MS = 10000;
 
 const fallbackAirQuality = {
   aqi: "--",
-  category: "API key needed for live AQI",
+  category: "AirNow API key not configured",
   area: "AirNow current observations",
   observedAt: "",
   pollutant: "AQI"
@@ -137,6 +137,13 @@ const formatWhoPublishedAt = (isoString, fallback = "Date unavailable") => {
     timeZone: "UTC",
     timeZoneName: "short"
   }).format(date)}`;
+};
+
+const formatWhoLatestAt = (isoString, fallback = "Date unavailable") => {
+  const label = formatWhoPublishedAt(isoString, fallback);
+  return label.startsWith("Published ")
+    ? `latest ${label.slice("Published ".length)}`
+    : `latest ${label}`;
 };
 
 const formatAirNowObservedAt = (reading) => {
@@ -338,6 +345,7 @@ const formatAreaSummary = (summary) => ({
   area: summary.area || "Location not specified",
   latestDate: summary.latestDate || "Date unavailable",
   latestDonId: summary.latestDonId || "WHO DON",
+  latestPublishedAt: summary.latestPublishedAt || "",
   latestTitle: summary.latestTitle || "Untitled WHO notice",
   latestUrl: summary.latestUrl || "https://www.who.int/emergencies/disease-outbreak-news",
   noticeCount: Number.isFinite(summary.noticeCount) ? summary.noticeCount : 1
@@ -366,7 +374,16 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
 
       const meta = document.createElement("p");
       meta.className = "area-meta";
-      meta.textContent = `${summary.noticeCount} ${summary.noticeCount === 1 ? "notice" : "notices"}; latest ${summary.latestDate}; ${summary.latestDonId}`;
+      const latest = document.createElement(summary.latestPublishedAt ? "time" : "span");
+      latest.textContent = formatWhoLatestAt(summary.latestPublishedAt, summary.latestDate);
+      if (summary.latestPublishedAt) {
+        latest.dateTime = summary.latestPublishedAt;
+      }
+      meta.append(
+        document.createTextNode(`${summary.noticeCount} ${summary.noticeCount === 1 ? "notice" : "notices"}; `),
+        latest,
+        document.createTextNode(`; ${summary.latestDonId}`)
+      );
 
       const title = document.createElement("h3");
       title.className = "area-title";
@@ -383,7 +400,7 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
       link.href = summary.latestUrl;
       link.target = "_blank";
       link.rel = "noreferrer";
-      link.innerHTML = `Open notice <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>`;
+      link.innerHTML = `View notice <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>`;
 
       item.append(content, link);
       list.append(item);
@@ -391,7 +408,7 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
   }
 
   setText("[data-who-area-updated]", isLive
-    ? joinDetails("Derived from WHO notices", formatCheckedAt(sourceMeta.fetchedAt))
+    ? joinDetails("WHO notice geography", formatCheckedAt(sourceMeta.fetchedAt))
     : sourceMeta.areaStatus || "WHO geography unavailable");
 };
 
@@ -419,7 +436,7 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
     empty.className = "empty-copy mb-0";
     empty.textContent = isLive
       ? "No dated WHO notices were available for the trend."
-      : "WHO trend is unavailable until live notices load.";
+      : "WHO notice trend is unavailable until live notices load.";
     grid.append(empty);
     setText("[data-who-trend-updated]", isLive ? "No dated notices" : "Source unavailable");
     return;
@@ -447,7 +464,7 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
     grid.append(bar);
   });
 
-  setText("[data-who-trend-updated]", joinDetails("Recent WHO notice dates", formatCheckedAt(sourceMeta.fetchedAt)));
+  setText("[data-who-trend-updated]", joinDetails("WHO notice dates", formatCheckedAt(sourceMeta.fetchedAt)));
 };
 
 const renderNotices = (notices, isLive, sourceMeta = {}) => {
@@ -591,7 +608,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
-  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "Needs key");
+  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "Key needed");
   setText("[data-airnow-source-observed]", isLive
     ? reading.observedAt || "Observation time unavailable"
     : sourceMeta.observed || "Waiting for live observations");
@@ -604,10 +621,10 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
-      : sourceMeta.freshness || "Add server API key for live AQI",
+      : sourceMeta.freshness || "AirNow API key not configured",
     isLive,
     isWarning: !isLive,
-    status: isLive ? "Live" : sourceMeta.statusLabel || "Needs key"
+    status: isLive ? "Live" : sourceMeta.statusLabel || "Key needed"
   });
 };
 
@@ -643,37 +660,37 @@ const getAirNowFallbackState = (error = {}) => {
         ? "AirNow route unavailable"
         : "Live AQI unavailable",
     freshness: isUnconfigured
-      ? "Add server API key for live AQI"
+      ? "AirNow API key not configured"
       : isRouteUnavailable
         ? "Run with server API routes for live AQI"
         : "Try refreshing again later",
     healthGuidance: isUnconfigured
-      ? "Available after configuring AirNow"
+      ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "Available when the AirNow route responds"
         : "Unavailable until the source responds",
     observed: isUnconfigured
-      ? "Requires AirNow API key"
+      ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
         : "Live observation unavailable",
     areaMatch: isUnconfigured
-      ? "Requires AirNow API key"
+      ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
         : "Live reporting area unavailable",
     aqiBasis: isUnconfigured
-      ? "Requires AirNow API key"
+      ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
         : "Live AQI basis unavailable",
     severityBand: isUnconfigured
-      ? "Requires AirNow API key"
+      ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
         : "Live AQI severity band unavailable",
     statusLabel: isUnconfigured
-      ? "Needs key"
+      ? "Key needed"
       : isRouteUnavailable
         ? "Route missing"
         : "Unavailable"

@@ -42,6 +42,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
+- WHO affected-area metadata showing the latest source publication time when available
 - WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
 - AirNow-ready air quality card using a serverless API route with an unconfigured state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
@@ -58,7 +59,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
 - Top-level signal basis rows that distinguish live, no-data, route-unavailable, unconfigured, and pending inputs behind the summary view
-- Source coverage rows that show status, scope, freshness, caveats, and official-source links for live public data
+- Source coverage rows that show status, scope, freshness, limits, and official-source links for live public data
 - Distinct no-data source state when a configured source responds without nearby observations
 - WHO-derived signal trend snapshot
 - Priority list for first public data areas
@@ -86,6 +87,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.
+- Show the latest source publication time in affected-area summaries when WHO provides the exact timestamp, not only the formatted notice date.
 - Keep live, ready, no-data, route-unavailable, unconfigured, and pending data states visible in source coverage details.
 - Treat a configured source with no returned records as no-data, not as an unconfigured or failed source.
 - Treat a missing serverless source route as route unavailable, not as a temporary source outage.
@@ -101,6 +103,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
+- Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
+- Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
 
 ## Roadmap
 

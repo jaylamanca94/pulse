@@ -22,14 +22,16 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, no-data, route-unavailable, unconfigured, and pending inputs.
 - Use compact source detail rows when a data surface mixes live, ready, no-data, route-unavailable, unconfigured, or pending states.
 - Distinguish missing serverless source routes from live-source outages so static-preview states do not imply a temporary public-data failure.
-- Keep outbreak geography summaries as compact rows with affected area, notice count, latest date, source identifier, and a direct source link.
+- Keep outbreak geography summaries as compact rows with affected area, notice count, latest source publication time when available, source identifier, and a direct source link.
 - Order outbreak geography summaries by repeated notice count first and recency second so users can scan for concentration and fresh signals.
 - When source-normalized geography splits one WHO notice into multiple affected areas, keep the rows visually identical and let notice count plus latest source metadata explain why repeated areas rank first.
-- Keep official-source links close to source status, freshness, and caveats when the dashboard depends on external public data.
+- Keep official-source links close to source status, freshness, and limits when the dashboard depends on external public data.
 - Keep source-specific controls, such as location or radius selectors, close to the source detail they affect.
 - Show upstream observation times near source freshness when a live source provides both values.
 - Show source-returned location matches near source details when a user-selected place is resolved through a reporting area.
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
+- Use plain source-state labels: `not connected yet` for planned data, `API key not configured` for unconfigured API-key sources, and `route unavailable` for missing serverless routes.
+- Use `Limit` for source constraints in compact metadata rows; reserve technical caveats for documentation.
 - Show official severity bands near environmental source details when a source returns a recognized AQI category.
 - When a live environmental source returns a numeric AQI without a category label, show the category and health meaning derived from the official numeric band rather than leaving those rows unavailable.
 - Normalize source category label variants to official AQI categories before applying severity text, health meaning, or color cues.

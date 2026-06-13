@@ -16,7 +16,7 @@
     <main class="app-shell">
       <header class="app-header">
         <div>
-          <p class="eyebrow mb-1">Today</p>
+          <p class="eyebrow mb-1">Official source scan</p>
           <h1 class="page-title mb-0">Pulse</h1>
         </div>
         <div class="header-actions">
@@ -37,8 +37,8 @@
             </div>
           </div>
           <div class="col-lg-7">
-            <h2 id="summary-title" class="section-title">See the health of the world.</h2>
-            <p class="lead-copy mb-0">Live health, environmental, and population data are pulled into one calm scan view.</p>
+            <h2 id="summary-title" class="section-title">Public health signals in one scan.</h2>
+            <p class="lead-copy mb-0">Official outbreak and environmental sources are summarized with freshness, geography, and clear pending states.</p>
             <dl class="signal-basis" aria-label="Signal basis">
               <div>
                 <dt>WHO notices</dt>
@@ -46,11 +46,11 @@
               </div>
               <div>
                 <dt>Local AQI</dt>
-                <dd data-airnow-signal-basis>Needs API key</dd>
+                <dd data-airnow-signal-basis>AirNow key needed</dd>
               </div>
               <div>
-                <dt>Baseline</dt>
-                <dd>Additional sources pending</dd>
+                <dt>Pending inputs</dt>
+                <dd>CDC, access, well-being, and population sources not connected yet</dd>
               </div>
             </dl>
           </div>
@@ -73,7 +73,7 @@
               <div>
                 <p class="metric-label">Disease trends</p>
                 <p class="metric-value">--</p>
-                <p class="metric-note text-secondary">CDC source pending</p>
+                <p class="metric-note text-secondary">CDC source not connected yet</p>
               </div>
             </article>
           </div>
@@ -93,7 +93,7 @@
               <div>
                 <p class="metric-label">Air quality</p>
                 <p class="metric-value" data-airnow-aqi>--</p>
-                <p class="metric-note text-secondary" data-airnow-note>API key needed for live AQI</p>
+                <p class="metric-note text-secondary" data-airnow-note>AirNow API key not configured</p>
               </div>
             </article>
           </div>
@@ -103,7 +103,7 @@
               <div>
                 <p class="metric-label">Healthcare access</p>
                 <p class="metric-value">--</p>
-                <p class="metric-note text-secondary">Source pending</p>
+                <p class="metric-note text-secondary">Source not connected yet</p>
               </div>
             </article>
           </div>
@@ -113,7 +113,7 @@
               <div>
                 <p class="metric-label">Community well-being</p>
                 <p class="metric-value">--</p>
-                <p class="metric-note text-secondary">Source pending</p>
+                <p class="metric-note text-secondary">Source not connected yet</p>
               </div>
             </article>
           </div>
@@ -123,7 +123,7 @@
               <div>
                 <p class="metric-label">Population signals</p>
                 <p class="metric-value">--</p>
-                <p class="metric-note text-secondary">Source pending</p>
+                <p class="metric-note text-secondary">Source not connected yet</p>
               </div>
             </article>
           </div>
@@ -135,7 +135,7 @@
           <article class="content-surface h-100">
             <div class="section-heading">
               <h2 id="geography-title" class="section-title mb-0">Outbreak geography scan</h2>
-              <span class="small text-secondary" data-who-area-updated>Source loading</span>
+              <span class="small text-secondary" data-who-area-updated>Checking source</span>
             </div>
             <div class="area-list" data-who-area-list aria-live="polite">
               <p class="empty-copy mb-0">Checking affected areas from WHO notices.</p>
@@ -145,7 +145,7 @@
 
         <div class="col-lg-4">
           <article class="content-surface h-100">
-            <h2 class="section-title">First data areas</h2>
+            <h2 class="section-title">Initial coverage</h2>
             <ul class="focus-list">
               <li>
                 <i class="fa-solid fa-circle-check text-success" aria-hidden="true"></i>
@@ -164,12 +164,12 @@
         </div>
       </section>
 
-      <section class="row g-4" aria-label="Signal trend and priorities">
+      <section class="row g-4" aria-label="WHO trend and scan priorities">
         <div class="col-lg-8">
           <article class="content-surface h-100">
             <div class="section-heading">
-              <h2 class="section-title mb-0">Signal trend</h2>
-              <span class="small text-secondary" data-who-trend-updated>Source loading</span>
+              <h2 class="section-title mb-0">WHO notice trend</h2>
+              <span class="small text-secondary" data-who-trend-updated>Checking source</span>
             </div>
             <div class="trend-grid" data-who-trend-grid role="list" aria-label="Recent WHO notice trend">
               <p class="empty-copy mb-0">Checking WHO notice trend.</p>
@@ -179,7 +179,7 @@
 
         <div class="col-lg-4">
           <article class="content-surface h-100">
-            <h2 class="section-title">Signal priorities</h2>
+            <h2 class="section-title">Scan priorities</h2>
             <dl class="priority-list">
               <div>
                 <dt>Where</dt>
@@ -203,7 +203,7 @@
           <article class="content-surface h-100">
             <div class="section-heading">
               <h2 class="section-title mb-0">Recent WHO notices</h2>
-              <span class="small text-secondary" data-who-updated>Source loading</span>
+              <span class="small text-secondary" data-who-updated>Checking source</span>
             </div>
             <div class="notice-list" data-who-list aria-live="polite">
               <p class="empty-copy mb-0">Checking WHO Disease Outbreak News.</p>
@@ -220,7 +220,7 @@
                   <span class="source-status" data-who-source-status>Loading</span>
                   <span class="source-name">WHO Disease Outbreak News</span>
                   <a class="source-link" href="https://www.who.int/emergencies/disease-outbreak-news" target="_blank" rel="noreferrer">
-                    Open source <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    View source <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
                   </a>
                 </div>
                 <dl class="source-meta-grid">
@@ -237,17 +237,17 @@
                     <dd data-who-source-window>Checking recent notices</dd>
                   </div>
                   <div>
-                    <dt>Caveat</dt>
+                    <dt>Limit</dt>
                     <dd>Official notices, not exhaustive surveillance</dd>
                   </div>
                 </dl>
               </li>
               <li>
                 <div class="source-row-head">
-                  <span class="source-status" data-airnow-source-status>Needs key</span>
+                  <span class="source-status" data-airnow-source-status>Key needed</span>
                   <span class="source-name">AirNow current observations</span>
                   <a class="source-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">
-                    Open source <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    View source <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
                   </a>
                 </div>
                 <dl class="source-meta-grid">
@@ -257,30 +257,30 @@
                   </div>
                   <div>
                     <dt>Freshness</dt>
-                    <dd data-airnow-source-freshness>Add server API key for live AQI</dd>
+                    <dd data-airnow-source-freshness>AirNow API key not configured</dd>
                   </div>
                   <div>
                     <dt>Observation</dt>
-                    <dd data-airnow-source-observed>Requires AirNow API key</dd>
+                    <dd data-airnow-source-observed>Available after AirNow is configured</dd>
                   </div>
                   <div>
                     <dt>Reporting area</dt>
-                    <dd data-airnow-area-match>Requires AirNow API key</dd>
+                    <dd data-airnow-area-match>Available after AirNow is configured</dd>
                   </div>
                   <div>
                     <dt>AQI basis</dt>
-                    <dd data-airnow-aqi-basis>Requires AirNow API key</dd>
+                    <dd data-airnow-aqi-basis>Available after AirNow is configured</dd>
                   </div>
                   <div>
                     <dt>Severity band</dt>
-                    <dd data-airnow-severity-band>Requires AirNow API key</dd>
+                    <dd data-airnow-severity-band>Available after AirNow is configured</dd>
                   </div>
                   <div>
                     <dt>Health meaning</dt>
-                    <dd data-airnow-health-guidance>Available after configuring AirNow</dd>
+                    <dd data-airnow-health-guidance>Available after AirNow is configured</dd>
                   </div>
                   <div>
-                    <dt>Caveat</dt>
+                    <dt>Limit</dt>
                     <dd>Preliminary AQI observations when configured</dd>
                   </div>
                 </dl>
@@ -322,7 +322,7 @@
                     <dd>Not connected yet</dd>
                   </div>
                   <div>
-                    <dt>Caveat</dt>
+                    <dt>Limit</dt>
                     <dd>Hidden from aggregate scoring until source wiring is complete</dd>
                   </div>
                 </dl>

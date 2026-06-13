@@ -267,6 +267,72 @@ test("WHO notice rows render source publication time as datetime metadata", () =
   assert.match(result.text, /^Published /);
 });
 
+test("WHO area summaries render latest source publication time", () => {
+  const result = runAppHelper(`(() => {
+    const makeElement = (tagName) => ({
+      tagName,
+      children: [],
+      classList: {
+        add() {},
+        remove() {},
+        toggle() {}
+      },
+      append(...nodes) {
+        this.children.push(...nodes);
+      },
+      set innerHTML(value) {
+        this.children = [];
+      }
+    });
+    const targets = new Map();
+
+    globalThis.document = {
+      createElement: makeElement,
+      createTextNode(textContent) {
+        return { tagName: "#text", textContent };
+      },
+      querySelector(selector) {
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement("div"));
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    renderAreaSummary([
+      {
+        area: "Uganda",
+        latestDate: "8 June 2026",
+        latestDonId: "2026-DON606",
+        latestPublishedAt: "2026-06-08T12:35:09Z",
+        latestTitle: "Ebola disease caused by Bundibugyo virus, Uganda",
+        latestUrl: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON606",
+        noticeCount: 2
+      }
+    ], true, {
+      fetchedAt: "2026-06-12T09:00:00Z"
+    });
+
+    const list = targets.get("[data-who-area-list]");
+    const item = list.children[0];
+    const content = item.children[0];
+    const meta = content.children[0];
+    const latest = meta.children[1];
+
+    return {
+      dateTime: latest.dateTime,
+      tagName: latest.tagName,
+      text: latest.textContent
+    };
+  })()`);
+
+  assert.equal(result.tagName, "time");
+  assert.equal(result.dateTime, "2026-06-08T12:35:09Z");
+  assert.match(result.text, /^latest /);
+  assert.match(result.text, /UTC/);
+});
+
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {
   const result = runAppHelper(`(() => {
     airNowQuery.zipCode = "10001";
@@ -302,4 +368,13 @@ test("AirNow fallback state distinguishes missing API routes from source outages
   assert.equal(result.freshness, "Run with server API routes for live AQI");
   assert.equal(result.observed, "AirNow route unavailable");
   assert.equal(result.statusLabel, "Route missing");
+});
+
+test("AirNow fallback state uses audience-facing unconfigured language", () => {
+  const result = runAppHelper(`(() => getAirNowFallbackState({ status: 503, payload: { status: "unconfigured" } }))()`);
+
+  assert.equal(result.category, "AirNow API key not configured");
+  assert.equal(result.freshness, "AirNow API key not configured");
+  assert.equal(result.observed, "Available after AirNow is configured");
+  assert.equal(result.statusLabel, "Key needed");
 });
