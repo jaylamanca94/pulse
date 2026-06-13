@@ -287,6 +287,7 @@ const formatAirNowAreaMatch = (reading, isLive) => {
 const syncAirNowLocationText = () => {
   setText("[data-airnow-source-scope]", getAirNowScope());
   setText("[data-airnow-location-note]", `Showing ${getAirNowScope()}.`);
+  setText("[data-airnow-snapshot-scope]", getAirNowScope());
 };
 
 const setSourceDetail = (sourceKey, detail) => {
@@ -298,6 +299,15 @@ const setSourceDetail = (sourceKey, detail) => {
   }
 
   setText(`[data-${sourceKey}-source-freshness]`, detail.freshness);
+};
+
+const setAirNowSnapshotStatus = (label, isLive) => {
+  const status = document.querySelector("[data-airnow-snapshot-status]");
+  if (!status) return;
+
+  status.textContent = label;
+  status.classList.toggle("is-live", Boolean(isLive));
+  status.classList.toggle("is-warning", !isLive);
 };
 
 const fetchJson = async (url) => {
@@ -605,26 +615,40 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   const severityBand = isLive
     ? getAqiSeverityBand(reading.category) || "Severity band unavailable for this AQI category"
     : sourceMeta.severityBand || "Available when live AQI is returned";
+  const observed = isLive
+    ? reading.observedAt || "Observation time unavailable"
+    : sourceMeta.observed || "Waiting for live observations";
+  const areaMatch = sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive);
+  const aqiBasis = sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive);
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "Key needed";
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
   setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "Key needed");
-  setText("[data-airnow-source-observed]", isLive
-    ? reading.observedAt || "Observation time unavailable"
-    : sourceMeta.observed || "Waiting for live observations");
-  setText("[data-airnow-area-match]", sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive));
-  setText("[data-airnow-aqi-basis]", sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive));
+  setText("[data-airnow-source-observed]", observed);
+  setText("[data-airnow-area-match]", areaMatch);
+  setText("[data-airnow-aqi-basis]", aqiBasis);
   setText("[data-airnow-severity-band]", severityBand);
   setText("[data-airnow-health-guidance]", healthGuidance);
+  setText("[data-airnow-snapshot-aqi]", String(reading.aqi));
+  setText("[data-airnow-snapshot-category]", isLive ? pollutantLabel : reading.category);
+  setText("[data-airnow-snapshot-area]", isLive ? areaLabel : areaMatch);
+  setText("[data-airnow-snapshot-observed]", observed);
+  setText("[data-airnow-snapshot-basis]", aqiBasis);
+  setText("[data-airnow-snapshot-band]", severityBand);
+  setText("[data-airnow-snapshot-health]", healthGuidance);
+  setAirNowSnapshotStatus(statusLabel, isLive);
   setAqiTone("[data-airnow-note]", isLive ? reading.category : "");
   setAqiTone("[data-airnow-severity-band]", isLive ? reading.category : "");
+  setAqiTone("[data-airnow-snapshot-category]", isLive ? reading.category : "");
+  setAqiTone("[data-airnow-snapshot-band]", isLive ? reading.category : "");
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
       : sourceMeta.freshness || "AirNow API key not configured",
     isLive,
     isWarning: !isLive,
-    status: isLive ? "Live" : sourceMeta.statusLabel || "Key needed"
+    status: statusLabel
   });
 };
 

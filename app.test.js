@@ -361,6 +361,98 @@ test("AirNow area match keeps the reporting area distinct from the request scope
   assert.equal(result.match, "New York City Region, NY for ZIP 10001, 50-mile radius");
 });
 
+test("AirNow snapshot summarizes the selected place and live reading", () => {
+  const result = runAppHelper(`(() => {
+    const targets = new Map();
+    const makeElement = () => {
+      const classes = new Set();
+
+      return {
+        textContent: "",
+        classList: {
+          classes,
+          add(...names) {
+            names.forEach((name) => classes.add(name));
+          },
+          remove(...names) {
+            names.forEach((name) => classes.delete(name));
+          },
+          toggle(name, force) {
+            if (force) {
+              classes.add(name);
+            } else {
+              classes.delete(name);
+            }
+          }
+        }
+      };
+    };
+
+    globalThis.document = {
+      querySelector(selector) {
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement());
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    airNowQuery.zipCode = "60601";
+    airNowQuery.distance = 25;
+
+    const reading = normalizeAirNowReading([
+      {
+        AQI: 135,
+        Category: { Name: "Unhealthy for Sensitive Groups" },
+        DateObserved: "2026-06-12",
+        HourObserved: 14,
+        LocalTimeZone: "CST",
+        ParameterName: "PM2.5",
+        ReportingArea: "Chicago",
+        StateCode: "IL"
+      }
+    ]);
+
+    renderAirQuality(reading, true, {
+      cacheSeconds: 900,
+      fetchedAt: "2026-06-12T19:00:00Z"
+    });
+
+    const snapshotStatus = targets.get("[data-airnow-snapshot-status]");
+    const snapshotCategory = targets.get("[data-airnow-snapshot-category]");
+    const snapshotBand = targets.get("[data-airnow-snapshot-band]");
+
+    return {
+      aqi: targets.get("[data-airnow-snapshot-aqi]").textContent,
+      area: targets.get("[data-airnow-snapshot-area]").textContent,
+      basis: targets.get("[data-airnow-snapshot-basis]").textContent,
+      category: snapshotCategory.textContent,
+      categoryClasses: Array.from(snapshotCategory.classList.classes),
+      health: targets.get("[data-airnow-snapshot-health]").textContent,
+      observed: targets.get("[data-airnow-snapshot-observed]").textContent,
+      scope: targets.get("[data-airnow-snapshot-scope]").textContent,
+      severityBand: snapshotBand.textContent,
+      severityClasses: Array.from(snapshotBand.classList.classes),
+      status: snapshotStatus.textContent,
+      statusClasses: Array.from(snapshotStatus.classList.classes)
+    };
+  })()`);
+
+  assert.equal(result.status, "Live");
+  assert.equal(JSON.stringify(result.statusClasses), JSON.stringify(["is-live"]));
+  assert.equal(result.aqi, "135");
+  assert.equal(result.category, "PM2.5: Unhealthy for Sensitive Groups");
+  assert.equal(JSON.stringify(result.categoryClasses), JSON.stringify(["aqi-unhealthy-sensitive"]));
+  assert.equal(result.scope, "ZIP 60601, 25-mile radius");
+  assert.equal(result.area, "Chicago, IL");
+  assert.equal(result.observed, "2026-06-12 2:00 PM CST");
+  assert.equal(result.basis, "1 pollutant AQI reading; displayed PM2.5 as highest AQI");
+  assert.equal(result.severityBand, "Unhealthy for Sensitive Groups, 101-150");
+  assert.equal(JSON.stringify(result.severityClasses), JSON.stringify(["aqi-unhealthy-sensitive"]));
+  assert.equal(result.health, "Sensitive groups should reduce prolonged or heavy outdoor exertion.");
+});
+
 test("AirNow fallback state distinguishes missing API routes from source outages", () => {
   const result = runAppHelper(`(() => getAirNowFallbackState({ status: 404 }))()`);
 

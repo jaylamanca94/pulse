@@ -43,7 +43,8 @@ It also shows the official AQI severity band for the returned category.
 If AirNow returns a numeric AQI without a category label, Pulse derives the official category from the AQI value so the severity band and health meaning stay available.
 Pulse also normalizes recognized AirNow category label variants before showing severity bands, health meaning, or color cues.
 When live AirNow observations are available, Pulse uses restrained official AQI category color cues on the metric note and severity-band detail.
-It also translates the returned AQI category into a concise health-meaning note in the source coverage panel.
+It also translates the returned AQI category into a concise health-meaning note in the local environmental snapshot and source coverage panel.
+The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, AQI basis, severity band, and health meaning before users inspect the full source metadata.
 
 The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
 

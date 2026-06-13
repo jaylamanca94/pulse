@@ -300,6 +300,73 @@ body {
   margin: 4px 0;
 }
 
+.local-snapshot {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 2.2fr);
+  margin-top: 16px;
+}
+
+.snapshot-primary {
+  background-color: var(--row-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 16px;
+}
+
+.snapshot-primary strong {
+  color: var(--accent);
+  font-size: 40px;
+  line-height: 48px;
+}
+
+.snapshot-primary span {
+  overflow-wrap: anywhere;
+}
+
+.snapshot-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.snapshot-grid {
+  display: grid;
+  gap: 12px 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.snapshot-grid div {
+  background-color: var(--row-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 14px 16px;
+}
+
+.snapshot-grid dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.snapshot-grid dd {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .trend-grid {
   align-items: end;
   display: grid;
@@ -655,6 +722,14 @@ body {
   .metric-card {
     padding: 16px;
   }
+
+  .local-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  .snapshot-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1200px) {
@@ -699,6 +774,10 @@ body {
 
   .trend-grid {
     gap: 8px;
+  }
+
+  .snapshot-grid {
+    grid-template-columns: 1fr;
   }
 
   .signal-basis {
