@@ -125,6 +125,7 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 
 - Dashboard surfaces use a restrained `1px` border with a soft shadow to separate content from the page background without creating heavy elevation.
 - The hero summary surface may use a narrow accent rail when it helps establish the primary page hierarchy.
+- Metric cards use restrained state rails and matching icon tones so users can distinguish live, attention-needed, and pending sources without reading every note. Use Pulse accent for live source cards, warning tone for unavailable or unconfigured live-source cards, and muted treatment for planned sources that are not connected yet.
 - Dense evidence rows, such as outbreak geography, WHO notices, and source coverage, should use low-contrast row panels with `8px` radius, restrained borders, and short hover/focus transitions so metadata feels grouped without becoming decorative.
 - Long official notice summaries may be visually clamped in repeated rows to preserve scan density while keeping source links prominent.
 - Metadata groups should use dividers, spacing, and compact labels before adding nested card treatments.

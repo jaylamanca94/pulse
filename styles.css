@@ -232,18 +232,45 @@ body {
 }
 
 .metric-card {
+  --metric-tone: var(--muted);
+  --metric-tone-soft: var(--bar-bg);
   border-color: color-mix(in srgb, var(--border), transparent 15%);
   gap: 16px;
   min-height: 132px;
+  overflow: hidden;
   padding: 24px;
+  position: relative;
+}
+
+.metric-card::before {
+  background: var(--metric-tone);
+  content: "";
+  height: 3px;
+  inset: 0 0 auto;
+  opacity: 0.72;
+  position: absolute;
+}
+
+.metric-card.is-live {
+  --metric-tone: var(--accent);
+  --metric-tone-soft: var(--accent-soft);
+}
+
+.metric-card.is-warning {
+  --metric-tone: var(--warning);
+  --metric-tone-soft: var(--warning-soft);
+}
+
+.metric-card > * {
+  position: relative;
 }
 
 .metric-icon {
   align-items: center;
-  background: var(--accent-soft);
+  background: var(--metric-tone-soft);
   border-radius: 8px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent), transparent 78%);
-  color: var(--accent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--metric-tone), transparent 78%);
+  color: var(--metric-tone);
   display: inline-flex;
   flex: 0 0 48px;
   height: 48px;

@@ -61,6 +61,17 @@ const setStatusBadge = (label, isWarning = false) => {
   badge.classList.toggle("is-warning", isWarning);
 };
 
+const METRIC_CARD_STATE_CLASSES = ["is-live", "is-warning", "is-pending"];
+
+const setMetricCardState = (metricKey, state = "pending") => {
+  const card = document.querySelector(`[data-metric-card="${metricKey}"]`);
+  if (!card) return;
+
+  const nextState = METRIC_CARD_STATE_CLASSES.includes(`is-${state}`) ? state : "pending";
+  card.classList.remove(...METRIC_CARD_STATE_CLASSES);
+  card.classList.add(`is-${nextState}`);
+};
+
 const updateSourceReadiness = (liveCount, totalCount) => {
   const value = totalCount > 0 ? `${liveCount}/${totalCount}` : "--";
   const label = totalCount === 0
@@ -537,6 +548,12 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
 
   setText("[data-who-count]", String(notices.length));
   setText("[data-who-note]", isLive ? "Live WHO notices" : sourceMeta.statusLabel || "No live WHO data");
+  const whoNote = document.querySelector("[data-who-note]");
+  if (whoNote) {
+    whoNote.classList.toggle("text-warning", !isLive);
+    whoNote.classList.toggle("text-secondary", isLive);
+  }
+  setMetricCardState("who", isLive ? "live" : "warning");
   setText("[data-who-updated]", isLive ? "WHO proxy cache" : sourceMeta.freshness || "Source unavailable");
   setText("[data-who-signal-basis]", isLive ? "Live event notices" : sourceMeta.statusLabel || "Source unavailable");
   setText("[data-who-source-window]", isLive
@@ -642,6 +659,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   setAqiTone("[data-airnow-severity-band]", isLive ? reading.category : "");
   setAqiTone("[data-airnow-snapshot-category]", isLive ? reading.category : "");
   setAqiTone("[data-airnow-snapshot-band]", isLive ? reading.category : "");
+  setMetricCardState("airnow", isLive ? "live" : "warning");
   setSourceDetail("airnow", {
     freshness: isLive
       ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
