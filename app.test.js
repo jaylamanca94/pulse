@@ -303,3 +303,12 @@ test("AirNow fallback state distinguishes missing API routes from source outages
   assert.equal(result.observed, "AirNow route unavailable");
   assert.equal(result.statusLabel, "Route missing");
 });
+
+test("AirNow fallback state uses audience-facing unconfigured language", () => {
+  const result = runAppHelper(`(() => getAirNowFallbackState({ status: 503, payload: { status: "unconfigured" } }))()`);
+
+  assert.equal(result.category, "AirNow API key not configured");
+  assert.equal(result.freshness, "AirNow API key not configured");
+  assert.equal(result.observed, "Available after AirNow is configured");
+  assert.equal(result.statusLabel, "Key needed");
+});

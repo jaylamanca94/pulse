@@ -13,13 +13,13 @@ Tagline: See the health of the world.
 - AirNow current observations API, when configured
 - Vercel Serverless Functions for cached public and API-key-backed sources
 
-## Planned Data Sources
+## Data Sources
 
-- CDC National Notifiable Diseases Surveillance System data
-- CDC National Outbreak Reporting System data
-- WHO Disease Outbreak News, proxied through `/api/who`
-- AirNow current observations, proxied through `/api/airnow`
-- Healthcare access and community well-being datasets
+- WHO Disease Outbreak News, live when `/api/who` is available
+- AirNow current observations, live when `/api/airnow` has `AIRNOW_API_KEY`
+- CDC National Notifiable Diseases Surveillance System data, not connected yet
+- CDC National Outbreak Reporting System data, not connected yet
+- Healthcare access and community well-being datasets, not connected yet
 
 ## Configuration
 
@@ -35,7 +35,7 @@ window.PULSE_CONFIG = {
 
 WHO notices are loaded through `/api/who`, which normalizes and caches the public source response, reports the recent notice window being summarized, and derives a compact affected-area summary from recent notices. Recent notice rows show the source publication timestamp when available. Obvious multi-area title geography is split into separate summary rows when the source uses separators such as `and`, `&`, or `;`, while joined place names such as Trinidad and Tobago stay intact. Affected areas are ranked by repeated notice count, then latest publication recency.
 
-AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable.
+AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable. Until that key is present, the product should say the AirNow API key is not configured instead of asking dashboard users to add a server key.
 When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.
 It also shows the returned AirNow reporting area and state that backs the selected ZIP/radius query.
 It also shows how many pollutant AQI readings were considered and which pollutant drives the displayed highest-AQI value.

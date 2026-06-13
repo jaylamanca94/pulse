@@ -58,7 +58,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
 - Top-level signal basis rows that distinguish live, no-data, route-unavailable, unconfigured, and pending inputs behind the summary view
-- Source coverage rows that show status, scope, freshness, caveats, and official-source links for live public data
+- Source coverage rows that show status, scope, freshness, limits, and official-source links for live public data
 - Distinct no-data source state when a configured source responds without nearby observations
 - WHO-derived signal trend snapshot
 - Priority list for first public data areas
@@ -101,6 +101,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
+- Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
+- Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
 
 ## Roadmap
 
