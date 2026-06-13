@@ -31,6 +31,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Show source-returned location matches near source details when a user-selected place is resolved through a reporting area.
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
 - Use plain source-state labels: `not connected yet` for planned data, `API key not configured` for unconfigured API-key sources, and `route unavailable` for missing serverless routes.
+- Do not label missing serverless routes as `route missing` in the UI; use `route unavailable` so the state matches the rest of the dashboard language.
 - Use `Limit` for source constraints in compact metadata rows; reserve technical caveats for documentation.
 - Show official severity bands near environmental source details when a source returns a recognized AQI category.
 - When a live environmental source returns a numeric AQI without a category label, show the category and health meaning derived from the official numeric band rather than leaving those rows unavailable.
