@@ -360,6 +360,62 @@ test("WHO area summaries render latest source publication time", () => {
   assert.match(result.text, /UTC/);
 });
 
+test("WHO trend bars expose notice counts to assistive technology", () => {
+  const result = runAppHelper(`(() => {
+    const makeElement = (tagName) => ({
+      tagName,
+      attributes: new Map(),
+      children: [],
+      className: "",
+      style: {},
+      textContent: "",
+      append(...nodes) {
+        this.children.push(...nodes);
+      },
+      setAttribute(name, value) {
+        this.attributes.set(name, value);
+      },
+      set innerHTML(value) {
+        this.children = [];
+      }
+    });
+    const grid = makeElement("div");
+
+    globalThis.document = {
+      createElement: makeElement,
+      querySelector(selector) {
+        return selector === "[data-who-trend-grid]" ? grid : makeElement("span");
+      }
+    };
+
+    renderWhoTrend([
+      {
+        count: 2,
+        date: "2026-06-10"
+      }
+    ], true, {
+      fetchedAt: "2026-06-12T09:00:00Z"
+    });
+
+    const bar = grid.children[0];
+    const fill = bar.children[0];
+
+    return {
+      ariaLabel: bar.attributes.get("aria-label"),
+      fillAriaHidden: fill.attributes.get("aria-hidden"),
+      fillTitle: fill.title,
+      role: bar.attributes.get("role"),
+      visibleCount: bar.children[2].textContent
+    };
+  })()`);
+
+  assert.equal(result.role, "listitem");
+  assert.match(result.ariaLabel, /^2 notices on /);
+  assert.equal(result.fillAriaHidden, "true");
+  assert.equal(result.fillTitle, result.ariaLabel);
+  assert.equal(result.visibleCount, "2");
+});
+
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {
   const result = runAppHelper(`(() => {
     airNowQuery.zipCode = "10001";

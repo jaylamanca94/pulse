@@ -473,6 +473,11 @@ const formatTrendLabel = (isoDate) => {
   }).format(date);
 };
 
+const formatTrendAccessibleLabel = (count, isoDate) => {
+  const noticeCount = Number(count) || 0;
+  return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} on ${formatTrendLabel(isoDate)}`;
+};
+
 const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   const grid = document.querySelector("[data-who-trend-grid]");
   if (!grid) return;
@@ -497,10 +502,12 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
     const bar = document.createElement("div");
     bar.className = "trend-day";
     bar.setAttribute("role", "listitem");
+    bar.setAttribute("aria-label", formatTrendAccessibleLabel(count, item.date));
 
     const fill = document.createElement("span");
     fill.style.height = `${Math.max(18, Math.round((count / maxCount) * 100))}%`;
-    fill.title = `${count} ${count === 1 ? "notice" : "notices"} on ${formatTrendLabel(item.date)}`;
+    fill.title = formatTrendAccessibleLabel(count, item.date);
+    fill.setAttribute("aria-hidden", "true");
 
     const label = document.createElement("small");
     label.textContent = formatTrendLabel(item.date);

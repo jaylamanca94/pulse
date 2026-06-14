@@ -41,6 +41,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Use official AQI category color cues as restrained text emphasis on live AQI category and severity-band details, while keeping source-readiness status visually separate.
 - Show concise health guidance near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
+- Visual data summaries, including trend bars and future chart-like elements, must expose the same values through text or accessible names so they do not rely on color, height, or hover-only labels.
 
 ## UI Foundation
 
