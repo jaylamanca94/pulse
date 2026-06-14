@@ -40,11 +40,11 @@ When live AirNow observations are available, the dashboard shows the highest ret
 It also shows the returned AirNow reporting area and state that backs the selected ZIP/radius query.
 It also shows how many pollutant AQI readings were considered and which pollutant drives the displayed highest-AQI value.
 It also shows the official AQI severity band for the returned category.
-If AirNow returns a numeric AQI without a category label, Pulse derives the official category from the AQI value so the severity band and health meaning stay available.
-Pulse also normalizes recognized AirNow category label variants before showing severity bands, health meaning, or color cues.
+If AirNow returns a numeric AQI without a category label, Pulse derives the official category from the AQI value so the severity band and health guidance stay available.
+Pulse also normalizes recognized AirNow category label variants before showing severity bands, health guidance, or color cues.
 When live AirNow observations are available, Pulse uses restrained official AQI category color cues on the metric note and severity-band detail.
-It also translates the returned AQI category into a concise health-meaning note in the local environmental snapshot and source coverage panel.
-The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, AQI basis, severity band, and health meaning before users inspect the full source metadata.
+It also translates the returned AQI category into concise health guidance in the local environmental snapshot and source coverage panel.
+The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, why the AQI was selected, severity band, and health guidance before users inspect the full source metadata.
 
 The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
 

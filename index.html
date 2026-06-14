@@ -39,17 +39,17 @@
           <div class="col-lg-7">
             <h2 id="summary-title" class="section-title">Public health signals in one scan.</h2>
             <p class="lead-copy mb-0">Official outbreak and environmental sources are summarized with freshness, geography, and clear pending states.</p>
-            <dl class="signal-basis" aria-label="Signal basis">
+            <dl class="signal-basis" aria-label="Current source basis">
               <div>
                 <dt>WHO notices</dt>
                 <dd data-who-signal-basis>Checking source</dd>
               </div>
               <div>
                 <dt>Local AQI</dt>
-                <dd data-airnow-signal-basis>AirNow key needed</dd>
+                <dd data-airnow-signal-basis>AirNow API key needed</dd>
               </div>
               <div>
-                <dt>Pending inputs</dt>
+                <dt>Planned sources</dt>
                 <dd>CDC, access, well-being, and population sources not connected yet</dd>
               </div>
             </dl>
@@ -59,7 +59,7 @@
 
       <section aria-labelledby="metrics-title">
         <div class="section-heading">
-          <h2 id="metrics-title" class="section-title mb-0">Signal sources</h2>
+          <h2 id="metrics-title" class="section-title mb-0">Source status</h2>
           <div class="dashboard-status-wrap">
             <span class="small text-secondary" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
             <span class="small text-secondary" data-dashboard-checked>Not checked yet</span>
@@ -134,9 +134,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow mb-1">Local environment</p>
-            <h2 id="local-aqi-title" class="section-title mb-0">AQI snapshot for selected place</h2>
+            <h2 id="local-aqi-title" class="section-title mb-0">Local AQI snapshot</h2>
           </div>
-          <span class="source-status is-warning" data-airnow-snapshot-status>Key needed</span>
+          <span class="source-status is-warning" data-airnow-snapshot-status>API key needed</span>
         </div>
         <div class="local-snapshot">
           <div class="snapshot-primary">
@@ -154,11 +154,11 @@
               <dd data-airnow-snapshot-area>Available after AirNow is configured</dd>
             </div>
             <div>
-              <dt>Observation</dt>
+              <dt>Observed</dt>
               <dd data-airnow-snapshot-observed>Available after AirNow is configured</dd>
             </div>
             <div>
-              <dt>AQI basis</dt>
+              <dt>Why this AQI</dt>
               <dd data-airnow-snapshot-basis>Available after AirNow is configured</dd>
             </div>
             <div>
@@ -166,7 +166,7 @@
               <dd data-airnow-snapshot-band>Available after AirNow is configured</dd>
             </div>
             <div>
-              <dt>Health meaning</dt>
+              <dt>Health guidance</dt>
               <dd data-airnow-snapshot-health>Available after AirNow is configured</dd>
             </div>
           </dl>
@@ -188,7 +188,7 @@
 
         <div class="col-lg-4">
           <article class="content-surface h-100">
-            <h2 class="section-title">Initial coverage</h2>
+            <h2 class="section-title">Coverage areas</h2>
             <ul class="focus-list">
               <li>
                 <i class="fa-solid fa-circle-check text-success" aria-hidden="true"></i>
@@ -207,7 +207,7 @@
         </div>
       </section>
 
-      <section class="row g-4" aria-label="WHO trend and scan priorities">
+      <section class="row g-4" aria-label="WHO trend and dashboard questions">
         <div class="col-lg-8">
           <article class="content-surface h-100">
             <div class="section-heading">
@@ -222,7 +222,7 @@
 
         <div class="col-lg-4">
           <article class="content-surface h-100">
-            <h2 class="section-title">Scan priorities</h2>
+            <h2 class="section-title">What this scan answers</h2>
             <dl class="priority-list">
               <div>
                 <dt>Where</dt>
@@ -287,7 +287,7 @@
               </li>
               <li>
                 <div class="source-row-head">
-                  <span class="source-status" data-airnow-source-status>Key needed</span>
+                  <span class="source-status" data-airnow-source-status>API key needed</span>
                   <span class="source-name">AirNow current observations</span>
                   <a class="source-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">
                     View source <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
@@ -303,7 +303,7 @@
                     <dd data-airnow-source-freshness>AirNow API key not configured</dd>
                   </div>
                   <div>
-                    <dt>Observation</dt>
+                    <dt>Observed</dt>
                     <dd data-airnow-source-observed>Available after AirNow is configured</dd>
                   </div>
                   <div>
@@ -311,7 +311,7 @@
                     <dd data-airnow-area-match>Available after AirNow is configured</dd>
                   </div>
                   <div>
-                    <dt>AQI basis</dt>
+                    <dt>Why this AQI</dt>
                     <dd data-airnow-aqi-basis>Available after AirNow is configured</dd>
                   </div>
                   <div>
@@ -319,7 +319,7 @@
                     <dd data-airnow-severity-band>Available after AirNow is configured</dd>
                   </div>
                   <div>
-                    <dt>Health meaning</dt>
+                    <dt>Health guidance</dt>
                     <dd data-airnow-health-guidance>Available after AirNow is configured</dd>
                   </div>
                   <div>
@@ -367,7 +367,7 @@
                   </div>
                   <div>
                     <dt>Limit</dt>
-                    <dd>Hidden from aggregate scoring until source wiring is complete</dd>
+                    <dd>Not included in source readiness until connected</dd>
                   </div>
                 </dl>
               </li>

@@ -48,14 +48,14 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - User-selectable ZIP code and radius for AirNow current observations
 - Highest returned AirNow pollutant AQI and observation timestamp when live observations are available
 - AirNow reporting-area match showing which returned area and state backs the selected ZIP/radius query
-- AirNow AQI basis detail showing how many pollutant AQI readings were considered and which pollutant drives the displayed value
+- AirNow AQI explanation detail showing how many pollutant AQI readings were considered and which pollutant drives the displayed value
 - AirNow AQI severity band showing the official category range for the displayed value
-- AirNow numeric AQI normalization that derives the official category, severity band, and health meaning when the source omits a category label
-- AirNow category-label normalization that keeps severity, health meaning, and color cues available when source labels vary in casing, spacing, or separators
+- AirNow numeric AQI normalization that derives the official category, severity band, and health guidance when the source omits a category label
+- AirNow category-label normalization that keeps severity, health guidance, and color cues available when source labels vary in casing, spacing, or separators
 - AirNow category color cues on live AQI text and severity-band details using the official AQI level semantics
-- AirNow AQI health meaning derived from the official AQI category when live observations are available
+- AirNow AQI health guidance derived from the official AQI category when live observations are available
 - Distinct AirNow route-unavailable state when the dashboard is opened without the serverless API route
-- Local environmental snapshot that summarizes the selected ZIP/radius, returned reporting area, observation time, AQI basis, severity band, and health meaning
+- Local environmental snapshot that summarizes the selected ZIP/radius, returned reporting area, observation time, why the AQI was selected, severity band, and health guidance
 - Refresh action for live source checks
 - Dashboard-level last-checked timestamp after source refresh
 - Dynamic source-readiness summary that shows how many live sources are currently backing the dashboard
@@ -95,12 +95,12 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Show source observation timing separately from dashboard fetch timing when an upstream response provides both.
 - Show AirNow's returned reporting area and state separately from the user-selected ZIP/radius so local relevance is auditable.
 - When AirNow returns multiple pollutant observations for a selected area, use the highest numeric AQI as the displayed current severity.
-- When displaying the highest AirNow pollutant AQI, show the pollutant-reading count and selected pollutant near source details so users understand the value's basis.
+- When displaying the highest AirNow pollutant AQI, show the pollutant-reading count and selected pollutant near source details so users understand why that AQI was selected.
 - Show the official AQI severity band beside AirNow details so the displayed category is anchored to its numeric range.
-- If AirNow returns a numeric AQI without a category label, derive the official AQI category from the value range before showing severity and health meaning.
-- Normalize recognized AirNow category label variants to official AQI categories before showing severity bands, health meaning, or color cues.
+- If AirNow returns a numeric AQI without a category label, derive the official AQI category from the value range before showing severity and health guidance.
+- Normalize recognized AirNow category label variants to official AQI categories before showing severity bands, health guidance, or color cues.
 - Use official AQI category color cues only on live AQI severity text and details, not on source-readiness status.
-- Translate official AQI categories into concise health meaning near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
+- Translate official AQI categories into concise health guidance near the AirNow source details so users can interpret severity without inventing a broader Pulse risk score.
 - Surface the selected-place AirNow summary above detailed source coverage so local environmental relevance is visible before users inspect source metadata.
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.

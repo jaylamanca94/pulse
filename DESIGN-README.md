@@ -31,14 +31,15 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Show source-returned location matches near source details when a user-selected place is resolved through a reporting area.
 - Show source-specific calculation basis near source details when a displayed value selects from multiple returned observations.
 - Use a compact local environmental snapshot when source details can answer what the selected place means at a glance before the user reaches the full source coverage panel.
+- Use audience-facing section labels that distinguish current source status, live evidence, and planned coverage; avoid implementation phrases such as aggregate scoring in visible UI copy.
 - Use plain source-state labels: `not connected yet` for planned data, `API key not configured` for unconfigured API-key sources, and `route unavailable` for missing serverless routes.
 - Do not label missing serverless routes as `route missing` in the UI; use `route unavailable` so the state matches the rest of the dashboard language.
 - Use `Limit` for source constraints in compact metadata rows; reserve technical caveats for documentation.
 - Show official severity bands near environmental source details when a source returns a recognized AQI category.
-- When a live environmental source returns a numeric AQI without a category label, show the category and health meaning derived from the official numeric band rather than leaving those rows unavailable.
-- Normalize source category label variants to official AQI categories before applying severity text, health meaning, or color cues.
+- When a live environmental source returns a numeric AQI without a category label, show the category and health guidance derived from the official numeric band rather than leaving those rows unavailable.
+- Normalize source category label variants to official AQI categories before applying severity text, health guidance, or color cues.
 - Use official AQI category color cues as restrained text emphasis on live AQI category and severity-band details, while keeping source-readiness status visually separate.
-- Show concise health meaning near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
+- Show concise health guidance near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 
 ## UI Foundation

@@ -504,7 +504,7 @@ test("AirNow fallback state uses audience-facing unconfigured language", () => {
   assert.equal(result.category, "AirNow API key not configured");
   assert.equal(result.freshness, "AirNow API key not configured");
   assert.equal(result.observed, "Available after AirNow is configured");
-  assert.equal(result.statusLabel, "Key needed");
+  assert.equal(result.statusLabel, "API key needed");
 });
 
 test("AirNow ZIP validation exposes persistent form feedback", () => {

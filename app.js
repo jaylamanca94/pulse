@@ -654,7 +654,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
     ? `${reading.pollutant}: ${reading.category}`
     : reading.category;
   const healthGuidance = isLive
-    ? reading.healthGuidance || getAqiHealthGuidance(reading.category) || "Health meaning unavailable for this AQI category"
+    ? reading.healthGuidance || getAqiHealthGuidance(reading.category) || "Health guidance unavailable for this AQI category"
     : sourceMeta.healthGuidance || "Available when live AQI is returned";
   const severityBand = isLive
     ? getAqiSeverityBand(reading.category) || "Severity band unavailable for this AQI category"
@@ -664,11 +664,11 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
     : sourceMeta.observed || "Waiting for live observations";
   const areaMatch = sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive);
   const aqiBasis = sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive);
-  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "Key needed";
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "API key needed";
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
-  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "Key needed");
+  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "API key needed");
   setText("[data-airnow-source-observed]", observed);
   setText("[data-airnow-area-match]", areaMatch);
   setText("[data-airnow-aqi-basis]", aqiBasis);
@@ -752,14 +752,14 @@ const getAirNowFallbackState = (error = {}) => {
       ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
-        : "Live AQI basis unavailable",
+        : "Live AQI explanation unavailable",
     severityBand: isUnconfigured
       ? "Available after AirNow is configured"
       : isRouteUnavailable
         ? "AirNow route unavailable"
         : "Live AQI severity band unavailable",
     statusLabel: isUnconfigured
-      ? "Key needed"
+      ? "API key needed"
       : isRouteUnavailable
         ? "Route unavailable"
         : "Unavailable"
