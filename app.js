@@ -318,6 +318,16 @@ const syncAirNowLocationText = () => {
   setText("[data-airnow-snapshot-scope]", getAirNowScope());
 };
 
+const setAirNowZipValidity = (form, zipInput, isValid) => {
+  if (!form || !zipInput) return;
+
+  form.classList.toggle("was-validated", !isValid);
+  zipInput.setAttribute("aria-invalid", String(!isValid));
+  if (!isValid) {
+    setText("[data-airnow-location-note]", "Enter a 5-digit ZIP code to update the AirNow area.");
+  }
+};
+
 const setSourceDetail = (sourceKey, detail) => {
   const status = document.querySelector(`[data-${sourceKey}-source-status]`);
   if (status) {
@@ -849,12 +859,26 @@ const initializeAirNowForm = () => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    if (!form.reportValidity()) return;
+    setAirNowZipValidity(form, zipInput, true);
 
     airNowQuery.zipCode = normalizeZipCode(zipInput?.value);
     airNowQuery.distance = normalizeDistance(distanceInput?.value);
     syncAirNowLocationText();
     loadDashboard();
+  });
+
+  zipInput?.addEventListener("invalid", () => {
+    setAirNowZipValidity(form, zipInput, false);
+  });
+
+  zipInput?.addEventListener("input", () => {
+    if (zipInput.checkValidity()) {
+      setAirNowZipValidity(form, zipInput, true);
+      setText(
+        "[data-airnow-location-note]",
+        `Ready to update to ZIP ${zipInput.value.trim()}, ${normalizeDistance(distanceInput?.value)}-mile radius.`
+      );
+    }
   });
 };
 

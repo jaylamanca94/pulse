@@ -331,7 +331,8 @@
                   <div class="airnow-form-grid">
                     <div>
                       <label class="form-label" for="airnowZip">ZIP code</label>
-                      <input class="form-control form-control-sm" id="airnowZip" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" required>
+                      <input class="form-control form-control-sm" id="airnowZip" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" aria-describedby="airnowFormHelp airnowZipFeedback" required>
+                      <div class="invalid-feedback" id="airnowZipFeedback">Enter a 5-digit ZIP code.</div>
                     </div>
                     <div>
                       <label class="form-label" for="airnowDistance">Radius</label>

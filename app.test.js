@@ -15,6 +15,18 @@ function runAppHelper(expression) {
   return vm.runInNewContext(`${helperSource}\n${expression}`, context);
 }
 
+function runAppBeforeBoot(expression) {
+  const source = fs.readFileSync("app.js", "utf8");
+  const helperSource = source.split('\ndocument.querySelector("#refreshButton")')[0];
+  const context = {
+    window: {
+      PULSE_CONFIG: {}
+    }
+  };
+
+  return vm.runInNewContext(`${helperSource}\n${expression}`, context);
+}
+
 test("AirNow reading normalization selects the highest AQI observation", () => {
   const result = runAppHelper(`(() => {
     const reading = normalizeAirNowReading([
@@ -493,4 +505,127 @@ test("AirNow fallback state uses audience-facing unconfigured language", () => {
   assert.equal(result.freshness, "AirNow API key not configured");
   assert.equal(result.observed, "Available after AirNow is configured");
   assert.equal(result.statusLabel, "Key needed");
+});
+
+test("AirNow ZIP validation exposes persistent form feedback", () => {
+  const result = runAppHelper(`(() => {
+    const note = { textContent: "" };
+    const formClasses = new Set();
+    const attributes = new Map();
+    const form = {
+      classList: {
+        toggle(name, force) {
+          if (force) {
+            formClasses.add(name);
+          } else {
+            formClasses.delete(name);
+          }
+        }
+      }
+    };
+    const zipInput = {
+      setAttribute(name, value) {
+        attributes.set(name, value);
+      }
+    };
+
+    globalThis.document = {
+      querySelector(selector) {
+        return selector === "[data-airnow-location-note]" ? note : null;
+      }
+    };
+
+    setAirNowZipValidity(form, zipInput, false);
+    const invalidState = {
+      ariaInvalid: attributes.get("aria-invalid"),
+      classes: Array.from(formClasses),
+      note: note.textContent
+    };
+
+    setAirNowZipValidity(form, zipInput, true);
+
+    return {
+      invalidState,
+      validState: {
+        ariaInvalid: attributes.get("aria-invalid"),
+        classes: Array.from(formClasses)
+      }
+    };
+  })()`);
+
+  assert.equal(result.invalidState.ariaInvalid, "true");
+  assert.equal(JSON.stringify(result.invalidState.classes), JSON.stringify(["was-validated"]));
+  assert.equal(result.invalidState.note, "Enter a 5-digit ZIP code to update the AirNow area.");
+  assert.equal(result.validState.ariaInvalid, "false");
+  assert.equal(JSON.stringify(result.validState.classes), JSON.stringify([]));
+});
+
+test("AirNow form initialization binds invalid ZIP feedback before submit", () => {
+  const result = runAppBeforeBoot(`(() => {
+    const targets = new Map();
+    const events = {};
+    const formClasses = new Set();
+    const makeElement = () => ({ textContent: "" });
+    const zipInput = {
+      value: "",
+      attributes: new Map(),
+      addEventListener(type, handler) {
+        events["zip:" + type] = handler;
+      },
+      checkValidity() {
+        return false;
+      },
+      setAttribute(name, value) {
+        this.attributes.set(name, value);
+      }
+    };
+    const distanceInput = {
+      value: "25"
+    };
+    const form = {
+      classList: {
+        toggle(name, force) {
+          if (force) {
+            formClasses.add(name);
+          } else {
+            formClasses.delete(name);
+          }
+        }
+      },
+      elements: {
+        namedItem(name) {
+          return name === "zipCode" ? zipInput : distanceInput;
+        }
+      },
+      addEventListener(type, handler) {
+        events["form:" + type] = handler;
+      }
+    };
+
+    globalThis.document = {
+      querySelector(selector) {
+        if (selector === "[data-airnow-form]") return form;
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement());
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    initializeAirNowForm();
+    events["zip:invalid"]();
+
+    return {
+      ariaInvalid: zipInput.attributes.get("aria-invalid"),
+      classes: Array.from(formClasses),
+      hasInvalidHandler: typeof events["zip:invalid"] === "function",
+      note: targets.get("[data-airnow-location-note]").textContent
+    };
+  })()`);
+
+  assert.equal(result.hasInvalidHandler, true);
+  assert.equal(result.ariaInvalid, "true");
+  assert.equal(JSON.stringify(result.classes), JSON.stringify(["was-validated"]));
+  assert.equal(result.note, "Enter a 5-digit ZIP code to update the AirNow area.");
 });
