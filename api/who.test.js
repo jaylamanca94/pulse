@@ -79,6 +79,8 @@ test("WHO proxy normalizes notice metadata and canonical URLs", async () => {
     assert.deepEqual(payload.noticeWindow, {
       count: 4,
       latestDate: "10 June 2026",
+      latestPublishedAt: "2026-06-10T09:15:00Z",
+      oldestPublishedAt: "2026-05-29T12:00:00Z",
       oldestDate: "29 May 2026"
     });
     assert.deepEqual(payload.trend.map((item) => ({

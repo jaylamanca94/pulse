@@ -16,7 +16,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Avoid adding decorative complexity unless it directly improves the product experience.
 - Make update timestamps, source attribution, location, geographic level, and severity easy to find.
 - Keep notice-level publication time, geography, and source identifiers visible as compact metadata, not buried in paragraph text.
-- Keep source-window metadata visible when a source surface summarizes only the latest batch of notices or observations.
+- Keep source-window metadata visible when a source surface summarizes only the latest batch of notices or observations, and use exact oldest/latest source publication time when available.
 - Show dashboard-level source check timestamps near refresh status so users can judge recency at a glance.
 - Use the hero score position for source readiness until Pulse has enough live inputs to support a real aggregate health signal.
 - Keep top-level signal summaries close to a compact source-basis explanation when the view mixes live, no-data, route-unavailable, unconfigured, and pending inputs.

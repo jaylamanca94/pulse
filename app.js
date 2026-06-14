@@ -123,14 +123,31 @@ const formatWhoNoticeWindow = (windowMeta = {}) => {
     return "No recent notices returned";
   }
 
-  const latestDate = windowMeta.latestDate || "latest date unavailable";
-  const oldestDate = windowMeta.oldestDate || "oldest date unavailable";
+  const latestDate = formatWhoWindowDateTime(windowMeta.latestPublishedAt, windowMeta.latestDate || "latest date unavailable");
+  const oldestDate = formatWhoWindowDateTime(windowMeta.oldestPublishedAt, windowMeta.oldestDate || "oldest date unavailable");
 
   if (latestDate === oldestDate) {
     return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} from ${latestDate}`;
   }
 
   return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} from ${oldestDate} to ${latestDate}`;
+};
+
+const formatWhoWindowDateTime = (isoString, fallback = "Date unavailable") => {
+  if (!isoString) return fallback;
+
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short"
+  }).format(date);
 };
 
 const formatWhoPublishedAt = (isoString, fallback = "Date unavailable") => {

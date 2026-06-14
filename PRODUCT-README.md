@@ -43,7 +43,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
 - WHO multi-area title parsing for affected-area summaries when DON geography uses separators such as `and`, `&`, or `;`
 - WHO affected-area metadata showing the latest source publication time when available
-- WHO source notice window showing how many recent notices are summarized and the oldest/latest notice dates in that batch
+- WHO source notice window showing how many recent notices are summarized and the oldest/latest source publication times in that batch when available
 - AirNow-ready air quality card using a serverless API route with an unconfigured state when no API key is configured
 - User-selectable ZIP code and radius for AirNow current observations
 - Highest returned AirNow pollutant AQI and observation timestamp when live observations are available
@@ -84,7 +84,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
 - Keep outbreak notice rows specific enough to show source publication time, affected geography, and source identifier when the upstream source provides them.
-- Show the recent notice window behind WHO-derived summaries so users can judge how much of the latest feed the dashboard is using.
+- Show the recent notice window behind WHO-derived summaries so users can judge how much of the latest feed the dashboard is using, including oldest/latest source publication time when WHO provides it.
 - Surface a compact geography scan from official notices before adding broader map or table workflows.
 - Parse obvious multi-area WHO title geography into separate affected-area summary rows, while preserving joined place names such as Trinidad and Tobago.
 - Rank affected-area summaries by repeated notice count first and latest publication recency second so the scan favors concentration without hiding fresh one-off events.

@@ -169,6 +169,8 @@ function getNoticeWindow(notices) {
   return {
     count: notices.length,
     latestDate: datedNotices[0]?.date || "Date unavailable",
+    latestPublishedAt: datedNotices[0]?.publishedAt || "",
+    oldestPublishedAt: datedNotices[datedNotices.length - 1]?.publishedAt || "",
     oldestDate: datedNotices[datedNotices.length - 1]?.date || "Date unavailable"
   };
 }

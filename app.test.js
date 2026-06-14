@@ -200,6 +200,21 @@ test("WHO notice helpers preserve exact source publication time", () => {
   assert.match(result.label, /UTC/);
 });
 
+test("WHO notice window uses exact publication time when available", () => {
+  const result = runAppHelper(`(() => formatWhoNoticeWindow({
+    count: 4,
+    latestDate: "10 June 2026",
+    latestPublishedAt: "2026-06-10T09:15:00Z",
+    oldestDate: "29 May 2026",
+    oldestPublishedAt: "2026-05-29T12:00:00Z"
+  }))()`);
+
+  assert.match(result, /^4 notices from /);
+  assert.match(result, /2026/);
+  assert.match(result, /UTC/);
+  assert.doesNotMatch(result, /29 May 2026 to 10 June 2026/);
+});
+
 test("WHO notice rows render source publication time as datetime metadata", () => {
   const result = runAppHelper(`(() => {
     const makeElement = (tagName) => ({
