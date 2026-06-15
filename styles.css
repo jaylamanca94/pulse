@@ -403,6 +403,14 @@ body {
   padding-top: 16px;
 }
 
+.trend-summary {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .trend-day {
   display: grid;
   gap: 8px;

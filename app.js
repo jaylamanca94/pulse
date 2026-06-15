@@ -511,6 +511,34 @@ const formatTrendAccessibleLabel = (count, isoDate) => {
   return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} on ${formatTrendLabel(isoDate)}`;
 };
 
+const formatWhoTrendSummary = (trend = []) => {
+  const datedTrend = trend
+    .map((item) => ({
+      count: Number(item.count) || 0,
+      date: item.date || ""
+    }))
+    .filter((item) => item.date);
+
+  if (!datedTrend.length) {
+    return "No dated WHO notices were available for the trend.";
+  }
+
+  const total = datedTrend.reduce((sum, item) => sum + item.count, 0);
+  const peak = datedTrend.reduce((highest, item) => (
+    item.count > highest.count
+    || (item.count === highest.count && item.date.localeCompare(highest.date) > 0)
+      ? item
+      : highest
+  ), datedTrend[0]);
+  const latest = datedTrend.reduce((newest, item) => (
+    item.date.localeCompare(newest.date) > 0 ? item : newest
+  ), datedTrend[0]);
+  const noticeLabel = total === 1 ? "notice" : "notices";
+  const dayLabel = datedTrend.length === 1 ? "publication day" : "publication days";
+
+  return `${total} ${noticeLabel} across ${datedTrend.length} ${dayLabel}; peak ${peak.count} on ${formatTrendLabel(peak.date)}; latest ${formatTrendLabel(latest.date)}`;
+};
+
 const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   const grid = document.querySelector("[data-who-trend-grid]");
   if (!grid) return;
@@ -518,16 +546,19 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   grid.innerHTML = "";
 
   if (!isLive || !trend.length) {
-    const empty = document.createElement("p");
-    empty.className = "empty-copy mb-0";
-    empty.textContent = isLive
+    const summary = isLive
       ? "No dated WHO notices were available for the trend."
       : "WHO notice trend is unavailable until live notices load.";
+    const empty = document.createElement("p");
+    empty.className = "empty-copy mb-0";
+    empty.textContent = summary;
     grid.append(empty);
+    setText("[data-who-trend-summary]", summary);
     setText("[data-who-trend-updated]", isLive ? "No dated notices" : "Source unavailable");
     return;
   }
 
+  setText("[data-who-trend-summary]", formatWhoTrendSummary(trend));
   const maxCount = Math.max(...trend.map((item) => Number(item.count) || 0), 1);
 
   trend.forEach((item) => {

@@ -380,11 +380,17 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
       }
     });
     const grid = makeElement("div");
+    const targets = new Map();
 
     globalThis.document = {
       createElement: makeElement,
       querySelector(selector) {
-        return selector === "[data-who-trend-grid]" ? grid : makeElement("span");
+        if (selector === "[data-who-trend-grid]") return grid;
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement("span"));
+        }
+
+        return targets.get(selector);
       }
     };
 
@@ -399,12 +405,14 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
 
     const bar = grid.children[0];
     const fill = bar.children[0];
+    const summary = targets.get("[data-who-trend-summary]");
 
     return {
       ariaLabel: bar.attributes.get("aria-label"),
       fillAriaHidden: fill.attributes.get("aria-hidden"),
       fillTitle: fill.title,
       role: bar.attributes.get("role"),
+      summary: summary.textContent,
       visibleCount: bar.children[2].textContent
     };
   })()`);
@@ -413,6 +421,7 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
   assert.match(result.ariaLabel, /^2 notices on /);
   assert.equal(result.fillAriaHidden, "true");
   assert.equal(result.fillTitle, result.ariaLabel);
+  assert.match(result.summary, /^2 notices across 1 publication day; peak 2 on /);
   assert.equal(result.visibleCount, "2");
 });
 
