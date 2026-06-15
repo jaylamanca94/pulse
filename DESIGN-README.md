@@ -131,6 +131,7 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 - Metric cards use restrained state rails and matching icon tones so users can distinguish live, attention-needed, and pending sources without reading every note. Use Pulse accent for live source cards, warning tone for unavailable or unconfigured live-source cards, and muted treatment for planned sources that are not connected yet.
 - Dense evidence rows, such as outbreak geography, WHO notices, and source coverage, should use low-contrast row panels with `8px` radius, restrained borders, and short hover/focus transitions so metadata feels grouped without becoming decorative.
 - Long official notice summaries may be visually clamped in repeated rows to preserve scan density while keeping source links prominent.
+- Compact chart visuals, such as the WHO notice trend, should sit in low-contrast chart wells with `8px` radius, a restrained border, and mobile-specific height reduction so the data view feels intentional without overpowering surrounding evidence rows.
 - Metadata groups should use dividers, spacing, and compact labels before adding nested card treatments.
 
 ## Icons

@@ -396,17 +396,23 @@ body {
 
 .trend-grid {
   align-items: end;
+  background-color: var(--row-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface), transparent 18%);
   display: grid;
-  gap: 16px;
+  gap: 12px;
   grid-template-columns: repeat(7, minmax(28px, 1fr));
+  margin-top: 12px;
   min-height: 260px;
-  padding-top: 16px;
+  overflow: hidden;
+  padding: 18px 16px 16px;
 }
 
 .trend-grid.is-empty {
   align-items: start;
   min-height: auto;
-  padding-top: 0;
+  padding: 14px 16px;
 }
 
 .trend-summary {
@@ -414,6 +420,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   margin: 0;
+  max-width: 76ch;
   overflow-wrap: anywhere;
 }
 
@@ -429,6 +436,7 @@ body {
   align-self: end;
   background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent), transparent 45%));
   border-radius: 8px 8px 4px 4px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface), transparent 36%);
   min-height: 32px;
 }
 
@@ -814,7 +822,13 @@ body {
   }
 
   .trend-grid {
-    gap: 8px;
+    gap: 6px;
+    min-height: 222px;
+    padding: 12px 10px;
+  }
+
+  .trend-day {
+    height: 180px;
   }
 
   .snapshot-grid {
