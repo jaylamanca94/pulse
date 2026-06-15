@@ -403,6 +403,12 @@ body {
   padding-top: 16px;
 }
 
+.trend-grid.is-empty {
+  align-items: start;
+  min-height: auto;
+  padding-top: 0;
+}
+
 .trend-summary {
   color: var(--muted);
   font-size: 14px;

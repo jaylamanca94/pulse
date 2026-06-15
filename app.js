@@ -546,6 +546,7 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   grid.innerHTML = "";
 
   if (!isLive || !trend.length) {
+    grid.classList?.add("is-empty");
     const summary = isLive
       ? "No dated WHO notices were available for the trend."
       : "WHO notice trend is unavailable until live notices load.";
@@ -558,6 +559,7 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
     return;
   }
 
+  grid.classList?.remove("is-empty");
   setText("[data-who-trend-summary]", formatWhoTrendSummary(trend));
   const maxCount = Math.max(...trend.map((item) => Number(item.count) || 0), 1);
 

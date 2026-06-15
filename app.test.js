@@ -366,6 +366,10 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
       tagName,
       attributes: new Map(),
       children: [],
+      classList: {
+        add() {},
+        remove() {}
+      },
       className: "",
       style: {},
       textContent: "",
@@ -423,6 +427,58 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
   assert.equal(result.fillTitle, result.ariaLabel);
   assert.match(result.summary, /^2 notices across 1 publication day; peak 2 on /);
   assert.equal(result.visibleCount, "2");
+});
+
+test("WHO trend empty state collapses chart spacing", () => {
+  const result = runAppHelper(`(() => {
+    const classes = new Set();
+    const makeElement = (tagName) => ({
+      tagName,
+      children: [],
+      className: "",
+      textContent: "",
+      append(...nodes) {
+        this.children.push(...nodes);
+      },
+      classList: {
+        add(name) {
+          classes.add(name);
+        },
+        remove(name) {
+          classes.delete(name);
+        }
+      },
+      set innerHTML(value) {
+        this.children = [];
+      }
+    });
+    const grid = makeElement("div");
+    const targets = new Map();
+
+    globalThis.document = {
+      createElement: makeElement,
+      querySelector(selector) {
+        if (selector === "[data-who-trend-grid]") return grid;
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement("span"));
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    renderWhoTrend([], false, {});
+
+    return {
+      classes: Array.from(classes),
+      emptyText: grid.children[0].textContent,
+      summary: targets.get("[data-who-trend-summary]").textContent
+    };
+  })()`);
+
+  assert.equal(JSON.stringify(result.classes), JSON.stringify(["is-empty"]));
+  assert.equal(result.emptyText, "WHO notice trend is unavailable until live notices load.");
+  assert.equal(result.summary, "WHO notice trend is unavailable until live notices load.");
 });
 
 test("AirNow area match keeps the reporting area distinct from the request scope", () => {
