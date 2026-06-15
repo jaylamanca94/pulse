@@ -563,6 +563,16 @@ test("AirNow fallback state uses audience-facing unconfigured language", () => {
   assert.equal(result.statusLabel, "API key needed");
 });
 
+test("AirNow fallback state keeps source outages distinct from setup states", () => {
+  const result = runAppHelper(`(() => getAirNowFallbackState({ status: 502 }))()`);
+
+  assert.equal(result.category, "Live AQI unavailable");
+  assert.equal(result.freshness, "Try refreshing again later");
+  assert.equal(result.healthGuidance, "Unavailable until the source responds");
+  assert.equal(result.observed, "Live observation unavailable");
+  assert.equal(result.statusLabel, "Unavailable");
+});
+
 test("AirNow ZIP validation exposes persistent form feedback", () => {
   const result = runAppHelper(`(() => {
     const note = { textContent: "" };

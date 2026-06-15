@@ -22,6 +22,39 @@ const noAirQualityReading = {
   pollutant: "AQI"
 };
 
+const AIRNOW_FALLBACK_STATES = {
+  unconfigured: {
+    category: fallbackAirQuality.category,
+    freshness: "AirNow API key not configured",
+    healthGuidance: "Available after AirNow is configured",
+    observed: "Available after AirNow is configured",
+    areaMatch: "Available after AirNow is configured",
+    aqiBasis: "Available after AirNow is configured",
+    severityBand: "Available after AirNow is configured",
+    statusLabel: "API key needed"
+  },
+  routeUnavailable: {
+    category: "AirNow route unavailable",
+    freshness: "Run with server API routes for live AQI",
+    healthGuidance: "Available when the AirNow route responds",
+    observed: "AirNow route unavailable",
+    areaMatch: "AirNow route unavailable",
+    aqiBasis: "AirNow route unavailable",
+    severityBand: "AirNow route unavailable",
+    statusLabel: "Route unavailable"
+  },
+  unavailable: {
+    category: "Live AQI unavailable",
+    freshness: "Try refreshing again later",
+    healthGuidance: "Unavailable until the source responds",
+    observed: "Live observation unavailable",
+    areaMatch: "Live reporting area unavailable",
+    aqiBasis: "Live AQI explanation unavailable",
+    severityBand: "Live AQI severity band unavailable",
+    statusLabel: "Unavailable"
+  }
+};
+
 const normalizeZipCode = (value) => {
   const zipCode = String(value || "").trim();
   return /^\d{5}$/.test(zipCode) ? zipCode : "10001";
@@ -729,48 +762,15 @@ const getAirNowFallbackState = (error = {}) => {
   const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";
   const isRouteUnavailable = error.status === 404;
 
-  return {
-    category: isUnconfigured
-      ? fallbackAirQuality.category
-      : isRouteUnavailable
-        ? "AirNow route unavailable"
-        : "Live AQI unavailable",
-    freshness: isUnconfigured
-      ? "AirNow API key not configured"
-      : isRouteUnavailable
-        ? "Run with server API routes for live AQI"
-        : "Try refreshing again later",
-    healthGuidance: isUnconfigured
-      ? "Available after AirNow is configured"
-      : isRouteUnavailable
-        ? "Available when the AirNow route responds"
-        : "Unavailable until the source responds",
-    observed: isUnconfigured
-      ? "Available after AirNow is configured"
-      : isRouteUnavailable
-        ? "AirNow route unavailable"
-        : "Live observation unavailable",
-    areaMatch: isUnconfigured
-      ? "Available after AirNow is configured"
-      : isRouteUnavailable
-        ? "AirNow route unavailable"
-        : "Live reporting area unavailable",
-    aqiBasis: isUnconfigured
-      ? "Available after AirNow is configured"
-      : isRouteUnavailable
-        ? "AirNow route unavailable"
-        : "Live AQI explanation unavailable",
-    severityBand: isUnconfigured
-      ? "Available after AirNow is configured"
-      : isRouteUnavailable
-        ? "AirNow route unavailable"
-        : "Live AQI severity band unavailable",
-    statusLabel: isUnconfigured
-      ? "API key needed"
-      : isRouteUnavailable
-        ? "Route unavailable"
-        : "Unavailable"
-  };
+  if (isUnconfigured) {
+    return { ...AIRNOW_FALLBACK_STATES.unconfigured };
+  }
+
+  if (isRouteUnavailable) {
+    return { ...AIRNOW_FALLBACK_STATES.routeUnavailable };
+  }
+
+  return { ...AIRNOW_FALLBACK_STATES.unavailable };
 };
 
 const loadAirQuality = async () => {
