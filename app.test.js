@@ -763,3 +763,85 @@ test("AirNow form initialization binds invalid ZIP feedback before submit", () =
   assert.equal(JSON.stringify(result.classes), JSON.stringify(["was-validated"]));
   assert.equal(result.note, "Enter a 5-digit ZIP code to update the AirNow area.");
 });
+
+test("AirNow form submit does not replace an invalid ZIP with the default", () => {
+  const result = runAppBeforeBoot(`(() => {
+    const targets = new Map();
+    const events = {};
+    const formClasses = new Set();
+    const makeElement = () => ({ textContent: "" });
+    const zipInput = {
+      value: "abc",
+      attributes: new Map(),
+      reportValidityCalled: false,
+      addEventListener(type, handler) {
+        events["zip:" + type] = handler;
+      },
+      checkValidity() {
+        return false;
+      },
+      reportValidity() {
+        this.reportValidityCalled = true;
+      },
+      setAttribute(name, value) {
+        this.attributes.set(name, value);
+      }
+    };
+    const distanceInput = {
+      value: "50"
+    };
+    const form = {
+      classList: {
+        toggle(name, force) {
+          if (force) {
+            formClasses.add(name);
+          } else {
+            formClasses.delete(name);
+          }
+        }
+      },
+      elements: {
+        namedItem(name) {
+          return name === "zipCode" ? zipInput : distanceInput;
+        }
+      },
+      addEventListener(type, handler) {
+        events["form:" + type] = handler;
+      }
+    };
+
+    globalThis.document = {
+      querySelector(selector) {
+        if (selector === "[data-airnow-form]") return form;
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement());
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    airNowQuery.zipCode = "60601";
+    airNowQuery.distance = 25;
+    initializeAirNowForm();
+    zipInput.value = "abc";
+    distanceInput.value = "50";
+    events["form:submit"]({ preventDefault() {} });
+
+    return {
+      ariaInvalid: zipInput.attributes.get("aria-invalid"),
+      classes: Array.from(formClasses),
+      distance: airNowQuery.distance,
+      note: targets.get("[data-airnow-location-note]").textContent,
+      reportValidityCalled: zipInput.reportValidityCalled,
+      zipCode: airNowQuery.zipCode
+    };
+  })()`);
+
+  assert.equal(result.ariaInvalid, "true");
+  assert.equal(JSON.stringify(result.classes), JSON.stringify(["was-validated"]));
+  assert.equal(result.distance, 25);
+  assert.equal(result.note, "Enter a 5-digit ZIP code to update the AirNow area.");
+  assert.equal(result.reportValidityCalled, true);
+  assert.equal(result.zipCode, "60601");
+});

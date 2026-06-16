@@ -910,6 +910,12 @@ const initializeAirNowForm = () => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    if (zipInput?.checkValidity && !zipInput.checkValidity()) {
+      setAirNowZipValidity(form, zipInput, false);
+      zipInput.reportValidity?.();
+      return;
+    }
+
     setAirNowZipValidity(form, zipInput, true);
 
     airNowQuery.zipCode = normalizeZipCode(zipInput?.value);
