@@ -42,7 +42,7 @@ The interface should feel quiet, practical, trustworthy, and easy to scan during
 - Show concise health guidance near environmental source details when a source returns an official severity category, while keeping source readiness separate from aggregate health-risk scoring.
 - Use maps, tables, trend lines, and status summaries when they clarify outbreak scale, spread, freshness, or local relevance.
 - Visual data summaries, including trend bars and future chart-like elements, must expose the same values through text or accessible names so they do not rely on color, height, or hover-only labels.
-- WHO notice trend visuals should include a short visible text summary of total notices, publication-day coverage, peak day, and latest day before the bars.
+- WHO notice trend visuals should include a short visible text summary of total notices, publication-day coverage, peak day, and latest notice title before the bars.
 
 ## UI Foundation
 

@@ -34,7 +34,7 @@ window.PULSE_CONFIG = {
 ```
 
 WHO notices are loaded through `/api/who`, which normalizes and caches the public source response, reports the recent notice window being summarized, and derives a compact affected-area summary from recent notices. Recent notice rows, affected-area rows, and source-window summaries show the source publication timestamp when available. Obvious multi-area title geography is split into separate summary rows when the source uses separators such as `and`, `&`, or `;`, while joined place names such as Trinidad and Tobago stay intact. Affected areas are ranked by repeated notice count, then latest publication recency.
-The WHO notice trend pairs the visual bars with a plain-language summary of total notices, publication-day coverage, peak day, and latest day.
+The WHO notice trend pairs the visual bars with a plain-language summary of total notices, publication-day coverage, peak day, and the latest notice title represented in the trend.
 
 AirNow requires an API key. The dashboard calls `/api/airnow`, which reads the key from a server-side environment variable. Until that key is present, the product should say the AirNow API key is not configured instead of asking dashboard users to add a server key.
 When live AirNow observations are available, the dashboard shows the highest returned pollutant AQI and upstream observation time separately from the dashboard fetch time.

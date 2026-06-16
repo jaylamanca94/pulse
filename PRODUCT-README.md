@@ -63,7 +63,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Source coverage rows that show status, scope, freshness, limits, and official-source links for live public data
 - Distinct no-data source state when a configured source responds without nearby observations
 - WHO-derived signal trend snapshot
-- WHO notice trend plain-language summary that mirrors the visual bar chart
+- WHO notice trend plain-language summary that mirrors the visual bar chart and names the latest notice represented in the trend
 - Priority list for first public data areas
 - Pending-source labels so the prototype does not imply live tracking where source wiring is incomplete
 - Responsive desktop, tablet, and mobile layout
@@ -108,7 +108,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
 - Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
 - Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
-- Pair WHO trend visuals with a concise text summary of notice count, publication-day coverage, peak day, and latest day so the chart is understandable without relying on bar height.
+- Pair WHO trend visuals with a concise text summary of notice count, publication-day coverage, peak day, and the latest notice title so the chart is understandable without relying on bar height.
 
 ## Roadmap
 

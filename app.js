@@ -506,16 +506,22 @@ const formatTrendLabel = (isoDate) => {
   }).format(date);
 };
 
-const formatTrendAccessibleLabel = (count, isoDate) => {
+const getTrendLatestTitle = (item = {}) => String(item.latestTitle || "").trim();
+
+const formatTrendAccessibleLabel = (count, isoDate, latestTitle = "") => {
   const noticeCount = Number(count) || 0;
-  return `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} on ${formatTrendLabel(isoDate)}`;
+  const label = `${noticeCount} ${noticeCount === 1 ? "notice" : "notices"} on ${formatTrendLabel(isoDate)}`;
+  const title = String(latestTitle || "").trim();
+
+  return title ? `${label}; latest notice: ${title}` : label;
 };
 
 const formatWhoTrendSummary = (trend = []) => {
   const datedTrend = trend
     .map((item) => ({
       count: Number(item.count) || 0,
-      date: item.date || ""
+      date: item.date || "",
+      latestTitle: getTrendLatestTitle(item)
     }))
     .filter((item) => item.date);
 
@@ -536,7 +542,11 @@ const formatWhoTrendSummary = (trend = []) => {
   const noticeLabel = total === 1 ? "notice" : "notices";
   const dayLabel = datedTrend.length === 1 ? "publication day" : "publication days";
 
-  return `${total} ${noticeLabel} across ${datedTrend.length} ${dayLabel}; peak ${peak.count} on ${formatTrendLabel(peak.date)}; latest ${formatTrendLabel(latest.date)}`;
+  const latestLabel = latest.latestTitle
+    ? `latest ${formatTrendLabel(latest.date)}: ${latest.latestTitle}`
+    : `latest ${formatTrendLabel(latest.date)}`;
+
+  return `${total} ${noticeLabel} across ${datedTrend.length} ${dayLabel}; peak ${peak.count} on ${formatTrendLabel(peak.date)}; ${latestLabel}`;
 };
 
 const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
@@ -565,14 +575,15 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
 
   trend.forEach((item) => {
     const count = Number(item.count) || 0;
+    const trendLabel = formatTrendAccessibleLabel(count, item.date, getTrendLatestTitle(item));
     const bar = document.createElement("div");
     bar.className = "trend-day";
     bar.setAttribute("role", "listitem");
-    bar.setAttribute("aria-label", formatTrendAccessibleLabel(count, item.date));
+    bar.setAttribute("aria-label", trendLabel);
 
     const fill = document.createElement("span");
     fill.style.height = `${Math.max(18, Math.round((count / maxCount) * 100))}%`;
-    fill.title = formatTrendAccessibleLabel(count, item.date);
+    fill.title = trendLabel;
     fill.setAttribute("aria-hidden", "true");
 
     const label = document.createElement("small");

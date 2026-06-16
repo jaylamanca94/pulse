@@ -401,7 +401,8 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
     renderWhoTrend([
       {
         count: 2,
-        date: "2026-06-10"
+        date: "2026-06-10",
+        latestTitle: "Marburg virus disease, Germany"
       }
     ], true, {
       fetchedAt: "2026-06-12T09:00:00Z"
@@ -423,9 +424,11 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
 
   assert.equal(result.role, "listitem");
   assert.match(result.ariaLabel, /^2 notices on /);
+  assert.match(result.ariaLabel, /latest notice: Marburg virus disease, Germany$/);
   assert.equal(result.fillAriaHidden, "true");
   assert.equal(result.fillTitle, result.ariaLabel);
   assert.match(result.summary, /^2 notices across 1 publication day; peak 2 on /);
+  assert.match(result.summary, /latest .*: Marburg virus disease, Germany$/);
   assert.equal(result.visibleCount, "2");
 });
 
