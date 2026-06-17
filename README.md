@@ -1,8 +1,8 @@
 # Pulse
 
-Pulse is an event-driven public health dashboard for understanding outbreaks, disease activity, environmental health signals, and population-level risk when something is happening near you or in a place you care about.
+Pulse is a live, source-backed dashboard for understanding how people, communities, and society are doing across environment, disease, healthcare, well-being, and population signals.
 
-Tagline: See the health of the world.
+Core question: How are people doing?
 
 ## Tech Stack
 

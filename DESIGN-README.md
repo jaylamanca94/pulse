@@ -6,7 +6,7 @@ This file is intentionally separate because design standards and utilities will 
 
 ## Product Feel
 
-The interface should feel quiet, practical, trustworthy, and easy to scan during a public health event.
+The interface should feel quiet, practical, trustworthy, and easy to scan during a human health, environmental, public health, care access, well-being, or population event.
 
 - Prefer Acadia primitives before custom UI patterns.
 - Keep visual decisions simple enough for a solo product builder to maintain.
@@ -141,7 +141,7 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 
 ## Favicon And App Icon
 
-- Pulse uses a Font Awesome heart-pulse mark for its favicon/app icon because it represents public health signals and source readiness.
+- Pulse uses a Font Awesome heart-pulse mark for its favicon/app icon because it represents human health signals and source readiness.
 - App icons and favicons must be vector-first, not screenshots.
 - The icon background uses a theme-aware vertical gradient: Dark Mode moves from slightly lighter gray on top to very dark black on bottom; Light Mode moves from very light gray on top to slightly darker light gray on bottom.
 - The centered heart-pulse mark uses Pulse green in Light Mode and white in Dark Mode for contrast.

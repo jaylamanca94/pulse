@@ -117,6 +117,11 @@ const updateSourceReadiness = (liveCount, totalCount) => {
 
   setText("[data-source-readiness-value]", value);
   setText("[data-source-readiness-label]", label);
+  setText("[data-source-status-card-value]", value);
+  setText("[data-source-status-card-note]", totalCount === 0
+    ? "Checking live sources"
+    : `${label} source readiness across ${totalCount} connected ${totalCount === 1 ? "source" : "sources"}`);
+  setMetricCardState("source", label === "live" ? "live" : label === "checking" ? "pending" : "warning");
 };
 
 const formatCheckedAt = (isoString) => {

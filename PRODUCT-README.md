@@ -3,32 +3,43 @@
 ## Goals
 
 - Help users see the health of the world.
-- Give people a clear place to understand public health and disease outbreak activity when something is happening near them or in a place they care about.
-- Bring the clarity of COVID-era case trackers, maps, county/state/country views, and update timestamps to a broader set of public health outbreaks and disease signals.
-- Turn live health, environmental, and population data into clear situational awareness.
-- Start with official public sources for disease activity, outbreak reports, case counts, air quality, healthcare access, and community well-being.
+- Give people a clear place to understand how people, communities, and society are doing when environmental, health, care, well-being, or population signals are changing.
+- Bring the clarity of COVID-era case trackers, maps, county/state/country views, and update timestamps to a broader set of human health and society signals.
+- Turn live health, environmental, healthcare, well-being, and population data into clear situational awareness.
+- Start with official public sources for air quality, disease activity, outbreak reports, healthcare access, community well-being, and population trends.
 - Keep the product quiet, practical, and maintainable.
 - Start with the smallest working dashboard before adding integrations.
 
 ## Product Discipline
 
-Pulse must stay focused on its core job: clear situational awareness for public health, outbreak, environmental, and community health signals.
+Pulse must stay focused on its core job: clear situational awareness for source-backed human health, environmental, care, well-being, and society signals.
 
-- Do not broaden Pulse into a general wellness, hospital operations, social network, news, or analytics platform unless the founder explicitly changes the product direction.
-- Prefer focused public-health clarity over feature volume.
-- Say no or defer when a feature is interesting but does not strengthen the current public health dashboard mission.
+- Do not broaden Pulse into a general wellness, hospital operations, social network, news, or generic analytics platform unless the founder explicitly changes the product direction.
+- Prefer focused human-health clarity over feature volume.
+- Say no or defer when a feature is interesting but does not strengthen the current human health and society dashboard mission.
 - Keep scope decisions grounded in user value, source quality, geographic clarity, freshness, trust, and maintainability.
 
 ## Product Positioning
 
-Pulse is an event-driven public health reference dashboard, not a daily wellness app. Users should be able to open it during an outbreak, public health event, or emerging disease concern and quickly answer:
+Pulse is a live, source-backed dashboard for understanding how people and society are doing. It is not only an outbreak tracker, a daily wellness app, or a CDC-style disease dashboard. Users should be able to open it during an environmental, public health, healthcare access, well-being, or population event and quickly answer:
 
-- What is happening?
+- How are people doing?
+- What is changing?
 - Where is it happening?
 - How severe or widespread is it?
 - When was the data last updated?
 - Which source is reporting it?
 - What level of geography is available, such as country, state, county, or local area?
+
+Pulse should lead with five pillars:
+
+1. Environment: air quality first, with future heat, wildfire smoke, water quality, and severe-weather impact signals.
+2. Disease & Outbreaks: WHO notices first, with future CDC notices, emerging diseases, and regional alerts.
+3. Healthcare: future provider shortages, hospital capacity, wait times, and insurance trend signals.
+4. Well-Being: future life expectancy, mental health, obesity, physical activity, and substance-use indicators.
+5. Population & Society: future birth rates, population growth, aging, migration, and demographic change.
+
+Disease and outbreaks should remain important, but they should not dominate the first impression. The dashboard should read as `How are people doing?`, not `Pandemic tracker`.
 
 ## Scope
 
@@ -36,8 +47,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Features
 
-- Public health signal summary
-- Metric cards for planned health, environmental, access, and population data areas
+- Human health and society signal summary
+- Metric cards ordered around Environment, Community Well-Being, Healthcare, Disease Activity, Population Trends, and Source Status
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
@@ -72,6 +83,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Design Decisions
 
 - Use Acadia conventions for layout, surfaces, controls, metrics, rows, forms, states, icons, focus, motion, density, and responsive behavior before creating any custom Pulse UI.
+- Lead the dashboard with the five-pillar human-health model, not disease-first source ordering.
+- Keep disease and outbreak surfaces clearly labeled as one pillar of Pulse rather than the product's full identity.
 - Use pending states until real data sources are selected.
 - Use graceful unavailable or no-data states when public APIs are unavailable.
 - Keep API-key-dependent sources in a clear configured/unconfigured state.
@@ -81,7 +94,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Avoid inactive controls that imply unavailable workflows.
 - Avoid custom build tooling until the product requires it.
 - Use the product foundation colors and spacing scale.
-- Favor official public health sources before third-party aggregators.
+- Favor official public sources before third-party aggregators.
 - Keep positioning broad enough for local, national, and global health signals.
 - Make source attribution, freshness, and geographic scope visible anywhere outbreak data appears.
 - Keep outbreak notice rows specific enough to show source publication time, affected geography, and source identifier when the upstream source provides them.
