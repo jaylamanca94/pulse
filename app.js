@@ -373,6 +373,12 @@ const setSourceDetail = (sourceKey, detail) => {
     status.textContent = detail.status;
     status.classList.toggle("is-live", Boolean(detail.isLive));
     status.classList.toggle("is-warning", Boolean(detail.isWarning));
+
+    const row = typeof status.closest === "function" ? status.closest(".acadia-status-row") : null;
+    if (row) {
+      row.classList.toggle("is-success", Boolean(detail.isLive));
+      row.classList.toggle("is-warning", Boolean(detail.isWarning));
+    }
   }
 
   setText(`[data-${sourceKey}-source-freshness]`, detail.freshness);
@@ -447,7 +453,7 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
 
   if (!summaries.length) {
     const empty = document.createElement("p");
-    empty.className = "empty-copy mb-0";
+    empty.className = "acadia-empty-state empty-copy";
     empty.textContent = isLive
       ? "No affected areas were available from the current WHO response."
       : "Affected areas are unavailable until WHO notices load.";
@@ -455,7 +461,7 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
   } else {
     summaries.forEach((summary) => {
       const item = document.createElement("article");
-      item.className = "area-item";
+      item.className = "acadia-status-row area-item";
 
       const content = document.createElement("div");
 
@@ -487,7 +493,7 @@ const renderAreaSummary = (areas, isLive, sourceMeta = {}) => {
       link.href = summary.latestUrl;
       link.target = "_blank";
       link.rel = "noreferrer";
-      link.innerHTML = `View notice <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>`;
+      link.innerHTML = `View notice <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>`;
 
       item.append(content, link);
       list.append(item);
@@ -567,7 +573,7 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
       ? "No dated WHO notices were available for the trend."
       : "WHO notice trend is unavailable until live notices load.";
     const empty = document.createElement("p");
-    empty.className = "empty-copy mb-0";
+    empty.className = "empty-copy";
     empty.textContent = summary;
     grid.append(empty);
     setText("[data-who-trend-summary]", summary);
@@ -614,7 +620,7 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
 
   if (!formattedNotices.length) {
     const empty = document.createElement("p");
-    empty.className = "empty-copy mb-0";
+    empty.className = "acadia-empty-state empty-copy";
     empty.textContent = isLive
       ? "No WHO Disease Outbreak News notices were returned."
       : "WHO notices are unavailable right now.";
@@ -623,7 +629,7 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
 
   formattedNotices.forEach((notice) => {
     const article = document.createElement("article");
-    article.className = "notice-item";
+    article.className = "acadia-object-card notice-item";
 
     const meta = document.createElement("p");
     meta.className = "notice-meta-row";
@@ -862,8 +868,8 @@ const setRefreshState = (isRefreshing) => {
 
   button.disabled = isRefreshing;
   button.innerHTML = isRefreshing
-    ? `<i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refreshing`
-    : `<i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Refresh`;
+    ? `<i class="fa-solid fa-rotate acadia-icon" aria-hidden="true"></i>Refreshing`
+    : `<i class="fa-solid fa-rotate acadia-icon" aria-hidden="true"></i>Refresh`;
 };
 
 const setAirNowFormState = (isRefreshing) => {

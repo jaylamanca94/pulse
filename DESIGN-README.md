@@ -8,7 +8,7 @@ This file is intentionally separate because design standards and utilities will 
 
 The interface should feel quiet, practical, trustworthy, and easy to scan during a public health event.
 
-- Prefer Bootstrap conventions before custom UI patterns.
+- Prefer Acadia primitives before custom UI patterns.
 - Keep visual decisions simple enough for a solo product builder to maintain.
 - Prefer evergreen design patterns and utilities that can scale with the product without becoming fragile or overly custom.
 - Use familiar, predictable interface patterns.
@@ -52,6 +52,8 @@ Use this file as the visual source of truth for `Pulse`. Update it whenever spac
 
 Pulse treats `../Acadia` as its default design system. Before adding or changing UI, check Acadia's live docs, foundations, and CSS primitives for the needed layout, control, surface, state, icon, or responsive behavior.
 
+Pulse vendors the current Acadia CSS primitives into `acadia.css` for deployment safety. Product work should consume those `.acadia-*` primitives first, then use `styles.css` only as a thin product adapter for Pulse identity, AQI tones, public-health source semantics, and source-specific data visualizations.
+
 - Use Acadia primitives for shared product language: controls, select arrows, search inputs, card padding, raised rows, focus rings, motion, table/form patterns, and Font Awesome Free icon sizing.
 - Create custom Pulse components only when an Acadia primitive cannot support a clearly product-specific public-health need.
 - When custom UI is necessary, keep the component visually and behaviorally aligned with Acadia tokens, spacing, radius, focus, motion, accessibility, and responsive rules.
@@ -61,42 +63,25 @@ Pulse treats `../Acadia` as its default design system. Before adding or changing
 
 ## Color
 
-### Light Mode
+Default to Acadia's system theme behavior and token names.
 
-- Page background: `#E2E3E5`
-- Content surface: `#FCFCFD`
-
-### Dark Mode
-
-- Page background: `#2B2F32`
-- Content surface: `#212529`
-
-Default to the user's system OS theme setting.
+- Page background: `--acadia-color-page`
+- Content surface: `--acadia-color-surface`
+- Muted surface: `--acadia-color-surface-muted`
+- Text: `--acadia-color-text`
+- Muted text: `--acadia-color-text-muted`
+- Pulse action/accent: mapped through the Acadia product adapter variables in `styles.css`
 
 ## Layout Grid
 
-### Desktop
+Use Acadia's responsive page frame and dashboard density rules.
 
-- 12-column grid
-- Page margin: `24px`
-- Column gap: `24px`
-- Content padding: `24px`
-- Form sections: `48px` padding
-- Form field rows span the section and use 4 columns with `24px` gaps
-
-### Tablet
-
-- 8-column grid
-- Page margin: `16px`
-- Column gap: `16px`
-- Content padding: `16px`
-
-### Mobile
-
-- 4-column grid
-- Page margin: `16px`
-- Column gap: `16px`
-- Content padding: `16px`
+- Ultra desktop and desktop: `128px` page margin.
+- Small desktop: `64px` page margin.
+- Tablet: `32px` page margin.
+- Phone: `16px` page margin.
+- Dashboard and source panels use Acadia dense section padding, `24px` desktop and `16px` mobile.
+- Use `.acadia-shell`, `.acadia-stack`, `.acadia-grid`, and `.acadia-dashboard-layout` before introducing local layout rules.
 
 ## Spacing Scale
 
@@ -216,7 +201,7 @@ Avoid utilities for:
 - One-off product-specific components
 - Temporary workarounds
 - Visual treatments that only make sense for one product
-- Custom patterns that Bootstrap already handles well
+- Custom patterns that Acadia already handles well
 
 ## Maintenance Rule
 

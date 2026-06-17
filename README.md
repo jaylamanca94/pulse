@@ -7,7 +7,8 @@ Tagline: See the health of the world.
 ## Tech Stack
 
 - Static HTML, CSS, and JavaScript
-- Bootstrap 5 via CDN
+- Acadia design-system CSS vendored from `../Acadia/src/acadia.css`
+- Thin Pulse adapter CSS for product identity and public-health data semantics
 - Font Awesome Free via CDN
 - WHO Disease Outbreak News public API
 - AirNow current observations API, when configured
@@ -108,7 +109,8 @@ npm test
 - `PRODUCT-README.md` - Pulse mission, goals, scope, decisions, roadmap, and known limitations
 - `DESIGN-README.md` - Pulse design standards, UI utilities, and interaction guidance
 - `index.html` - dashboard markup
-- `styles.css` - dashboard styling
+- `acadia.css` - vendored Acadia CSS primitives used by the Pulse dashboard
+- `styles.css` - thin Pulse adapter for product identity, AQI tones, and source-specific data views
 - `app.js` - frontend data loading and rendering
 - `assets/favicon.svg` - vector heart-pulse favicon/app icon with theme-aware gradient background
 - `site.webmanifest` - browser app manifest pointing to the SVG icon

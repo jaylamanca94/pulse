@@ -71,7 +71,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Design Decisions
 
-- Use Bootstrap conventions for layout and components.
+- Use Acadia conventions for layout, surfaces, controls, metrics, rows, forms, states, icons, focus, motion, density, and responsive behavior before creating any custom Pulse UI.
 - Use pending states until real data sources are selected.
 - Use graceful unavailable or no-data states when public APIs are unavailable.
 - Keep API-key-dependent sources in a clear configured/unconfigured state.
