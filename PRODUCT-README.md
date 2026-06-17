@@ -114,6 +114,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 - Add live AirNow API key in deployment environment variables.
 - Deploy to Vercel.
+- Replace the legacy AirNow ZIP/lat-long observation flow before AirNow's fall 2026 retirement window by moving to the newer reporting-area-centered API model. The target flow should resolve a user-entered ZIP code or browser geolocation to an AirNow reporting area, then store and display the reporting area name, state, AQI, category, and dominant pollutant as the source for Pulse AQI cards.
+- Evaluate AirNow historical observations and forecasts for a future `Air Quality Trends` card with today AQI, 7-day average, 30-day average, best day this month, and worst day this month.
 - Expand outbreak-focused geography views from the WHO-derived scan into richer country, state, county, or local views as source quality permits.
 - Expand user-selectable environmental observations beyond ZIP code and radius when source coverage supports it.
 - Add API fetch and normalization layer for each source category.
@@ -124,6 +126,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Known Limitations
 
 - WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; planned CDC, access, well-being, and population sources are still pending.
+- The current AirNow integration still uses the legacy ZIP-code current-observation web service. AirNow's public docs list legacy ZIP and latitude/longitude web services for retirement in fall 2026, so Pulse should migrate to reporting-area-based endpoints before that window.
 - No authentication or database exists yet.
 - Charts are simple CSS/HTML indicators, not a charting library.
 - Public source APIs vary in freshness, coverage, and format.
