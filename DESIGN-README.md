@@ -50,9 +50,11 @@ Use this file as the visual source of truth for `Pulse`. Update it whenever spac
 
 ### Acadia Adapter
 
-Pulse now treats `../Acadia` as the shared design-system baseline. Before adding a local UI style, check Acadia's live docs, foundations, and CSS primitives for the needed layout, control, surface, state, icon, or responsive behavior.
+Pulse treats `../Acadia` as its default design system. Before adding or changing UI, check Acadia's live docs, foundations, and CSS primitives for the needed layout, control, surface, state, icon, or responsive behavior.
 
 - Use Acadia primitives for shared product language: controls, select arrows, search inputs, card padding, raised rows, focus rings, motion, table/form patterns, and Font Awesome Free icon sizing.
+- Create custom Pulse components only when an Acadia primitive cannot support a clearly product-specific public-health need.
+- When custom UI is necessary, keep the component visually and behaviorally aligned with Acadia tokens, spacing, radius, focus, motion, accessibility, and responsive rules.
 - Keep Pulse-specific choices local when they express public-health semantics, source-state language, severity, data shape, or product accent behavior.
 - Map Pulse variables onto Acadia-style adapter variables in `styles.css` before creating a new one-off component rule.
 - If a Pulse pattern becomes useful for another product, graduate the neutral part into Acadia and keep the Pulse wording/data treatment here.

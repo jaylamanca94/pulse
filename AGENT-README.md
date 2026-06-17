@@ -5,7 +5,7 @@ Use this file as the working agreement for the Pulse product agent. The agent is
 Read these files first:
 
 1. `PRODUCT-README.md` for Pulse mission, audience, goals, scope, roadmap, and product decisions.
-2. `../Acadia/AGENTS.md`, `../Acadia/OPERATING_MODEL.md`, `../Acadia/FOUNDATIONS.md`, and `../Acadia/src/acadia.css` before custom UI work, so shared design-system primitives are reused when they exist.
+2. `../Acadia/AGENTS.md`, `../Acadia/OPERATING_MODEL.md`, `../Acadia/FOUNDATIONS.md`, and `../Acadia/src/acadia.css` before any UI work. Acadia is Pulse's default design system, so shared primitives, tokens, layout rules, controls, states, and interaction patterns should be used unless a custom Pulse component is absolutely required.
 3. `DESIGN-README.md` whenever work affects UI, layout, styling, interactions, accessibility, or reusable design utilities.
 4. `README.md` for setup, environment variables, local development, and deployment details.
 
@@ -70,8 +70,10 @@ Use this mode when checking usability, accessibility, responsiveness, interactio
 
 Use `DESIGN-README.md` as the product's design source of truth.
 
-- Check Acadia first for layout, spacing, controls, surfaces, rows, states, tables, forms, icons, focus, and responsive behavior before creating custom Pulse UI.
-- Preserve reusable design utilities, interaction patterns, spacing, typography, radius, icons, forms, accessibility expectations, and responsive behavior there.
+- Treat Acadia as the default design system for Pulse UI work.
+- Check Acadia first for layout, spacing, controls, surfaces, rows, states, tables, forms, icons, focus, and responsive behavior before creating or changing Pulse UI.
+- Use Acadia primitives whenever they fit the task; create custom Pulse components only when a source-state, public-health, or product-specific need cannot be met by Acadia.
+- Preserve reusable design utilities, interaction patterns, spacing, typography, radius, icons, forms, accessibility expectations, and responsive behavior in Acadia-aligned form.
 - Product-specific visual changes belong in `DESIGN-README.md` when they should guide future Pulse work.
 - Product mission, scope, features, roadmap, and decisions belong in `PRODUCT-README.md`.
 
