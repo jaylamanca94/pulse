@@ -845,3 +845,69 @@ test("AirNow form submit does not replace an invalid ZIP with the default", () =
   assert.equal(result.reportValidityCalled, true);
   assert.equal(result.zipCode, "60601");
 });
+
+test("AirNow radius changes preview the pending selected scope", () => {
+  const result = runAppBeforeBoot(`(() => {
+    const targets = new Map();
+    const events = {};
+    const makeElement = () => ({ textContent: "" });
+    const zipInput = {
+      value: "60601",
+      addEventListener(type, handler) {
+        events["zip:" + type] = handler;
+      },
+      checkValidity() {
+        return true;
+      },
+      setAttribute() {}
+    };
+    const distanceInput = {
+      value: "25",
+      addEventListener(type, handler) {
+        events["distance:" + type] = handler;
+      }
+    };
+    const form = {
+      classList: {
+        toggle() {}
+      },
+      elements: {
+        namedItem(name) {
+          return name === "zipCode" ? zipInput : distanceInput;
+        }
+      },
+      addEventListener(type, handler) {
+        events["form:" + type] = handler;
+      }
+    };
+
+    globalThis.document = {
+      querySelector(selector) {
+        if (selector === "[data-airnow-form]") return form;
+        if (!targets.has(selector)) {
+          targets.set(selector, makeElement());
+        }
+
+        return targets.get(selector);
+      }
+    };
+
+    airNowQuery.zipCode = "10001";
+    airNowQuery.distance = 25;
+    initializeAirNowForm();
+    distanceInput.value = "100";
+    events["distance:change"]();
+
+    return {
+      activeDistance: airNowQuery.distance,
+      activeZipCode: airNowQuery.zipCode,
+      hasChangeHandler: typeof events["distance:change"] === "function",
+      note: targets.get("[data-airnow-location-note]").textContent
+    };
+  })()`);
+
+  assert.equal(result.hasChangeHandler, true);
+  assert.equal(result.activeDistance, 25);
+  assert.equal(result.activeZipCode, "10001");
+  assert.equal(result.note, "Ready to update to ZIP 10001, 100-mile radius.");
+});

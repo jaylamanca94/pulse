@@ -351,6 +351,12 @@ const syncAirNowLocationText = () => {
   setText("[data-airnow-snapshot-scope]", getAirNowScope());
 };
 
+const setPendingAirNowLocationText = (zipInput, distanceInput) => {
+  const zipCode = String(zipInput?.value || airNowQuery.zipCode).trim();
+  const distance = normalizeDistance(distanceInput?.value);
+  setText("[data-airnow-location-note]", `Ready to update to ZIP ${zipCode}, ${distance}-mile radius.`);
+};
+
 const setAirNowZipValidity = (form, zipInput, isValid) => {
   if (!form || !zipInput) return;
 
@@ -864,6 +870,7 @@ const setAirNowFormState = (isRefreshing) => {
   const form = document.querySelector("[data-airnow-form]");
   if (!form) return;
 
+  form.setAttribute?.("aria-busy", String(isRefreshing));
   form.querySelectorAll("input, select, button").forEach((control) => {
     control.disabled = isRefreshing;
   });
@@ -931,10 +938,13 @@ const initializeAirNowForm = () => {
   zipInput?.addEventListener("input", () => {
     if (zipInput.checkValidity()) {
       setAirNowZipValidity(form, zipInput, true);
-      setText(
-        "[data-airnow-location-note]",
-        `Ready to update to ZIP ${zipInput.value.trim()}, ${normalizeDistance(distanceInput?.value)}-mile radius.`
-      );
+      setPendingAirNowLocationText(zipInput, distanceInput);
+    }
+  });
+
+  distanceInput?.addEventListener?.("change", () => {
+    if (!zipInput || zipInput.checkValidity()) {
+      setPendingAirNowLocationText(zipInput, distanceInput);
     }
   });
 };
