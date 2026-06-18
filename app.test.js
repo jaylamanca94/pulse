@@ -3,6 +3,14 @@ const fs = require("node:fs");
 const test = require("node:test");
 const vm = require("node:vm");
 
+const htmlPages = [
+  "index.html",
+  "environment.html",
+  "disease.html",
+  "sources.html",
+  "model.html"
+];
+
 function runAppHelper(expression) {
   const source = fs.readFileSync("app.js", "utf8");
   const helperSource = source.split("const loadAirQuality = async () => {")[0];
@@ -26,6 +34,22 @@ function runAppBeforeBoot(expression) {
 
   return vm.runInNewContext(`${helperSource}\n${expression}`, context);
 }
+
+test("HTML pages request the current shared app assets", () => {
+  htmlPages.forEach((page) => {
+    const html = fs.readFileSync(page, "utf8");
+
+    assert.match(html, /styles\.css\?v=20260618-signals/);
+    assert.match(html, /app\.js\?v=20260618-signals/);
+  });
+});
+
+test("Dashboard keeps a visible source freshness timestamp", () => {
+  const html = fs.readFileSync("index.html", "utf8");
+
+  assert.match(html, /data-dashboard-checked/);
+  assert.match(html, /Not checked yet/);
+});
 
 test("AirNow reading normalization selects the highest AQI observation", () => {
   const result = runAppHelper(`(() => {
@@ -227,6 +251,66 @@ test("WHO notice window uses exact publication time when available", () => {
   assert.doesNotMatch(result, /29 May 2026 to 10 June 2026/);
 });
 
+test("Disease snapshot elevates signal context over source metadata", () => {
+  const result = runAppHelper(`(() => getDiseaseSnapshot([
+    formatNotice({
+      title: "Ebola disease caused by Bundibugyo virus, Democratic Republic of the Congo and Uganda",
+      date: "13 June 2026",
+      donId: "2026-DON607",
+      location: "Democratic Republic of the Congo",
+      publishedAt: "2026-06-13T08:06:00Z",
+      summary: "New outbreak update.",
+      url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON607"
+    }),
+    formatNotice({
+      title: "Hantavirus outbreak linked to cruise ship travel, Multi-country",
+      date: "13 May 2026",
+      donId: "2026-DON601",
+      location: "Multi-country",
+      publishedAt: "2026-05-13T18:00:00Z",
+      summary: "Multi-country event.",
+      url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON601"
+    }),
+    formatNotice({
+      title: "Ebola disease caused by Bundibugyo virus, Uganda",
+      date: "28 May 2026",
+      donId: "2026-DON604",
+      location: "Uganda",
+      publishedAt: "2026-05-28T18:00:00Z",
+      summary: "Outbreak update.",
+      url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON604"
+    })
+  ], {
+    areas: [
+      {
+        area: "Location not specified",
+        latestDate: "21 May 2026",
+        noticeCount: 12
+      },
+      {
+        area: "Democratic Republic of the Congo",
+        latestDate: "13 June 2026",
+        noticeCount: 4
+      }
+    ],
+    trend: [
+      { count: 1, date: "2026-05-13" },
+      { count: 1, date: "2026-05-16" },
+      { count: 1, date: "2026-05-21" },
+      { count: 1, date: "2026-05-28" },
+      { count: 1, date: "2026-06-13" }
+    ]
+  }, true))()`);
+  const topicFromDash = runAppHelper(`(() => getDiseaseTopic("Ebola disease caused by Bundibugyo virus – Democratic Republic of the Congo"))()`);
+
+  assert.equal(result.mostActive, "Democratic Republic of the Congo");
+  assert.equal(result.frequency, "5 publication days; 5 notices");
+  assert.match(result.mostRecent, /Jun 13, 2026/);
+  assert.match(result.mostRecent, /Ebola disease caused by Bundibugyo virus/);
+  assert.equal(result.primaryTopic, "Ebola disease caused by Bundibugyo virus");
+  assert.equal(topicFromDash, "Ebola disease caused by Bundibugyo virus");
+});
+
 test("WHO notice rows render source publication time as datetime metadata", () => {
   const result = runAppHelper(`(() => {
     const makeElement = (tagName) => ({
@@ -353,15 +437,16 @@ test("Community brief translates connected source states into qualitative synthe
   })()`);
 
   assert.equal(result.partialStatus, "Mixed");
-  assert.match(result.partialSummary, /partial community health read/);
+  assert.match(result.partialSummary, /Air Quality Good/);
   assert.equal(result.mixedStatus, "Mixed");
-  assert.match(result.mixedSummary, /All five pillars are live/);
-  assert.match(result.mixedSummary, /65 active HRSA shortage designations/);
+  assert.match(result.mixedSummary, /Air Quality Good/);
+  assert.match(result.mixedSummary, /Healthcare Access constrained/);
+  assert.match(result.mixedSummary, /Well-Being 20.8% inactive adults/);
   assert.match(result.mixedCurrent, /Air quality is Good/);
   assert.match(result.mixedCurrent, /healthcare is access constrained/i);
   assert.match(result.mixedCurrent, /physical inactivity 20.8%/i);
   assert.equal(result.pressuredStatus, "Under Pressure");
-  assert.match(result.pressuredSummary, /Environmental conditions are under pressure/);
+  assert.match(result.pressuredSummary, /Air Quality Unhealthy/);
 });
 
 test("WHO area summaries render latest source publication time", () => {

@@ -103,6 +103,10 @@ a {
   position: relative;
 }
 
+.pulse-hero.acadia-panel {
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
 .pulse-hero::before {
   background: var(--acadia-color-primary);
   content: "";
@@ -112,10 +116,16 @@ a {
   width: 0.25rem;
 }
 
+.pulse-hero .acadia-display,
+.pulse-brief-hero .acadia-display {
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  line-height: 1;
+}
+
 .pulse-lead {
-  font-size: 1.125rem;
-  line-height: 1.5;
-  max-width: 62ch;
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 58ch;
 }
 
 .pulse-home-hero {
@@ -131,19 +141,20 @@ a {
 }
 
 .pulse-brief-hero {
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-}
-
-.pulse-brief-hero-grid {
-  align-items: start;
-  display: grid;
-  gap: var(--acadia-space-3);
-  grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.24fr);
+  padding: clamp(1rem, 2vw, 1.375rem);
 }
 
 .pulse-brief-main {
   display: grid;
+  gap: 0.625rem;
+}
+
+.pulse-brief-title-row {
+  align-items: end;
+  display: flex;
   gap: 1rem;
+  justify-content: space-between;
+  min-width: 0;
 }
 
 .pulse-brief-state-row {
@@ -155,10 +166,10 @@ a {
 
 .pulse-brief-state {
   color: var(--acadia-color-primary-ink);
-  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
   font-weight: 900;
   letter-spacing: 0;
-  line-height: 0.95;
+  line-height: 1;
 }
 
 .pulse-brief-state.is-live {
@@ -187,12 +198,12 @@ a {
 
 .pulse-brief-summary {
   color: var(--acadia-color-text);
-  font-size: clamp(1.25rem, 2vw, 1.75rem);
-  font-weight: 750;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  font-weight: 650;
   letter-spacing: 0;
-  line-height: 1.3;
+  line-height: 1.4;
   margin: 0;
-  max-width: 62ch;
+  max-width: 90ch;
 }
 
 .pulse-brief-grid {
@@ -216,11 +227,9 @@ a {
   margin: 0;
 }
 
-.pulse-dashboard-split {
-  align-items: start;
+.pulse-dashboard-stack {
   display: grid;
-  gap: var(--acadia-space-3);
-  grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.32fr);
+  gap: 0.875rem;
 }
 
 .pulse-signal-panel {
@@ -229,14 +238,14 @@ a {
   border-radius: var(--acadia-radius-lg);
   box-shadow: var(--acadia-shadow-card);
   display: grid;
-  gap: var(--acadia-space-3);
-  padding: var(--acadia-section-padding-dense);
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
 }
 
 .pulse-signal-grid {
   display: grid;
-  gap: 0.875rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .pulse-signal-card {
@@ -244,14 +253,9 @@ a {
   border: 1px solid var(--acadia-color-border);
   border-radius: var(--acadia-radius-md);
   display: grid;
-  gap: 0.875rem;
-  min-height: 13rem;
-  padding: 1rem;
-}
-
-.pulse-signal-card-featured {
-  grid-row: span 2;
-  min-height: 100%;
+  gap: 0.625rem;
+  min-height: 8.25rem;
+  padding: 0.875rem;
 }
 
 .pulse-signal-card.is-live .pulse-card-icon {
@@ -265,25 +269,24 @@ a {
 .pulse-signal-card-head {
   align-items: center;
   display: flex;
-  gap: 0.875rem;
+  gap: 0.625rem;
 }
 
 .pulse-signal-card h3 {
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 1.25;
   margin: 0;
 }
 
 .pulse-signal-value-row {
-  align-items: baseline;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
+  align-items: start;
+  display: grid;
+  gap: 0.25rem;
 }
 
 .pulse-signal-value-row strong {
   color: var(--acadia-color-text);
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(1.625rem, 2.4vw, 2.25rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 1;
@@ -292,6 +295,7 @@ a {
 .pulse-signal-value-row span,
 .pulse-signal-card p {
   color: var(--acadia-color-text-muted);
+  font-size: 0.875rem;
   line-height: 1.4;
   margin: 0;
 }
@@ -321,9 +325,10 @@ a {
   overflow-wrap: anywhere;
 }
 
-.pulse-watch-panel {
+.pulse-briefing-grid {
   display: grid;
-  gap: var(--acadia-space-3);
+  gap: 0.875rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .pulse-watch-list {
@@ -447,17 +452,20 @@ a {
 
 .pulse-snapshot {
   display: grid;
-  gap: var(--acadia-space-3);
-  grid-template-columns: minmax(12rem, 0.34fr) minmax(0, 1fr);
+  gap: 1rem;
+  grid-template-columns: minmax(18rem, 0.5fr) minmax(0, 1fr);
 }
 
 .pulse-snapshot-primary {
+  align-content: center;
   min-height: 100%;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
 }
 
 .pulse-snapshot-primary .acadia-metric-value {
   color: var(--acadia-color-primary-ink);
-  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  font-size: clamp(4rem, 8vw, 6rem);
+  line-height: 0.95;
 }
 
 .pulse-dashboard-grid {
@@ -491,9 +499,9 @@ a {
   color: var(--acadia-color-primary);
   display: inline-flex;
   flex: 0 0 auto;
-  height: 2.5rem;
+  height: 2rem;
   justify-content: center;
-  width: 2.5rem;
+  width: 2rem;
 }
 
 .pulse-dashboard-snapshot {
@@ -533,6 +541,20 @@ a {
 .pulse-compact-list dd {
   margin: 0.125rem 0 0;
   overflow-wrap: anywhere;
+}
+
+.disease-snapshot-list dd {
+  color: var(--acadia-color-text);
+  font-weight: 750;
+}
+
+.pulse-source-note {
+  align-items: center;
+  border-top: 1px solid var(--acadia-color-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  padding-top: 0.875rem;
 }
 
 .pulse-detail-link {
@@ -884,9 +906,12 @@ a {
   }
 
   .pulse-home-grid,
-  .pulse-detail-layout,
-  .pulse-dashboard-split {
+  .pulse-detail-layout {
     grid-template-columns: 1fr;
+  }
+
+  .pulse-signal-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .pulse-snapshot {
@@ -901,7 +926,7 @@ a {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pulse-watch-panel {
+  .pulse-briefing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -918,9 +943,14 @@ a {
   }
 
   .pulse-home-header,
-  .pulse-hero .acadia-page-header,
-  .pulse-brief-hero-grid {
+  .pulse-hero .acadia-page-header {
     grid-template-columns: 1fr;
+  }
+
+  .pulse-brief-title-row {
+    align-items: start;
+    display: grid;
+    gap: 0.5rem;
   }
 
   .pulse-readiness-compact {
@@ -937,16 +967,12 @@ a {
     text-align: left;
   }
 
-  .pulse-brief-summary {
-    font-size: 1.125rem;
-  }
-
   .pulse-brief-hero {
-    padding: 1rem;
+    padding: 0.875rem;
   }
 
   .pulse-brief-state {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .pulse-brief-grid {
@@ -970,7 +996,7 @@ a {
   .pulse-detail-grid,
   .pulse-brief-grid,
   .pulse-signal-grid,
-  .pulse-watch-panel,
+  .pulse-briefing-grid,
   .source-meta-grid,
   .pulse-dashboard-grid,
   .pulse-model-list {

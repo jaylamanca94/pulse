@@ -8,9 +8,9 @@
     <link href="site.webmanifest" rel="manifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="acadia.css?v=20260617" rel="stylesheet">
-    <link href="styles.css?v=20260617-signal" rel="stylesheet">
+    <link href="styles.css?v=20260618-signals" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260618-healthcare" defer></script>
+    <script src="app.js?v=20260618-signals" defer></script>
   </head>
   <body data-pulse-page="disease">
     <div class="acadia-app pulse-app">
@@ -43,7 +43,7 @@
             <div class="acadia-page-header-copy">
               <span class="acadia-kicker">Disease & outbreaks</span>
               <h1 id="disease-title" class="acadia-display">Disease activity</h1>
-              <p class="acadia-text-muted pulse-lead">WHO Disease Outbreak News summarized by affected area, publication trend, and recent official notices.</p>
+              <p class="acadia-text-muted pulse-lead">Current outbreak signals by geography, publication movement, and recent official notices.</p>
             </div>
             <div class="pulse-readiness" aria-label="Disease source readiness">
               <span class="acadia-kicker">Source readiness</span>
@@ -74,8 +74,8 @@
             <article class="acadia-surface acadia-panel-dense acadia-stack">
               <div class="acadia-section-header">
                 <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Publication trend</span>
-                  <h2 class="acadia-title">WHO notice trend</h2>
+                  <span class="acadia-kicker">Movement</span>
+                  <h2 class="acadia-title">Notice trend</h2>
                 </div>
                 <span class="acadia-text-muted pulse-section-meta" data-who-trend-updated>Checking source</span>
               </div>
@@ -89,7 +89,7 @@
               <div class="acadia-section-header">
                 <div class="acadia-section-header-copy">
                   <span class="acadia-kicker">Recent notices</span>
-                  <h2 class="acadia-title">WHO Disease Outbreak News</h2>
+                  <h2 class="acadia-title">Recent outbreak notices</h2>
                 </div>
                 <span class="acadia-text-muted pulse-section-meta" data-who-updated>Checking source</span>
               </div>
@@ -99,46 +99,39 @@
             </article>
           </div>
 
-          <aside class="pulse-detail-aside" aria-label="Disease source detail">
+          <aside class="pulse-detail-aside" aria-label="Disease snapshot">
             <article class="acadia-surface acadia-panel-dense acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Source</span>
-                  <h2 class="acadia-title">WHO coverage</h2>
+              <div class="pulse-card-heading">
+                <span class="pulse-card-icon"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i></span>
+                <div>
+                  <span class="acadia-kicker">Snapshot</span>
+                  <h2 class="acadia-title">Current disease activity</h2>
                 </div>
               </div>
-              <ul class="acadia-status-list source-list source-detail-list">
-                <li class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-earth-americas acadia-icon" aria-hidden="true"></i></span>
-                  <div class="source-row-body">
-                    <div class="source-row-head">
-                      <span class="acadia-badge source-status" data-who-source-status>Loading</span>
-                      <strong class="source-name">WHO Disease Outbreak News</strong>
-                      <a class="source-link" href="https://www.who.int/emergencies/disease-outbreak-news" target="_blank" rel="noreferrer">
-                        View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
-                      </a>
-                    </div>
-                    <dl class="source-meta-grid">
-                      <div>
-                        <dt>Scope</dt>
-                        <dd>Global disease and outbreak events</dd>
-                      </div>
-                      <div>
-                        <dt>Freshness</dt>
-                        <dd data-who-source-freshness>Checking proxy</dd>
-                      </div>
-                      <div>
-                        <dt>Notice window</dt>
-                        <dd data-who-source-window>Checking recent notices</dd>
-                      </div>
-                      <div>
-                        <dt>Limit</dt>
-                        <dd>Official notices, not exhaustive surveillance</dd>
-                      </div>
-                    </dl>
-                  </div>
-                </li>
-              </ul>
+              <dl class="pulse-compact-list disease-snapshot-list">
+                <div>
+                  <dt>Most active geography</dt>
+                  <dd data-disease-most-active>Checking source</dd>
+                </div>
+                <div>
+                  <dt>Most recent notice</dt>
+                  <dd data-disease-most-recent>Checking source</dd>
+                </div>
+                <div>
+                  <dt>Notice frequency</dt>
+                  <dd data-disease-frequency>Checking source</dd>
+                </div>
+                <div>
+                  <dt>Primary topic</dt>
+                  <dd data-disease-primary-topic>Checking source</dd>
+                </div>
+              </dl>
+              <div class="pulse-source-note">
+                <span class="acadia-badge source-status" data-who-source-status>Loading</span>
+                <a class="source-link" href="https://www.who.int/emergencies/disease-outbreak-news" target="_blank" rel="noreferrer">
+                  WHO source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
+                </a>
+              </div>
             </article>
           </aside>
         </section>
