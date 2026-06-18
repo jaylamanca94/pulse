@@ -10,7 +10,7 @@
     <link href="acadia.css?v=20260617" rel="stylesheet">
     <link href="styles.css?v=20260617-signal" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260618-data" defer></script>
+    <script src="app.js?v=20260618-healthcare" defer></script>
   </head>
   <body data-pulse-page="sources">
     <div class="acadia-app pulse-app">
@@ -147,9 +147,9 @@
               <span class="acadia-status-icon"><i class="fa-solid fa-hospital acadia-icon" aria-hidden="true"></i></span>
               <div class="source-row-body">
                 <div class="source-row-head">
-                  <span class="acadia-badge acadia-badge-warning source-status is-warning">Pending</span>
+                  <span class="acadia-badge acadia-badge-warning source-status is-warning" data-healthcare-source-status>Loading</span>
                   <strong class="source-name">HRSA Health Professional Shortage Areas</strong>
-                  <a class="source-link" href="https://data.hrsa.gov/topics/health-workforce/shortage-areas" target="_blank" rel="noreferrer">
+                  <a class="source-link" href="https://data.hrsa.gov/data/download" target="_blank" rel="noreferrer">
                     View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
                   </a>
                 </div>
@@ -160,7 +160,11 @@
                   </div>
                   <div>
                     <dt>Freshness</dt>
-                    <dd>Not connected yet</dd>
+                    <dd data-healthcare-source-freshness>Checking HRSA shortage areas</dd>
+                  </div>
+                  <div>
+                    <dt>Designation read</dt>
+                    <dd data-healthcare-signal-basis>Primary care, dental, and mental-health HPSAs</dd>
                   </div>
                   <div>
                     <dt>Limit</dt>

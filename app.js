@@ -1,4 +1,5 @@
 const API = {
+  healthcare: "/api/healthcare",
   places: "/api/places",
   population: "/api/population",
   who: "/api/who",
@@ -126,6 +127,13 @@ const communityBriefState = {
     noticeCount: null,
     statusLabel: "Checking"
   },
+  healthcare: {
+    accessStatus: "",
+    isLive: false,
+    primaryCount: null,
+    totalDesignations: null,
+    statusLabel: "Checking"
+  },
   places: {
     isLive: false,
     primaryLabel: "",
@@ -215,8 +223,8 @@ const formatPercentValue = (value, options = {}) => {
 };
 
 const getCommunityBrief = () => {
-  const { airnow, places, population, who } = communityBriefState;
-  const liveCount = [airnow.isLive, who.isLive, places.isLive, population.isLive].filter(Boolean).length;
+  const { airnow, healthcare, places, population, who } = communityBriefState;
+  const liveCount = [airnow.isLive, who.isLive, healthcare.isLive, places.isLive, population.isLive].filter(Boolean).length;
   const airnowArea = airnow.area || "the selected AirNow area";
   const noticeCount = Number(who.noticeCount);
   const hasNoticeCount = Number.isFinite(noticeCount);
@@ -229,14 +237,28 @@ const getCommunityBrief = () => {
   const populationLabel = population.isLive && Number.isFinite(Number(population.changePercent))
     ? `${population.county || "the county"} population ${population.changeLabel.toLowerCase()} ${formatPercentValue(population.changePercent, { signDisplay: "exceptZero" })} in 2024`
     : "Census population context";
+  const healthcareLabel = healthcare.isLive && Number.isFinite(Number(healthcare.totalDesignations))
+    ? `${healthcare.totalDesignations} active HRSA shortage ${healthcare.totalDesignations === 1 ? "designation" : "designations"}`
+    : "HRSA healthcare access";
 
   if (airnow.isLive && isElevatedAqiCategory(airnow.category)) {
     return {
       status: "Under Pressure",
       summary: `Environmental conditions are under pressure near ${airnowArea}.`,
       current: `Air quality is ${airnow.category}; ${who.isLive ? noticeLabel : "WHO remains a watch source for outbreak notices"}.`,
-      change: `This refresh pulled current AQI${who.isLive ? ", WHO notices" : ""}${places.isLive ? ", CDC PLACES" : ""}${population.isLive ? ", and Census population context" : ""}.`,
+      change: `This refresh pulled current AQI${who.isLive ? ", WHO notices" : ""}${healthcare.isLive ? ", HRSA shortage areas" : ""}${places.isLive ? ", CDC PLACES" : ""}${population.isLive ? ", and Census population context" : ""}.`,
       watch: "Air quality, heat risk, healthcare shortages, and disease activity.",
+      tone: "warning"
+    };
+  }
+
+  if (liveCount >= 5 && airnow.isLive && isFavorableAqiCategory(airnow.category)) {
+    return {
+      status: "Mixed",
+      summary: `All five pillars are live for ${airnowArea}: environmental conditions are favorable, ${healthcareLabel} show access constraints, ${wellbeingLabel} is live, and ${populationLabel}.`,
+      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; healthcare is ${healthcare.accessStatus.toLowerCase()} with ${healthcareLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated AQI, WHO notices, HRSA shortage areas, CDC PLACES well-being measures, Census population context, and source readiness.",
+      watch: "Healthcare access shortages, heat risk, new outbreak notices, and well-being measures that move slowly.",
       tone: "warning"
     };
   }
@@ -244,10 +266,10 @@ const getCommunityBrief = () => {
   if (liveCount >= 3 && airnow.isLive && isFavorableAqiCategory(airnow.category)) {
     return {
       status: "Mixed",
-      summary: `Four connected signals now describe the community more directly: environmental conditions are favorable near ${airnowArea}, ${wellbeingLabel} is live, and ${populationLabel}. Healthcare access remains the missing structural signal.`,
-      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
-      change: "This refresh updated AQI, WHO notices, CDC PLACES well-being measures, Census population context, and source readiness.",
-      watch: "Healthcare access shortages, heat risk, new outbreak notices, and well-being measures that move slowly.",
+      summary: `Connected signals now describe the community more directly: environmental conditions are favorable near ${airnowArea}, ${places.isLive ? `${wellbeingLabel} is live` : "well-being is still loading"}, and ${population.isLive ? populationLabel : "population context is still loading"}.`,
+      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; ${healthcare.isLive ? `${healthcare.accessStatus} with ${healthcareLabel}` : healthcare.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated connected community signals and source readiness.",
+      watch: "Healthcare access shortages, heat risk, new outbreak notices, and any source that is not yet live.",
       tone: "warning"
     };
   }
@@ -256,7 +278,7 @@ const getCommunityBrief = () => {
     return {
       status: "Mixed",
       summary: "Connected sources provide a partial community health read, but the full five-signal picture is still coming online.",
-      current: `${airnow.isLive ? `Air quality is ${airnow.category}` : airnow.statusLabel}; ${who.isLive ? noticeLabel : who.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      current: `${airnow.isLive ? `Air quality is ${airnow.category}` : airnow.statusLabel}; ${who.isLive ? noticeLabel : who.statusLabel}; ${healthcare.isLive ? healthcareLabel : healthcare.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
       change: "This refresh updated connected source readiness and any live community signals.",
       watch: "Healthcare access, well-being, population change, and any source that is not yet live.",
       tone: "warning"
@@ -1057,6 +1079,81 @@ const loadAirQuality = async () => {
   }
 };
 
+const getHealthcareSummary = (summaries = [], label) => summaries.find((summary) => summary.label === label);
+
+const formatHealthcareDiscipline = (summary) => {
+  if (!summary) return "";
+
+  const score = Number(summary.maxScore);
+  const scoreLabel = Number.isFinite(score) ? `, max score ${score}/${summary.scoreMax}` : "";
+  return `${summary.label} ${summary.count}${scoreLabel}`;
+};
+
+const renderHealthcare = (data, isLive, sourceMeta = {}) => {
+  const summaries = Array.isArray(data.summaries) ? data.summaries : [];
+  const primaryCare = getHealthcareSummary(summaries, "Primary care");
+  const dental = getHealthcareSummary(summaries, "Dental health");
+  const mental = getHealthcareSummary(summaries, "Mental health");
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "Unavailable";
+  const accessStatus = data.accessStatus || "Shortage watch";
+  const totalDesignations = Number(data.totalDesignations);
+  const primaryCount = Number(primaryCare?.count);
+  const disciplineSummary = [primaryCare, dental, mental]
+    .map(formatHealthcareDiscipline)
+    .filter(Boolean)
+    .join("; ");
+  const geography = data.geography?.county || "New York County";
+
+  communityBriefState.healthcare = {
+    accessStatus,
+    isLive,
+    primaryCount: Number.isFinite(primaryCount) ? primaryCount : null,
+    totalDesignations: Number.isFinite(totalDesignations) ? totalDesignations : null,
+    statusLabel
+  };
+  updateCommunityBrief();
+
+  setText("[data-healthcare-value]", Number.isFinite(primaryCount) ? String(primaryCount) : "--");
+  setText("[data-healthcare-label]", isLive ? "primary care HPSAs" : "shortage signal unavailable");
+  setText("[data-healthcare-note]", isLive
+    ? `${accessStatus} in ${geography}: ${disciplineSummary}.`
+    : sourceMeta.note || "HRSA shortage designations are unavailable right now.");
+  setText("[data-healthcare-signal-basis]", isLive
+    ? `${Number.isFinite(totalDesignations) ? totalDesignations : "--"} active HRSA designations`
+    : statusLabel);
+  setMetricCardState("access", isLive ? "live" : "warning");
+  setSourceDetail("healthcare", {
+    freshness: isLive
+      ? joinDetails(data.latestUpdate ? `Updated ${data.latestUpdate}` : "", formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+      : sourceMeta.freshness || "HRSA shortage areas unavailable",
+    isLive,
+    isWarning: !isLive,
+    status: statusLabel
+  });
+};
+
+const loadHealthcare = async () => {
+  try {
+    const data = await fetchJson(API.healthcare);
+    const isLive = data.status === "live" && Number(data.totalDesignations) > 0;
+    renderHealthcare(data, isLive, {
+      ...data,
+      statusLabel: isLive ? undefined : "No data"
+    });
+    return isLive;
+  } catch (error) {
+    renderHealthcare({
+      summaries: [],
+      totalDesignations: null
+    }, false, {
+      freshness: error.status === 404 ? "Healthcare route unavailable" : "Try refreshing again later",
+      note: error.status === 404 ? "Run with server API routes for HRSA shortage areas." : "HRSA shortage areas could not be loaded.",
+      statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
+    });
+    return false;
+  }
+};
+
 const getMeasureById = (measures = [], measureId) => measures.find((measure) => measure.measureId === measureId);
 
 const formatPlacesMetric = (measure) => {
@@ -1213,11 +1310,11 @@ const setAirNowFormState = (isRefreshing) => {
 
 const loadDashboard = async () => {
   const loadersByPage = {
-    dashboard: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation],
+    dashboard: [loadWhoNotices, loadAirQuality, loadHealthcare, loadPlaces, loadPopulation],
     disease: [loadWhoNotices],
     environment: [loadAirQuality],
-    model: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation],
-    sources: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation]
+    model: [loadWhoNotices, loadAirQuality, loadHealthcare, loadPlaces, loadPopulation],
+    sources: [loadWhoNotices, loadAirQuality, loadHealthcare, loadPlaces, loadPopulation]
   };
   const pageType = getPulsePage();
   const loaders = loadersByPage[pageType] || loadersByPage.dashboard;

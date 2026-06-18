@@ -10,7 +10,7 @@
     <link href="acadia.css?v=20260617" rel="stylesheet">
     <link href="styles.css?v=20260617-signal" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260618-data" defer></script>
+    <script src="app.js?v=20260618-healthcare" defer></script>
   </head>
   <body data-pulse-page="dashboard">
     <div class="acadia-app pulse-app">
@@ -143,10 +143,10 @@
                   </div>
                 </div>
                 <div class="pulse-signal-value-row">
-                  <strong>Watch</strong>
-                  <span>shortage signal pending</span>
+                  <strong data-healthcare-value>--</strong>
+                  <span data-healthcare-label>shortage signal loading</span>
                 </div>
-                <p>Provider shortage coverage is the next live access signal.</p>
+                <p data-healthcare-note>Provider shortage coverage is loading.</p>
               </article>
 
               <article class="pulse-signal-card is-pending" data-metric-card="wellbeing">
@@ -191,7 +191,7 @@
                 </div>
               </div>
               <ul class="pulse-watch-list">
-                <li><strong>Healthcare access</strong><span>Shortage signal is the largest structural gap to connect.</span></li>
+                <li><strong>Healthcare access</strong><span data-healthcare-signal-basis>HRSA shortage areas loading.</span></li>
                 <li><strong>Disease activity</strong><span data-community-brief-watch>Disease activity remains a monitored watch area.</span></li>
                 <li><strong>Heat risk</strong><span>Environmental expansion should add heat and smoke context next.</span></li>
               </ul>

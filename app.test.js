@@ -309,6 +309,13 @@ test("Community brief translates connected source states into qualitative synthe
     };
     const partial = getCommunityBrief();
 
+    communityBriefState.healthcare = {
+      accessStatus: "Access constrained",
+      isLive: true,
+      primaryCount: 22,
+      totalDesignations: 65,
+      statusLabel: "Live"
+    };
     communityBriefState.places = {
       isLive: true,
       primaryLabel: "Physical inactivity",
@@ -348,9 +355,10 @@ test("Community brief translates connected source states into qualitative synthe
   assert.equal(result.partialStatus, "Mixed");
   assert.match(result.partialSummary, /partial community health read/);
   assert.equal(result.mixedStatus, "Mixed");
-  assert.match(result.mixedSummary, /Four connected signals/);
-  assert.match(result.mixedSummary, /Healthcare access remains the missing structural signal/);
+  assert.match(result.mixedSummary, /All five pillars are live/);
+  assert.match(result.mixedSummary, /65 active HRSA shortage designations/);
   assert.match(result.mixedCurrent, /Air quality is Good/);
+  assert.match(result.mixedCurrent, /healthcare is access constrained/i);
   assert.match(result.mixedCurrent, /physical inactivity 20.8%/i);
   assert.equal(result.pressuredStatus, "Under Pressure");
   assert.match(result.pressuredSummary, /Environmental conditions are under pressure/);

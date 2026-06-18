@@ -134,9 +134,9 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Roadmap
 
 - Finish the AirNow migration to reporting-area-based data before the legacy ZIP and latitude/longitude flow retires.
-- Wire HRSA Health Professional Shortage Areas as the first healthcare access source.
-- Wire CDC PLACES local health measures as the first well-being source.
-- Wire U.S. Census Population Estimates Program as the first population source.
+- Add location switching across HRSA, CDC PLACES, Census, and AirNow-backed community context.
+- Add heat, smoke, and weather stress to make Environment a fuller category.
+- Build a higher-level disease relevance layer that answers whether users should care about current notices.
 - Improve the disease signal with CDC or regional sources after each pillar has at least one live signal.
 - Keep the near-term threshold simple: every pillar should have one credible live source before Pulse deepens any single pillar.
 - Continue the AirNow target flow by resolving a user-entered ZIP code or browser geolocation to an AirNow reporting area, then store and display the reporting area name, state, AQI, category, and dominant pollutant as the source for Pulse AQI cards.
@@ -150,7 +150,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Known Limitations
 
-- WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; HRSA, CDC PLACES, and Census source targets are selected but still pending.
+- WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; HRSA, CDC PLACES, and Census are live through serverless public-source routes.
 - The current AirNow integration still uses the legacy ZIP-code current-observation web service. AirNow's public docs list legacy ZIP and latitude/longitude web services for retirement in fall 2026, so Pulse should migrate to reporting-area-based endpoints before that window.
 - No authentication or database exists yet.
 - Charts are simple CSS/HTML indicators, not a charting library.

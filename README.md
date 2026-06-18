@@ -18,9 +18,9 @@ Core question: Are communities healthy?
 
 - WHO Disease Outbreak News, live when `/api/who` is available
 - AirNow current observations, live when `/api/airnow` has `AIRNOW_API_KEY`
-- HRSA Health Professional Shortage Areas, selected for healthcare access and not connected yet
-- CDC PLACES local health measures, selected for well-being and not connected yet
-- U.S. Census Population Estimates Program, selected for population trends and not connected yet
+- HRSA Health Professional Shortage Areas, live through `/api/healthcare`
+- CDC PLACES local health measures, live through `/api/places`
+- U.S. Census Population Estimates Program, live through `/api/population`
 - CDC National Notifiable Diseases Surveillance System data, not connected yet
 - CDC National Outbreak Reporting System data, not connected yet
 
@@ -50,9 +50,9 @@ When live AirNow observations are available, Pulse uses restrained official AQI 
 It also translates the returned AQI category into concise health guidance in the local environmental snapshot and source coverage panel.
 The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, why the AQI was selected, severity band, and health guidance before users inspect the full source metadata.
 
-The dashboard includes a Community Brief that synthesizes connected source states into qualitative language such as `Stable`, `Mixed`, `Under Pressure`, or `Coverage Building`. It interprets AirNow and WHO status into plain meaning while avoiding a fake cross-source health score.
+The dashboard includes a Community Brief that synthesizes connected source states into qualitative language such as `Stable`, `Mixed`, `Under Pressure`, or `Coverage Building`. It interprets AirNow, WHO, HRSA, CDC PLACES, and Census status into plain meaning while avoiding a fake cross-source health score.
 
-The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist. HRSA, CDC PLACES, and Census are named as first source targets for the remaining pillars, but they do not count toward readiness until connected.
+The hero readiness score is computed from the current source states for the official sources loaded on a page, such as `5/5 live`, `4/5 partial`, or `0/5 unavailable`, so the prototype does not imply a synthetic public-health risk score.
 
 ## Local Setup
 
