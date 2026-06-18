@@ -116,15 +116,21 @@ async function requestCountyPopulation({ state = DEFAULT_STATE, county = DEFAULT
   ));
 
   if (!row) {
-    const error = new Error("County population record not found.");
-    error.status = 404;
-    error.payload = {
-      error: {
-        code: "POPULATION_RECORD_NOT_FOUND",
-        message: "County population record was not found in Census county totals."
-      }
+    const payload = {
+      cacheSeconds: POPULATION_CACHE_SECONDS,
+      fetchedAt: new Date().toISOString(),
+      geography: {
+        county: normalizedCounty,
+        state: normalizedState
+      },
+      record: null,
+      source: "U.S. Census Population Estimates Program",
+      sourceUrl: CENSUS_COUNTY_TOTALS_URL,
+      status: "no_data"
     };
-    throw error;
+
+    setCached(cacheKey, payload, POPULATION_CACHE_SECONDS);
+    return payload;
   }
 
   const record = normalizePopulationRecord(row);
