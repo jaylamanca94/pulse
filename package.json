@@ -4,7 +4,7 @@
   "private": true,
   "description": "Live human health dashboard for environment, disease, healthcare, well-being, and population signals.",
   "scripts": {
-    "check": "node --check app.js && node --check config.js && node --check api/_pulse.js && node --check api/airnow.js && node --check api/who.js",
+    "check": "node --check app.js && node --check config.js && node --check api/_pulse.js && node --check api/airnow.js && node --check api/who.js && node --check api/places.js && node --check api/population.js",
     "dev": "npx vercel dev",
     "test": "node --test"
   },

@@ -8,9 +8,9 @@
     <link href="site.webmanifest" rel="manifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="acadia.css?v=20260617" rel="stylesheet">
-    <link href="styles.css?v=20260617-community" rel="stylesheet">
+    <link href="styles.css?v=20260617-signal" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260617-multipage" defer></script>
+    <script src="app.js?v=20260618-data" defer></script>
   </head>
   <body data-pulse-page="dashboard">
     <div class="acadia-app pulse-app">
@@ -38,98 +38,76 @@
       </header>
 
       <main class="acadia-shell pulse-shell">
-        <section class="acadia-surface acadia-panel pulse-home-hero" aria-labelledby="summary-title">
-          <div class="acadia-page-header pulse-home-header">
-            <div class="acadia-page-header-copy">
-              <span class="acadia-kicker">Human health scan</span>
-              <h1 id="summary-title" class="acadia-display">Pulse</h1>
-              <p class="acadia-text-muted pulse-lead">A calm, source-backed view of whether communities are healthy, starting with connected environment and disease signals.</p>
+        <section class="acadia-surface acadia-panel pulse-brief pulse-brief-hero" aria-labelledby="brief-title">
+          <div class="pulse-brief-hero-grid">
+            <div class="pulse-brief-main">
+              <span class="acadia-kicker" data-community-location>Selected community</span>
+              <h1 id="brief-title" class="acadia-display">Community Health</h1>
+              <div class="pulse-brief-state-row">
+                <strong class="pulse-brief-state" data-community-brief-status>Checking</strong>
+                <span class="acadia-badge" data-source-readiness-label>checking</span>
+              </div>
+              <p class="pulse-brief-summary" data-community-brief-summary>Reading connected environment and disease sources before synthesizing the community health picture.</p>
             </div>
-            <div class="pulse-readiness" aria-label="Source readiness">
-              <span class="acadia-kicker">Source readiness</span>
+            <div class="pulse-readiness pulse-readiness-compact" aria-label="Source readiness">
+              <span class="acadia-kicker">Live sources</span>
               <div class="pulse-readiness-value">
                 <span data-source-readiness-value>--</span>
-                <span class="acadia-badge" data-source-readiness-label>checking</span>
               </div>
               <span class="acadia-text-muted" data-dashboard-checked>Not checked yet</span>
             </div>
           </div>
+
+          <div class="pulse-brief-grid" aria-label="Community health synthesis">
+            <article>
+              <span class="acadia-kicker">Current read</span>
+              <p data-community-brief-current>AirNow and WHO are loading. Healthcare, well-being, and population signals are not live yet.</p>
+            </article>
+            <article>
+              <span class="acadia-kicker">What changed</span>
+              <p data-community-brief-change>Waiting for the latest source responses.</p>
+            </article>
+            <article>
+              <span class="acadia-kicker">Watch areas</span>
+              <p data-community-brief-watch>Healthcare access, heat risk, and disease activity.</p>
+            </article>
+          </div>
         </section>
 
-        <section class="pulse-home-grid" aria-labelledby="overview-title">
-          <div class="pulse-home-main">
-            <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="overview-title">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">At a glance</span>
-                  <h2 id="overview-title" class="acadia-title">Five signals for community health</h2>
-                </div>
-                <div class="pulse-status-copy">
-                  <span class="acadia-text-muted" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
-                </div>
+        <section class="pulse-dashboard-split" aria-label="Community health dashboard">
+          <div class="pulse-signal-panel">
+            <div class="acadia-section-header">
+              <div class="acadia-section-header-copy">
+                <span class="acadia-kicker">New York City Region</span>
+                <h2 id="overview-title" class="acadia-title">Five community signals</h2>
               </div>
-
-              <div class="acadia-grid pulse-metric-grid pulse-quick-grid">
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="airnow">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-wind acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Air Quality</div>
-                  <div class="acadia-metric-value" data-airnow-aqi>--</div>
-                  <div class="acadia-text-muted pulse-metric-note" data-airnow-note>AirNow API key not configured</div>
-                </article>
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="who">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-virus-covid acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Disease Activity</div>
-                  <div class="acadia-metric-value" data-who-count>--</div>
-                  <div class="acadia-text-muted pulse-metric-note" data-who-note>Loading WHO notices</div>
-                </article>
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="access">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-hospital acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Healthcare Access</div>
-                  <div class="acadia-metric-value">HRSA</div>
-                  <div class="acadia-text-muted pulse-metric-note">Health Professional Shortage Areas selected</div>
-                </article>
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="wellbeing">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-person-walking acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Community Well-Being</div>
-                  <div class="acadia-metric-value">CDC</div>
-                  <div class="acadia-text-muted pulse-metric-note">PLACES local health measures selected</div>
-                </article>
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="population">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-people-group acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Population Trends</div>
-                  <div class="acadia-metric-value">Census</div>
-                  <div class="acadia-text-muted pulse-metric-note">Population Estimates Program selected</div>
-                </article>
-                <article class="acadia-metric pulse-metric is-pending" data-metric-card="source">
-                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-signal acadia-icon"></i></span>
-                  <div class="acadia-text-muted pulse-metric-label">Source Status</div>
-                  <div class="acadia-metric-value" data-source-status-card-value>--</div>
-                  <div class="acadia-text-muted pulse-metric-note" data-source-status-card-note>Checking live sources</div>
-                </article>
+              <div class="pulse-status-copy">
+                <span class="acadia-text-muted" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
               </div>
-            </section>
+            </div>
 
-            <section class="pulse-dashboard-grid" aria-label="Pulse dashboard cards">
-              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
-                <div class="pulse-card-heading">
+            <div class="pulse-signal-grid">
+              <article class="pulse-signal-card pulse-signal-card-featured is-pending" data-metric-card="airnow">
+                <div class="pulse-signal-card-head">
                   <span class="pulse-card-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
                   <div>
                     <span class="acadia-kicker">Environment</span>
-                    <h2 class="acadia-title">Air quality now</h2>
+                    <h3>Air Quality</h3>
                   </div>
                 </div>
-                <div class="pulse-dashboard-snapshot">
-                  <strong class="pulse-dashboard-value" data-airnow-snapshot-aqi>--</strong>
-                  <span class="acadia-text-muted" data-airnow-snapshot-category>AirNow API key not configured</span>
+                <div class="pulse-signal-value-row">
+                  <strong data-airnow-aqi>--</strong>
+                  <span data-airnow-snapshot-category>AirNow API key not configured</span>
                 </div>
-                <dl class="pulse-compact-list">
-                  <div>
-                    <dt>Scope</dt>
-                    <dd data-airnow-snapshot-scope>ZIP 10001, 25-mile radius</dd>
-                  </div>
+                <p data-airnow-note>AirNow API key not configured</p>
+                <dl class="pulse-signal-meta">
                   <div>
                     <dt>Observed</dt>
                     <dd data-airnow-snapshot-observed>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Area</dt>
+                    <dd data-airnow-snapshot-area>Waiting for live reading</dd>
                   </div>
                 </dl>
                 <a class="source-link pulse-detail-link" href="./environment.html">
@@ -137,110 +115,113 @@
                 </a>
               </article>
 
-              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
-                <div class="pulse-card-heading">
+              <article class="pulse-signal-card is-pending" data-metric-card="who">
+                <div class="pulse-signal-card-head">
                   <span class="pulse-card-icon"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i></span>
                   <div>
                     <span class="acadia-kicker">Disease</span>
-                    <h2 class="acadia-title">Outbreak signal</h2>
+                    <h3>Disease Activity</h3>
                   </div>
                 </div>
-                <p class="acadia-text-muted trend-summary" data-who-trend-summary>Checking WHO notice dates.</p>
-                <div class="acadia-rule-list signal-basis">
-                  <div class="acadia-rule-row">
-                    <strong>Source</strong>
-                    <span class="acadia-text-muted" data-who-signal-basis>Checking source</span>
-                  </div>
-                  <div class="acadia-rule-row">
-                    <strong>Latest</strong>
-                    <span class="acadia-text-muted" data-who-updated>Checking source</span>
-                  </div>
+                <div class="pulse-signal-value-row">
+                  <strong data-who-count>--</strong>
+                  <span>WHO notices</span>
                 </div>
+                <p data-who-note>Loading WHO notices</p>
+                <p class="trend-summary" data-who-trend-summary>Checking WHO notice dates.</p>
                 <a class="source-link pulse-detail-link" href="./disease.html">
                   Open disease <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
                 </a>
               </article>
 
-              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
-                <div class="pulse-card-heading">
-                  <span class="pulse-card-icon"><i class="fa-solid fa-layer-group acadia-icon" aria-hidden="true"></i></span>
+              <article class="pulse-signal-card is-pending" data-metric-card="access">
+                <div class="pulse-signal-card-head">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-hospital acadia-icon" aria-hidden="true"></i></span>
                   <div>
-                    <span class="acadia-kicker">Model</span>
-                    <h2 class="acadia-title">Five-signal frame</h2>
+                    <span class="acadia-kicker">Healthcare</span>
+                    <h3>Healthcare Access</h3>
                   </div>
                 </div>
-                <div class="acadia-rule-list signal-basis">
-                  <div class="acadia-rule-row">
-                    <strong>Live now</strong>
-                    <span class="acadia-text-muted">AirNow and WHO sources</span>
-                  </div>
-                  <div class="acadia-rule-row">
-                    <strong>Next</strong>
-                    <span class="acadia-text-muted">HRSA, CDC PLACES, and Census coverage</span>
-                  </div>
+                <div class="pulse-signal-value-row">
+                  <strong>Watch</strong>
+                  <span>shortage signal pending</span>
                 </div>
-                <a class="source-link pulse-detail-link" href="./model.html">
-                  Open model <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
-                </a>
+                <p>Provider shortage coverage is the next live access signal.</p>
               </article>
 
-              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
-                <div class="pulse-card-heading">
-                  <span class="pulse-card-icon"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i></span>
+              <article class="pulse-signal-card is-pending" data-metric-card="wellbeing">
+                <div class="pulse-signal-card-head">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-person-walking acadia-icon" aria-hidden="true"></i></span>
                   <div>
-                    <span class="acadia-kicker">Sources</span>
-                    <h2 class="acadia-title">Coverage status</h2>
+                    <span class="acadia-kicker">Well-Being</span>
+                    <h3>Community Well-Being</h3>
                   </div>
                 </div>
-                <div class="acadia-rule-list signal-basis">
-                  <div class="acadia-rule-row">
-                    <strong>Environment</strong>
-                    <span class="acadia-text-muted" data-airnow-signal-basis>AirNow API key needed</span>
-                  </div>
-                  <div class="acadia-rule-row">
-                    <strong>Disease</strong>
-                    <span class="acadia-text-muted" data-who-source-window>Checking recent notices</span>
-                  </div>
-                  <div class="acadia-rule-row">
-                    <strong>Next</strong>
-                    <span class="acadia-text-muted">HRSA HPSA, CDC PLACES, Census PEP</span>
-                  </div>
+                <div class="pulse-signal-value-row">
+                  <strong data-places-primary-value>--</strong>
+                  <span data-places-primary-label>local measures loading</span>
                 </div>
-                <a class="source-link pulse-detail-link" href="./sources.html">
-                  Open sources <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
-                </a>
+                <p data-places-note>Physical activity, obesity, sleep, and mental-health measures are loading.</p>
               </article>
-            </section>
+
+              <article class="pulse-signal-card is-pending" data-metric-card="population">
+                <div class="pulse-signal-card-head">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-people-group acadia-icon" aria-hidden="true"></i></span>
+                  <div>
+                    <span class="acadia-kicker">Population</span>
+                    <h3>Population Context</h3>
+                  </div>
+                </div>
+                <div class="pulse-signal-value-row">
+                  <strong data-population-value>--</strong>
+                  <span data-population-label>demographic trend loading</span>
+                </div>
+                <p data-population-note>Growth, births, deaths, and migration context are loading.</p>
+              </article>
+            </div>
           </div>
 
-          <aside class="pulse-home-aside" aria-label="Dashboard context">
-            <article class="acadia-muted-panel acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Scan frame</span>
-                  <h2 class="acadia-title">Pulse tracks five signals</h2>
+          <aside class="pulse-watch-panel" aria-label="Watch areas and changes">
+            <article class="acadia-surface acadia-panel-dense acadia-stack">
+              <div class="pulse-card-heading">
+                <span class="pulse-card-icon"><i class="fa-solid fa-triangle-exclamation acadia-icon" aria-hidden="true"></i></span>
+                <div>
+                  <span class="acadia-kicker">Watch Areas</span>
+                  <h2 class="acadia-title">Current pressures</h2>
                 </div>
               </div>
-              <dl class="acadia-rule-list priority-list">
-                <div class="acadia-rule-row">
-                  <dt>Environment</dt>
-                  <dd class="acadia-text-muted">Air quality now through AirNow, with heat, smoke, water, and weather impacts later</dd>
+              <ul class="pulse-watch-list">
+                <li><strong>Healthcare access</strong><span>Shortage signal is the largest structural gap to connect.</span></li>
+                <li><strong>Disease activity</strong><span data-community-brief-watch>Disease activity remains a monitored watch area.</span></li>
+                <li><strong>Heat risk</strong><span>Environmental expansion should add heat and smoke context next.</span></li>
+              </ul>
+            </article>
+
+            <article class="acadia-surface acadia-panel-dense acadia-stack">
+              <div class="pulse-card-heading">
+                <span class="pulse-card-icon"><i class="fa-solid fa-clock-rotate-left acadia-icon" aria-hidden="true"></i></span>
+                <div>
+                  <span class="acadia-kicker">What Changed</span>
+                  <h2 class="acadia-title">Latest movement</h2>
                 </div>
-                <div class="acadia-rule-row">
+              </div>
+              <p class="trend-summary" data-community-brief-change>Waiting for the latest source responses.</p>
+              <dl class="pulse-compact-list">
+                <div>
+                  <dt>Air quality</dt>
+                  <dd data-airnow-signal-basis>AirNow API key needed</dd>
+                </div>
+                <div>
                   <dt>Disease</dt>
-                  <dd class="acadia-text-muted">WHO outbreak notices now, kept as one pillar rather than the whole product</dd>
+                  <dd data-who-source-window>Checking recent notices</dd>
                 </div>
-                <div class="acadia-rule-row">
-                  <dt>Healthcare</dt>
-                  <dd class="acadia-text-muted">HRSA shortage-area data is the first access signal to connect</dd>
+                <div>
+                  <dt>Well-being</dt>
+                  <dd data-places-signal-basis>CDC PLACES loading</dd>
                 </div>
-                <div class="acadia-rule-row">
-                  <dt>Well-Being</dt>
-                  <dd class="acadia-text-muted">CDC PLACES is the first local health and behavior signal to connect</dd>
-                </div>
-                <div class="acadia-rule-row">
+                <div>
                   <dt>Population</dt>
-                  <dd class="acadia-text-muted">Census estimates are the first demographic change signal to connect</dd>
+                  <dd data-population-signal-basis>Census loading</dd>
                 </div>
               </dl>
             </article>

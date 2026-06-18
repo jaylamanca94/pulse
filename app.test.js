@@ -294,6 +294,68 @@ test("WHO notice rows render source publication time as datetime metadata", () =
   assert.match(result.text, /^Published /);
 });
 
+test("Community brief translates connected source states into qualitative synthesis", () => {
+  const result = runAppHelper(`(() => {
+    communityBriefState.airnow = {
+      isLive: true,
+      category: "Good",
+      area: "New York City Region, NY",
+      statusLabel: "Live"
+    };
+    communityBriefState.who = {
+      isLive: true,
+      noticeCount: 5,
+      statusLabel: "WHO notices live"
+    };
+    const partial = getCommunityBrief();
+
+    communityBriefState.places = {
+      isLive: true,
+      primaryLabel: "Physical inactivity",
+      primaryValue: 20.8,
+      summary: "Physical inactivity 20.8%; adult obesity 20.9%",
+      statusLabel: "Live"
+    };
+    communityBriefState.population = {
+      isLive: true,
+      changeLabel: "Growing",
+      changePercent: 1.68,
+      county: "New York County",
+      population: 1660664,
+      statusLabel: "Live"
+    };
+    const mixed = getCommunityBrief();
+
+    communityBriefState.airnow = {
+      isLive: true,
+      category: "Unhealthy",
+      area: "New York City Region, NY",
+      statusLabel: "Live"
+    };
+    const pressured = getCommunityBrief();
+
+    return {
+      pressuredStatus: pressured.status,
+      pressuredSummary: pressured.summary,
+      mixedCurrent: mixed.current,
+      mixedStatus: mixed.status,
+      mixedSummary: mixed.summary,
+      partialStatus: partial.status,
+      partialSummary: partial.summary
+    };
+  })()`);
+
+  assert.equal(result.partialStatus, "Mixed");
+  assert.match(result.partialSummary, /partial community health read/);
+  assert.equal(result.mixedStatus, "Mixed");
+  assert.match(result.mixedSummary, /Four connected signals/);
+  assert.match(result.mixedSummary, /Healthcare access remains the missing structural signal/);
+  assert.match(result.mixedCurrent, /Air quality is Good/);
+  assert.match(result.mixedCurrent, /physical inactivity 20.8%/i);
+  assert.equal(result.pressuredStatus, "Under Pressure");
+  assert.match(result.pressuredSummary, /Environmental conditions are under pressure/);
+});
+
 test("WHO area summaries render latest source publication time", () => {
   const result = runAppHelper(`(() => {
     const makeElement = (tagName) => ({

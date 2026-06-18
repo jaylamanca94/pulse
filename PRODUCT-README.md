@@ -21,7 +21,7 @@ Pulse must stay focused on its core job: clear situational awareness for source-
 
 ## Product Positioning
 
-Pulse is a live, source-backed dashboard for understanding how people and society are doing. It is not only an outbreak tracker, a daily wellness app, or a CDC-style disease dashboard. Users should be able to open it during an environmental, public health, healthcare access, well-being, or population event and quickly answer:
+Pulse is a live, source-backed community health dashboard for understanding how people and society are doing. It is not only an outbreak tracker, a daily wellness app, or a CDC-style disease dashboard. Users should be able to open it during an environmental, public health, healthcare access, well-being, or population event and quickly answer:
 
 - Are communities healthy?
 - What is changing?
@@ -47,7 +47,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Features
 
-- Human health and society signal summary
+- Community health and society signal summary
 - Metric cards ordered around Environment, Disease Activity, Healthcare Access, Community Well-Being, Population Trends, and Source Status
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
@@ -75,6 +75,8 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Distinct no-data source state when a configured source responds without nearby observations
 - WHO-derived signal trend snapshot
 - WHO notice trend plain-language summary that mirrors the visual bar chart and names the latest notice represented in the trend
+- Community Brief synthesis that translates connected source states into qualitative community-health meaning without inventing a composite score
+- Homepage signal dashboard that prioritizes Community Health, Air Quality, Disease Activity, Healthcare Access, Well-Being, Population, Watch Areas, and What Changed before source/model explanation
 - Named first source target for each pillar: AirNow, WHO, HRSA HPSA, CDC PLACES, and Census PEP
 - Priority list for first public data areas
 - Pending-source labels so the prototype does not imply live tracking where source wiring is incomplete
@@ -84,8 +86,10 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Design Decisions
 
 - Use Acadia conventions for layout, surfaces, controls, metrics, rows, forms, states, icons, focus, motion, density, and responsive behavior before creating any custom Pulse UI.
-- Lead the dashboard with the five-pillar human-health model, not disease-first source ordering.
+- Lead the dashboard with the five-signal community health model, not disease-first source ordering.
 - Frame Pulse around community health rather than a Mercury-style indicator board.
+- Use `Community Health Dashboard`, `Pulse`, and `Five signals for community health` as the homepage hierarchy.
+- Keep framework, source coverage, and model explanation off the homepage unless they directly support a live signal or watch area.
 - Keep disease and outbreak surfaces clearly labeled as one pillar of Pulse rather than the product's full identity.
 - Use pending states until selected data sources are wired.
 - Use graceful unavailable or no-data states when public APIs are unavailable.
@@ -121,6 +125,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Prefer visuals that help users compare place, scale, recency, and severity over decorative analytics.
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
+- Use qualitative synthesis labels such as `Stable`, `Mixed`, `Under Pressure`, and `Coverage Building` when connected data supports interpretation, but do not create numeric health scores across sources with different cadence and scope.
 - Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
 - Name the first source target for each unconnected pillar so placeholders feel intentional rather than empty.
 - Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
@@ -128,12 +133,13 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Roadmap
 
-- Add live AirNow API key in deployment environment variables.
-- Deploy to Vercel.
+- Finish the AirNow migration to reporting-area-based data before the legacy ZIP and latitude/longitude flow retires.
 - Wire HRSA Health Professional Shortage Areas as the first healthcare access source.
 - Wire CDC PLACES local health measures as the first well-being source.
 - Wire U.S. Census Population Estimates Program as the first population source.
-- Replace the legacy AirNow ZIP/lat-long observation flow before AirNow's fall 2026 retirement window by moving to the newer reporting-area-centered API model. The target flow should resolve a user-entered ZIP code or browser geolocation to an AirNow reporting area, then store and display the reporting area name, state, AQI, category, and dominant pollutant as the source for Pulse AQI cards.
+- Improve the disease signal with CDC or regional sources after each pillar has at least one live signal.
+- Keep the near-term threshold simple: every pillar should have one credible live source before Pulse deepens any single pillar.
+- Continue the AirNow target flow by resolving a user-entered ZIP code or browser geolocation to an AirNow reporting area, then store and display the reporting area name, state, AQI, category, and dominant pollutant as the source for Pulse AQI cards.
 - Evaluate AirNow historical observations and forecasts for a future `Air Quality Trends` card with today AQI, 7-day average, 30-day average, best day this month, and worst day this month.
 - Expand outbreak-focused geography views from the WHO-derived scan into richer country, state, county, or local views as source quality permits.
 - Expand user-selectable environmental observations beyond ZIP code and radius when source coverage supports it.

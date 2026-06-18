@@ -1,4 +1,6 @@
 const API = {
+  places: "/api/places",
+  population: "/api/population",
   who: "/api/who",
   airnow: "/api/airnow"
 };
@@ -81,6 +83,16 @@ const setText = (selector, value) => {
   if (element) element.textContent = value;
 };
 
+const setTextAll = (selector, value) => {
+  const elements = typeof document.querySelectorAll === "function"
+    ? document.querySelectorAll(selector)
+    : [document.querySelector(selector)].filter(Boolean);
+
+  elements.forEach((element) => {
+    element.textContent = value;
+  });
+};
+
 const setBusy = (selector, value) => {
   const element = document.querySelector(selector);
   if (element) element.setAttribute("aria-busy", String(value));
@@ -100,6 +112,36 @@ const getPulsePage = () => {
 };
 
 const METRIC_CARD_STATE_CLASSES = ["is-live", "is-warning", "is-pending"];
+const COMMUNITY_BRIEF_STATUS_CLASSES = ["is-live", "is-warning"];
+
+const communityBriefState = {
+  airnow: {
+    isLive: false,
+    category: "",
+    area: "",
+    statusLabel: "Checking"
+  },
+  who: {
+    isLive: false,
+    noticeCount: null,
+    statusLabel: "Checking"
+  },
+  places: {
+    isLive: false,
+    primaryLabel: "",
+    primaryValue: null,
+    summary: "",
+    statusLabel: "Checking"
+  },
+  population: {
+    isLive: false,
+    changeLabel: "",
+    changePercent: null,
+    county: "",
+    population: null,
+    statusLabel: "Checking"
+  }
+};
 
 const setMetricCardState = (metricKey, state = "pending") => {
   const card = document.querySelector(`[data-metric-card="${metricKey}"]`);
@@ -108,6 +150,131 @@ const setMetricCardState = (metricKey, state = "pending") => {
   const nextState = METRIC_CARD_STATE_CLASSES.includes(`is-${state}`) ? state : "pending";
   card.classList.remove(...METRIC_CARD_STATE_CLASSES);
   card.classList.add(`is-${nextState}`);
+};
+
+const setCommunityBriefText = ({ status, summary, current, change, watch, tone = "warning" }) => {
+  const badge = document.querySelector("[data-community-brief-status]");
+  if (badge) {
+    badge.textContent = status;
+    badge.classList.remove(...COMMUNITY_BRIEF_STATUS_CLASSES);
+    if (tone === "live" || tone === "warning") {
+      badge.classList.add(`is-${tone}`);
+    }
+  }
+
+  setTextAll("[data-community-brief-summary]", summary);
+  setTextAll("[data-community-brief-current]", current);
+  setTextAll("[data-community-brief-change]", change);
+  setTextAll("[data-community-brief-watch]", watch);
+  setTextAll("[data-community-location]", communityBriefState.airnow.area || "Selected community");
+};
+
+const isFavorableAqiCategory = (category) => {
+  const normalizedCategory = normalizeAqiCategory(category).toLowerCase();
+  return normalizedCategory === "good" || normalizedCategory === "moderate";
+};
+
+const isElevatedAqiCategory = (category) => {
+  const normalizedCategory = normalizeAqiCategory(category).toLowerCase();
+  return [
+    "unhealthy for sensitive groups",
+    "unhealthy",
+    "very unhealthy",
+    "hazardous"
+  ].includes(normalizedCategory);
+};
+
+const formatCompactNumber = (value) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "--";
+
+  return new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: number >= 1000000 ? 1 : 0,
+    notation: number >= 100000 ? "compact" : "standard"
+  }).format(number);
+};
+
+const formatSignedNumber = (value) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "--";
+
+  return new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: 0,
+    signDisplay: "exceptZero"
+  }).format(number);
+};
+
+const formatPercentValue = (value, options = {}) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "--";
+
+  return new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: options.maximumFractionDigits ?? 1,
+    signDisplay: options.signDisplay || "auto"
+  }).format(number) + "%";
+};
+
+const getCommunityBrief = () => {
+  const { airnow, places, population, who } = communityBriefState;
+  const liveCount = [airnow.isLive, who.isLive, places.isLive, population.isLive].filter(Boolean).length;
+  const airnowArea = airnow.area || "the selected AirNow area";
+  const noticeCount = Number(who.noticeCount);
+  const hasNoticeCount = Number.isFinite(noticeCount);
+  const noticeLabel = hasNoticeCount
+    ? `${noticeCount} recent WHO ${noticeCount === 1 ? "notice" : "notices"}`
+    : "WHO notices";
+  const wellbeingLabel = places.primaryLabel && Number.isFinite(Number(places.primaryValue))
+    ? `${places.primaryLabel.toLowerCase()} ${formatPercentValue(places.primaryValue)}`
+    : "CDC PLACES well-being baseline";
+  const populationLabel = population.isLive && Number.isFinite(Number(population.changePercent))
+    ? `${population.county || "the county"} population ${population.changeLabel.toLowerCase()} ${formatPercentValue(population.changePercent, { signDisplay: "exceptZero" })} in 2024`
+    : "Census population context";
+
+  if (airnow.isLive && isElevatedAqiCategory(airnow.category)) {
+    return {
+      status: "Under Pressure",
+      summary: `Environmental conditions are under pressure near ${airnowArea}.`,
+      current: `Air quality is ${airnow.category}; ${who.isLive ? noticeLabel : "WHO remains a watch source for outbreak notices"}.`,
+      change: `This refresh pulled current AQI${who.isLive ? ", WHO notices" : ""}${places.isLive ? ", CDC PLACES" : ""}${population.isLive ? ", and Census population context" : ""}.`,
+      watch: "Air quality, heat risk, healthcare shortages, and disease activity.",
+      tone: "warning"
+    };
+  }
+
+  if (liveCount >= 3 && airnow.isLive && isFavorableAqiCategory(airnow.category)) {
+    return {
+      status: "Mixed",
+      summary: `Four connected signals now describe the community more directly: environmental conditions are favorable near ${airnowArea}, ${wellbeingLabel} is live, and ${populationLabel}. Healthcare access remains the missing structural signal.`,
+      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated AQI, WHO notices, CDC PLACES well-being measures, Census population context, and source readiness.",
+      watch: "Healthcare access shortages, heat risk, new outbreak notices, and well-being measures that move slowly.",
+      tone: "warning"
+    };
+  }
+
+  if (liveCount > 0) {
+    return {
+      status: "Mixed",
+      summary: "Connected sources provide a partial community health read, but the full five-signal picture is still coming online.",
+      current: `${airnow.isLive ? `Air quality is ${airnow.category}` : airnow.statusLabel}; ${who.isLive ? noticeLabel : who.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated connected source readiness and any live community signals.",
+      watch: "Healthcare access, well-being, population change, and any source that is not yet live.",
+      tone: "warning"
+    };
+  }
+
+  return {
+    status: "Coverage Building",
+    summary: "Pulse is still building its live community health read.",
+    current: "AirNow and WHO need live responses before Pulse can interpret connected conditions.",
+    change: "This refresh checked source availability.",
+    watch: "Air quality setup, WHO availability, healthcare access, local well-being, and population context.",
+    tone: "warning"
+  };
+};
+
+const updateCommunityBrief = () => {
+  setCommunityBriefText(getCommunityBrief());
 };
 
 const updateSourceReadiness = (liveCount, totalCount) => {
@@ -625,61 +792,69 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
 
 const renderNotices = (notices, isLive, sourceMeta = {}) => {
   const list = document.querySelector("[data-who-list]");
-  if (!list) return;
+  communityBriefState.who = {
+    isLive,
+    noticeCount: notices.length,
+    statusLabel: isLive ? "WHO notices live" : sourceMeta.statusLabel || "WHO unavailable"
+  };
+  updateCommunityBrief();
 
-  list.innerHTML = "";
   const formattedNotices = notices.map(formatNotice);
 
-  if (!formattedNotices.length) {
-    const empty = document.createElement("p");
-    empty.className = "acadia-empty-state empty-copy";
-    empty.textContent = isLive
-      ? "No WHO Disease Outbreak News notices were returned."
-      : "WHO notices are unavailable right now.";
-    list.append(empty);
-  }
+  if (list) {
+    list.innerHTML = "";
 
-  formattedNotices.forEach((notice) => {
-    const article = document.createElement("article");
-    article.className = "acadia-object-card notice-item";
-
-    const meta = document.createElement("p");
-    meta.className = "notice-meta-row";
-
-    const published = document.createElement(notice.publishedAt ? "time" : "span");
-    published.className = "notice-meta";
-    published.textContent = notice.publishedAt
-      ? formatWhoPublishedAt(notice.publishedAt, notice.date)
-      : notice.date;
-    if (notice.publishedAt) {
-      published.dateTime = notice.publishedAt;
+    if (!formattedNotices.length) {
+      const empty = document.createElement("p");
+      empty.className = "acadia-empty-state empty-copy";
+      empty.textContent = isLive
+        ? "No WHO Disease Outbreak News notices were returned."
+        : "WHO notices are unavailable right now.";
+      list.append(empty);
     }
-    meta.append(published);
 
-    [notice.location, notice.donId].forEach((value) => {
-      const item = document.createElement("span");
-      item.className = "notice-meta";
-      item.textContent = value;
-      meta.append(item);
+    formattedNotices.forEach((notice) => {
+      const article = document.createElement("article");
+      article.className = "acadia-object-card notice-item";
+
+      const meta = document.createElement("p");
+      meta.className = "notice-meta-row";
+
+      const published = document.createElement(notice.publishedAt ? "time" : "span");
+      published.className = "notice-meta";
+      published.textContent = notice.publishedAt
+        ? formatWhoPublishedAt(notice.publishedAt, notice.date)
+        : notice.date;
+      if (notice.publishedAt) {
+        published.dateTime = notice.publishedAt;
+      }
+      meta.append(published);
+
+      [notice.location, notice.donId].forEach((value) => {
+        const item = document.createElement("span");
+        item.className = "notice-meta";
+        item.textContent = value;
+        meta.append(item);
+      });
+
+      const title = document.createElement("h3");
+      title.className = "notice-title";
+
+      const link = document.createElement("a");
+      link.href = notice.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = notice.title;
+      title.append(link);
+
+      const summary = document.createElement("p");
+      summary.className = "notice-summary";
+      summary.textContent = notice.summary;
+
+      article.append(meta, title, summary);
+      list.append(article);
     });
-
-    const title = document.createElement("h3");
-    title.className = "notice-title";
-
-    const link = document.createElement("a");
-    link.href = notice.url;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = notice.title;
-    title.append(link);
-
-    const summary = document.createElement("p");
-    summary.className = "notice-summary";
-    summary.textContent = notice.summary;
-
-    article.append(meta, title, summary);
-    list.append(article);
-  });
+  }
 
   setText("[data-who-count]", String(notices.length));
   setText("[data-who-note]", isLive ? "Live WHO notices" : sourceMeta.statusLabel || "No live WHO data");
@@ -773,6 +948,14 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
   const areaMatch = sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive);
   const aqiBasis = sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive);
   const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "API key needed";
+
+  communityBriefState.airnow = {
+    isLive,
+    category: reading.category || "",
+    area: isLive ? areaLabel : "",
+    statusLabel
+  };
+  updateCommunityBrief();
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
@@ -874,6 +1057,140 @@ const loadAirQuality = async () => {
   }
 };
 
+const getMeasureById = (measures = [], measureId) => measures.find((measure) => measure.measureId === measureId);
+
+const formatPlacesMetric = (measure) => {
+  if (!measure || !Number.isFinite(Number(measure.value))) return "--";
+  return `${formatPercentValue(measure.value)} ${measure.label.toLowerCase()}`;
+};
+
+const renderPlaces = (data, isLive, sourceMeta = {}) => {
+  const measures = Array.isArray(data.measures) ? data.measures : [];
+  const primary = data.primary || getMeasureById(measures, "LPA") || measures[0] || {};
+  const obesity = getMeasureById(measures, "OBESITY");
+  const mentalDistress = getMeasureById(measures, "MHLTH");
+  const sleep = getMeasureById(measures, "SLEEP");
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "Unavailable";
+  const primaryLabel = primary.label || "Physical inactivity";
+  const primaryValue = Number(primary.value);
+  const primaryDisplay = Number.isFinite(primaryValue) ? formatPercentValue(primaryValue) : "--";
+  const secondary = [
+    formatPlacesMetric(obesity),
+    formatPlacesMetric(mentalDistress),
+    formatPlacesMetric(sleep)
+  ].filter((value) => value !== "--").join("; ");
+  const geography = data.geography?.county || "New York County";
+  const sourceYear = data.year ? `PLACES ${data.year}` : "CDC PLACES";
+
+  communityBriefState.places = {
+    isLive,
+    primaryLabel,
+    primaryValue: Number.isFinite(primaryValue) ? primaryValue : null,
+    summary: data.summary || secondary,
+    statusLabel
+  };
+  updateCommunityBrief();
+
+  setText("[data-places-primary-value]", primaryDisplay);
+  setText("[data-places-primary-label]", isLive ? primaryLabel : "local measures unavailable");
+  setText("[data-places-note]", isLive
+    ? `${secondary || data.summary || "CDC PLACES measures are live"} for ${geography}.`
+    : sourceMeta.note || "CDC PLACES measures are unavailable right now.");
+  setText("[data-places-signal-basis]", isLive ? `${sourceYear} county measures` : statusLabel);
+  setMetricCardState("wellbeing", isLive ? "live" : "warning");
+  setSourceDetail("places", {
+    freshness: isLive
+      ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+      : sourceMeta.freshness || "CDC PLACES unavailable",
+    isLive,
+    isWarning: !isLive,
+    status: statusLabel
+  });
+};
+
+const loadPlaces = async () => {
+  try {
+    const data = await fetchJson(API.places);
+    const isLive = data.status === "live" && Array.isArray(data.measures) && data.measures.length > 0;
+    renderPlaces(data, isLive, {
+      ...data,
+      statusLabel: isLive ? undefined : "No data"
+    });
+    return isLive;
+  } catch (error) {
+    renderPlaces({
+      measures: [],
+      primary: null
+    }, false, {
+      freshness: error.status === 404 ? "PLACES route unavailable" : "Try refreshing again later",
+      note: error.status === 404 ? "Run with server API routes for CDC PLACES." : "CDC PLACES could not be loaded.",
+      statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
+    });
+    return false;
+  }
+};
+
+const renderPopulation = (data, isLive, sourceMeta = {}) => {
+  const record = data.record || {};
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "Unavailable";
+  const changePercent = Number(record.changePercent);
+  const population = Number(record.population);
+  const change = Number(record.change);
+  const county = record.county || "New York County";
+  const changeLabel = record.changeLabel || "Context";
+  const netMigration = Number(record.netMigration);
+  const naturalChange = Number(record.naturalChange);
+
+  communityBriefState.population = {
+    isLive,
+    changeLabel,
+    changePercent: Number.isFinite(changePercent) ? changePercent : null,
+    county,
+    population: Number.isFinite(population) ? population : null,
+    statusLabel
+  };
+  updateCommunityBrief();
+
+  setText("[data-population-value]", Number.isFinite(population) ? formatCompactNumber(population) : "--");
+  setText("[data-population-label]", isLive && Number.isFinite(changePercent)
+    ? `${changeLabel}, ${formatPercentValue(changePercent, { signDisplay: "exceptZero" })}`
+    : "demographic trend unavailable");
+  setText("[data-population-note]", isLive
+    ? `${county} changed by ${formatSignedNumber(change)} people in 2024; net migration ${formatSignedNumber(netMigration)} and natural change ${formatSignedNumber(naturalChange)}.`
+    : sourceMeta.note || "Census population estimates are unavailable right now.");
+  setText("[data-population-signal-basis]", isLive ? "2024 county population estimate" : statusLabel);
+  setMetricCardState("population", isLive ? "live" : "warning");
+  setSourceDetail("population", {
+    freshness: isLive
+      ? joinDetails(formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+      : sourceMeta.freshness || "Census population estimates unavailable",
+    isLive,
+    isWarning: !isLive,
+    status: statusLabel
+  });
+};
+
+const loadPopulation = async () => {
+  try {
+    const data = await fetchJson(API.population);
+    const isLive = data.status === "live" && Boolean(data.record?.population);
+    renderPopulation(data, isLive, {
+      ...data,
+      statusLabel: isLive ? undefined : "No data"
+    });
+    return isLive;
+  } catch (error) {
+    renderPopulation({
+      record: {}
+    }, false, {
+      freshness: error.status === 404 ? "Population route unavailable" : "Try refreshing again later",
+      note: error.status === 404 ? "Run with server API routes for Census population estimates." : "Census estimates could not be loaded.",
+      statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
+    });
+    return false;
+  }
+};
+
 const setRefreshState = (isRefreshing) => {
   const button = document.querySelector("#refreshButton");
   if (!button) return;
@@ -896,11 +1213,11 @@ const setAirNowFormState = (isRefreshing) => {
 
 const loadDashboard = async () => {
   const loadersByPage = {
-    dashboard: [loadWhoNotices, loadAirQuality],
+    dashboard: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation],
     disease: [loadWhoNotices],
     environment: [loadAirQuality],
-    model: [loadWhoNotices, loadAirQuality],
-    sources: [loadWhoNotices, loadAirQuality]
+    model: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation],
+    sources: [loadWhoNotices, loadAirQuality, loadPlaces, loadPopulation]
   };
   const pageType = getPulsePage();
   const loaders = loadersByPage[pageType] || loadersByPage.dashboard;

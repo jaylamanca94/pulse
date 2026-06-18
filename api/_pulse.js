@@ -78,12 +78,37 @@ async function requestJson(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
   return payload;
 }
 
+async function requestText(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const response = await fetch(url, {
+    signal: controller.signal
+  }).finally(() => clearTimeout(timeoutId));
+  const payload = await response.text().catch(() => "");
+
+  if (!response.ok) {
+    const error = new Error(`Request failed with status ${response.status}`);
+    error.status = response.status;
+    error.payload = {
+      error: {
+        code: "UPSTREAM_REQUEST_FAILED",
+        message: payload || "Upstream request failed."
+      }
+    };
+    throw error;
+  }
+
+  return payload;
+}
+
 module.exports = {
   getCached,
   getText,
   normalizeDistance,
   normalizeZipCode,
   requestJson,
+  requestText,
   safeHttpUrl,
   sendJson,
   setCached

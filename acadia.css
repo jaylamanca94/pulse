@@ -313,30 +313,37 @@
 
 .acadia-nav {
   align-items: center;
-  background: var(--acadia-color-surface-muted);
-  border: 1px solid var(--acadia-color-border);
-  border-radius: var(--acadia-radius-pill);
-  box-shadow: var(--acadia-shadow-control);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   display: inline-flex;
-  gap: 0.125rem;
-  padding: 0.1875rem;
+  gap: 0.5rem;
+  padding: 0;
   position: relative;
 }
 
 .acadia-nav-item {
   align-items: center;
-  border: 0;
-  border-radius: var(--acadia-radius-pill);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--acadia-radius-md);
   color: var(--acadia-color-text-muted);
   cursor: pointer;
   display: inline-flex;
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: 800;
   gap: 0.45rem;
   line-height: 1.25;
-  min-height: 2.25rem;
-  padding: 0.45rem 0.8rem;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.85rem;
   text-decoration: none;
+  transition:
+    background-color var(--acadia-motion-fast),
+    border-color var(--acadia-motion-fast),
+    box-shadow var(--acadia-motion-fast),
+    color var(--acadia-motion-fast),
+    transform var(--acadia-motion-fast);
 }
 
 .acadia-nav-group {
@@ -360,13 +367,24 @@
   transform: rotate(180deg);
 }
 
+.acadia-nav-item:hover,
+.acadia-nav-item:focus-visible {
+  background: var(--acadia-color-surface-muted);
+  border-color: var(--acadia-color-border);
+  box-shadow: var(--acadia-shadow-control);
+  color: var(--acadia-color-text);
+  outline: 0;
+  transform: translateY(-1px);
+}
+
 .acadia-nav-item[aria-current="page"],
 .acadia-nav-item.is-active,
 .acadia-nav-group.is-active > .acadia-nav-trigger,
 .acadia-nav-group[open] > .acadia-nav-trigger {
-  background: var(--acadia-color-surface-elevated);
+  background: var(--acadia-color-brand-bg);
+  border-color: var(--acadia-color-brand-border);
   box-shadow: var(--acadia-shadow-control);
-  color: var(--acadia-color-text);
+  color: var(--acadia-color-action-ink);
 }
 
 .acadia-nav-menu {

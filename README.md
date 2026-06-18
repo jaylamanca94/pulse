@@ -1,6 +1,6 @@
 # Pulse
 
-Pulse is a live, source-backed dashboard for understanding how people, communities, and society are doing across environment, disease, healthcare, well-being, and population signals.
+Pulse is a live, source-backed community health dashboard for understanding how people, communities, and society are doing across environment, disease, healthcare, well-being, and population signals.
 
 Core question: Are communities healthy?
 
@@ -49,6 +49,8 @@ Pulse also normalizes recognized AirNow category label variants before showing s
 When live AirNow observations are available, Pulse uses restrained official AQI category color cues on the metric note and severity-band detail.
 It also translates the returned AQI category into concise health guidance in the local environmental snapshot and source coverage panel.
 The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, why the AQI was selected, severity band, and health guidance before users inspect the full source metadata.
+
+The dashboard includes a Community Brief that synthesizes connected source states into qualitative language such as `Stable`, `Mixed`, `Under Pressure`, or `Coverage Building`. It interprets AirNow and WHO status into plain meaning while avoiding a fake cross-source health score.
 
 The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist. HRSA, CDC PLACES, and Census are named as first source targets for the remaining pillars, but they do not count toward readiness until connected.
 
