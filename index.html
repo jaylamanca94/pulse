@@ -8,20 +8,27 @@
     <link href="site.webmanifest" rel="manifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="acadia.css?v=20260617" rel="stylesheet">
-    <link href="styles.css?v=20260617-acadia" rel="stylesheet">
+    <link href="styles.css?v=20260617-multipage" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260617-acadia" defer></script>
+    <script src="app.js?v=20260617-multipage" defer></script>
   </head>
-  <body>
+  <body data-pulse-page="dashboard">
     <div class="acadia-app pulse-app">
       <header class="acadia-chrome">
-        <div class="acadia-chrome-inner">
-          <a class="acadia-brand" href="/" aria-label="Pulse home">
+        <div class="acadia-chrome-inner pulse-chrome-inner">
+          <a class="acadia-brand" href="./index.html" aria-label="Pulse home">
             <span class="acadia-mark"><i class="fa-solid fa-heart-pulse acadia-icon" aria-hidden="true"></i></span>
             <span>Pulse</span>
           </a>
+          <nav class="acadia-nav pulse-primary-nav" aria-label="Pulse pages">
+            <a class="acadia-nav-item" href="./index.html" aria-current="page">Dashboard</a>
+            <a class="acadia-nav-item" href="./environment.html">Environment</a>
+            <a class="acadia-nav-item" href="./disease.html">Disease</a>
+            <a class="acadia-nav-item" href="./sources.html">Sources</a>
+            <a class="acadia-nav-item" href="./model.html">Model</a>
+          </nav>
           <div class="acadia-page-actions pulse-header-actions">
-            <span class="acadia-badge" data-status-badge>Loading sources</span>
+            <span class="acadia-badge status-badge" data-status-badge>Loading sources</span>
             <button class="acadia-button acadia-button-secondary" id="refreshButton" type="button" aria-label="Refresh source data">
               <i class="fa-solid fa-rotate acadia-icon" aria-hidden="true"></i>
               Refresh
@@ -30,13 +37,13 @@
         </div>
       </header>
 
-      <main class="acadia-shell acadia-stack">
-        <section class="acadia-surface acadia-panel acadia-stack pulse-hero" aria-labelledby="summary-title">
-          <header class="acadia-page-header">
+      <main class="acadia-shell pulse-shell">
+        <section class="acadia-surface acadia-panel pulse-home-hero" aria-labelledby="summary-title">
+          <div class="acadia-page-header pulse-home-header">
             <div class="acadia-page-header-copy">
               <span class="acadia-kicker">Human health scan</span>
-              <h1 class="acadia-display">Pulse</h1>
-              <p class="acadia-text-muted pulse-lead">A live, source-backed view of how people, communities, and society are doing across environment, disease, healthcare, well-being, and population signals.</p>
+              <h1 id="summary-title" class="acadia-display">Pulse</h1>
+              <p class="acadia-text-muted pulse-lead">A calm, source-backed view of environment, disease, healthcare, well-being, and population signals.</p>
             </div>
             <div class="pulse-readiness" aria-label="Source readiness">
               <span class="acadia-kicker">Source readiness</span>
@@ -44,199 +51,170 @@
                 <span data-source-readiness-value>--</span>
                 <span class="acadia-badge" data-source-readiness-label>checking</span>
               </div>
-            </div>
-          </header>
-          <div class="acadia-rule-list signal-basis" aria-label="Current source basis">
-            <div class="acadia-rule-row">
-              <strong>Environment</strong>
-              <span class="acadia-text-muted" data-airnow-signal-basis>AirNow API key needed</span>
-            </div>
-            <div class="acadia-rule-row">
-              <strong>Disease activity</strong>
-              <span class="acadia-text-muted" data-who-signal-basis>Checking source</span>
-            </div>
-            <div class="acadia-rule-row">
-              <strong>Future pillars</strong>
-              <span class="acadia-text-muted">Healthcare, well-being, and population sources not connected yet</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="metrics-title">
-          <div class="acadia-section-header">
-            <div class="acadia-section-header-copy">
-              <span class="acadia-kicker">Five-pillar dashboard</span>
-              <h2 id="metrics-title" class="acadia-title">How are people doing?</h2>
-            </div>
-            <div class="pulse-status-copy">
-              <span class="acadia-text-muted" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
               <span class="acadia-text-muted" data-dashboard-checked>Not checked yet</span>
             </div>
           </div>
-
-          <div class="acadia-grid pulse-metric-grid" style="--acadia-grid-columns: 3">
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="airnow">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-wind acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Air Quality</div>
-              <div class="acadia-metric-value" data-airnow-aqi>--</div>
-              <div class="acadia-text-muted pulse-metric-note" data-airnow-note>AirNow API key not configured</div>
-            </article>
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="wellbeing">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-person-walking acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Community Well-Being</div>
-              <div class="acadia-metric-value">--</div>
-              <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
-            </article>
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="access">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-hospital acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Healthcare Access</div>
-              <div class="acadia-metric-value">--</div>
-              <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
-            </article>
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="who">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-virus-covid acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Disease Activity</div>
-              <div class="acadia-metric-value" data-who-count>--</div>
-              <div class="acadia-text-muted pulse-metric-note" data-who-note>Loading WHO notices</div>
-            </article>
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="population">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-people-group acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Population Trends</div>
-              <div class="acadia-metric-value">--</div>
-              <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
-            </article>
-            <article class="acadia-metric pulse-metric is-pending" data-metric-card="source">
-              <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-signal acadia-icon"></i></span>
-              <div class="acadia-text-muted pulse-metric-label">Source Status</div>
-              <div class="acadia-metric-value" data-source-status-card-value>--</div>
-              <div class="acadia-text-muted pulse-metric-note" data-source-status-card-note>Checking live sources</div>
-            </article>
-          </div>
         </section>
 
-        <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="local-aqi-title">
-          <div class="acadia-section-header">
-            <div class="acadia-section-header-copy">
-              <span class="acadia-kicker">Environment</span>
-              <h2 id="local-aqi-title" class="acadia-title">Environmental snapshot</h2>
-            </div>
-            <span class="acadia-badge acadia-badge-warning source-status is-warning" data-airnow-snapshot-status>API key needed</span>
+        <section class="pulse-home-grid" aria-labelledby="overview-title">
+          <div class="pulse-home-main">
+            <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="overview-title">
+              <div class="acadia-section-header">
+                <div class="acadia-section-header-copy">
+                  <span class="acadia-kicker">At a glance</span>
+                  <h2 id="overview-title" class="acadia-title">How are people doing?</h2>
+                </div>
+                <div class="pulse-status-copy">
+                  <span class="acadia-text-muted" data-dashboard-status role="status" aria-live="polite">Loading live sources</span>
+                </div>
+              </div>
+
+              <div class="acadia-grid pulse-metric-grid pulse-quick-grid">
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="airnow">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-wind acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Air Quality</div>
+                  <div class="acadia-metric-value" data-airnow-aqi>--</div>
+                  <div class="acadia-text-muted pulse-metric-note" data-airnow-note>AirNow API key not configured</div>
+                </article>
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="who">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-virus-covid acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Disease Activity</div>
+                  <div class="acadia-metric-value" data-who-count>--</div>
+                  <div class="acadia-text-muted pulse-metric-note" data-who-note>Loading WHO notices</div>
+                </article>
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="access">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-hospital acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Healthcare Access</div>
+                  <div class="acadia-metric-value">--</div>
+                  <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
+                </article>
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="wellbeing">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-person-walking acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Community Well-Being</div>
+                  <div class="acadia-metric-value">--</div>
+                  <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
+                </article>
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="population">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-people-group acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Population Trends</div>
+                  <div class="acadia-metric-value">--</div>
+                  <div class="acadia-text-muted pulse-metric-note">Source not connected yet</div>
+                </article>
+                <article class="acadia-metric pulse-metric is-pending" data-metric-card="source">
+                  <span class="acadia-metric-icon" aria-hidden="true"><i class="fa-solid fa-signal acadia-icon"></i></span>
+                  <div class="acadia-text-muted pulse-metric-label">Source Status</div>
+                  <div class="acadia-metric-value" data-source-status-card-value>--</div>
+                  <div class="acadia-text-muted pulse-metric-note" data-source-status-card-note>Checking live sources</div>
+                </article>
+              </div>
+            </section>
+
+            <section class="pulse-dashboard-grid" aria-label="Pulse dashboard cards">
+              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
+                <div class="pulse-card-heading">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
+                  <div>
+                    <span class="acadia-kicker">Environment</span>
+                    <h2 class="acadia-title">Air quality now</h2>
+                  </div>
+                </div>
+                <div class="pulse-dashboard-snapshot">
+                  <strong class="pulse-dashboard-value" data-airnow-snapshot-aqi>--</strong>
+                  <span class="acadia-text-muted" data-airnow-snapshot-category>AirNow API key not configured</span>
+                </div>
+                <dl class="pulse-compact-list">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd data-airnow-snapshot-scope>ZIP 10001, 25-mile radius</dd>
+                  </div>
+                  <div>
+                    <dt>Observed</dt>
+                    <dd data-airnow-snapshot-observed>Available after AirNow is configured</dd>
+                  </div>
+                </dl>
+                <a class="source-link pulse-detail-link" href="./environment.html">
+                  Open environment <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
+                </a>
+              </article>
+
+              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
+                <div class="pulse-card-heading">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i></span>
+                  <div>
+                    <span class="acadia-kicker">Disease</span>
+                    <h2 class="acadia-title">Outbreak signal</h2>
+                  </div>
+                </div>
+                <p class="acadia-text-muted trend-summary" data-who-trend-summary>Checking WHO notice dates.</p>
+                <div class="acadia-rule-list signal-basis">
+                  <div class="acadia-rule-row">
+                    <strong>Source</strong>
+                    <span class="acadia-text-muted" data-who-signal-basis>Checking source</span>
+                  </div>
+                  <div class="acadia-rule-row">
+                    <strong>Latest</strong>
+                    <span class="acadia-text-muted" data-who-updated>Checking source</span>
+                  </div>
+                </div>
+                <a class="source-link pulse-detail-link" href="./disease.html">
+                  Open disease <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
+                </a>
+              </article>
+
+              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
+                <div class="pulse-card-heading">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-layer-group acadia-icon" aria-hidden="true"></i></span>
+                  <div>
+                    <span class="acadia-kicker">Model</span>
+                    <h2 class="acadia-title">Five-pillar frame</h2>
+                  </div>
+                </div>
+                <div class="acadia-rule-list signal-basis">
+                  <div class="acadia-rule-row">
+                    <strong>Live now</strong>
+                    <span class="acadia-text-muted">Environment and disease sources</span>
+                  </div>
+                  <div class="acadia-rule-row">
+                    <strong>Next</strong>
+                    <span class="acadia-text-muted">Healthcare, well-being, and population coverage</span>
+                  </div>
+                </div>
+                <a class="source-link pulse-detail-link" href="./model.html">
+                  Open model <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
+                </a>
+              </article>
+
+              <article class="acadia-surface acadia-panel-dense acadia-stack pulse-dashboard-card">
+                <div class="pulse-card-heading">
+                  <span class="pulse-card-icon"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i></span>
+                  <div>
+                    <span class="acadia-kicker">Sources</span>
+                    <h2 class="acadia-title">Coverage status</h2>
+                  </div>
+                </div>
+                <div class="acadia-rule-list signal-basis">
+                  <div class="acadia-rule-row">
+                    <strong>Environment</strong>
+                    <span class="acadia-text-muted" data-airnow-signal-basis>AirNow API key needed</span>
+                  </div>
+                  <div class="acadia-rule-row">
+                    <strong>Disease</strong>
+                    <span class="acadia-text-muted" data-who-source-window>Checking recent notices</span>
+                  </div>
+                </div>
+                <a class="source-link pulse-detail-link" href="./sources.html">
+                  Open sources <i class="fa-solid fa-arrow-right acadia-icon" aria-hidden="true"></i>
+                </a>
+              </article>
+            </section>
           </div>
-          <div class="pulse-snapshot">
-            <div class="acadia-metric pulse-snapshot-primary">
-              <span class="acadia-text-muted pulse-metric-label">Current AQI</span>
-              <strong class="acadia-metric-value" data-airnow-snapshot-aqi>--</strong>
-              <span class="acadia-text-muted" data-airnow-snapshot-category>AirNow API key not configured</span>
-            </div>
-            <dl class="pulse-detail-grid">
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Selected scope</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-scope>ZIP 10001, 25-mile radius</dd>
-              </div>
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Reporting area</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-area>Available after AirNow is configured</dd>
-              </div>
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Observed</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-observed>Available after AirNow is configured</dd>
-              </div>
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Why this AQI</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-basis>Available after AirNow is configured</dd>
-              </div>
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Severity band</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-band>Available after AirNow is configured</dd>
-              </div>
-              <div class="acadia-review-item">
-                <dt class="acadia-review-label">Health guidance</dt>
-                <dd class="acadia-review-value" data-airnow-snapshot-health>Available after AirNow is configured</dd>
-              </div>
-            </dl>
-          </div>
-        </section>
 
-        <section class="acadia-dashboard-layout" aria-label="Dashboard details">
-          <div class="acadia-dashboard-main">
-            <article class="acadia-surface acadia-panel-dense acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Disease & outbreaks</span>
-                  <h2 id="geography-title" class="acadia-title">Outbreak geography scan</h2>
-                </div>
-                <span class="acadia-text-muted pulse-section-meta" data-who-area-updated>Checking source</span>
-              </div>
-              <div class="acadia-status-list area-list" data-who-area-list aria-live="polite">
-                <p class="acadia-empty-state empty-copy">Checking affected areas from WHO notices.</p>
-              </div>
-            </article>
-
-            <article class="acadia-surface acadia-panel-dense acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Disease & outbreaks</span>
-                  <h2 class="acadia-title">WHO notice trend</h2>
-                </div>
-                <span class="acadia-text-muted pulse-section-meta" data-who-trend-updated>Checking source</span>
-              </div>
-              <p class="acadia-text-muted trend-summary" data-who-trend-summary>Checking WHO notice dates.</p>
-              <div class="acadia-muted-panel trend-grid is-empty" data-who-trend-grid role="list" aria-label="Recent WHO notice trend">
-                <p class="empty-copy">Checking WHO notice trend.</p>
-              </div>
-            </article>
-
-            <article class="acadia-surface acadia-panel-dense acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Disease & outbreaks</span>
-                  <h2 class="acadia-title">Recent WHO notices</h2>
-                </div>
-                <span class="acadia-text-muted pulse-section-meta" data-who-updated>Checking source</span>
-              </div>
-              <div class="acadia-object-list notice-list" data-who-list aria-live="polite">
-                <p class="acadia-empty-state empty-copy">Checking WHO Disease Outbreak News.</p>
-              </div>
-            </article>
-          </div>
-
-          <aside class="acadia-dashboard-aside" aria-label="Dashboard side panels">
-            <article class="acadia-muted-panel acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Pillars</span>
-                  <h2 class="acadia-title">Human health model</h2>
-                </div>
-              </div>
-              <div class="acadia-status-list">
-                <div class="acadia-status-row is-success">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
-                  <div><strong>Environment</strong><p class="acadia-text-muted">Air quality now; heat, smoke, water, and weather impacts later.</p></div>
-                </div>
-                <div class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i></span>
-                  <div><strong>Disease & Outbreaks</strong><p class="acadia-text-muted">WHO notices now; CDC and regional alerts later.</p></div>
-                </div>
-                <div class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-hospital acadia-icon" aria-hidden="true"></i></span>
-                  <div><strong>Healthcare</strong><p class="acadia-text-muted">Access, shortages, capacity, and wait-time signals.</p></div>
-                </div>
-                <div class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-person-walking acadia-icon" aria-hidden="true"></i></span>
-                  <div><strong>Well-Being</strong><p class="acadia-text-muted">Life expectancy, mental health, activity, and substance trends.</p></div>
-                </div>
-                <div class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-people-group acadia-icon" aria-hidden="true"></i></span>
-                  <div><strong>Population & Society</strong><p class="acadia-text-muted">Birth rates, aging, migration, and population change.</p></div>
-                </div>
-              </div>
-            </article>
-
+          <aside class="pulse-home-aside" aria-label="Dashboard context">
             <article class="acadia-muted-panel acadia-stack">
               <div class="acadia-section-header">
                 <div class="acadia-section-header-copy">
                   <span class="acadia-kicker">Scan frame</span>
-                  <h2 class="acadia-title">What this scan answers</h2>
+                  <h2 class="acadia-title">What this answers</h2>
                 </div>
               </div>
               <dl class="acadia-rule-list priority-list">
@@ -246,147 +224,13 @@
                 </div>
                 <div class="acadia-rule-row">
                   <dt>Place</dt>
-                  <dd class="acadia-text-muted">Which geography a source can actually support</dd>
+                  <dd class="acadia-text-muted">Which geography each source can actually support</dd>
                 </div>
                 <div class="acadia-rule-row">
                   <dt>Freshness</dt>
-                  <dd class="acadia-text-muted">When each official source last updated or was checked</dd>
+                  <dd class="acadia-text-muted">When official sources last updated or were checked</dd>
                 </div>
               </dl>
-            </article>
-
-            <article class="acadia-surface acadia-panel-dense acadia-stack">
-              <div class="acadia-section-header">
-                <div class="acadia-section-header-copy">
-                  <span class="acadia-kicker">Sources</span>
-                  <h2 class="acadia-title">Source coverage</h2>
-                </div>
-              </div>
-              <ul class="acadia-status-list source-list source-detail-list">
-                <li class="acadia-status-row">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-earth-americas acadia-icon" aria-hidden="true"></i></span>
-                  <div class="source-row-body">
-                    <div class="source-row-head">
-                      <span class="acadia-badge source-status" data-who-source-status>Loading</span>
-                      <strong class="source-name">WHO Disease Outbreak News</strong>
-                      <a class="source-link" href="https://www.who.int/emergencies/disease-outbreak-news" target="_blank" rel="noreferrer">
-                        View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
-                      </a>
-                    </div>
-                    <dl class="source-meta-grid">
-                      <div>
-                        <dt>Scope</dt>
-                        <dd>Global disease and outbreak events</dd>
-                      </div>
-                      <div>
-                        <dt>Freshness</dt>
-                        <dd data-who-source-freshness>Checking proxy</dd>
-                      </div>
-                      <div>
-                        <dt>Notice window</dt>
-                        <dd data-who-source-window>Checking recent notices</dd>
-                      </div>
-                      <div>
-                        <dt>Limit</dt>
-                        <dd>Official notices, not exhaustive surveillance</dd>
-                      </div>
-                    </dl>
-                  </div>
-                </li>
-                <li class="acadia-status-row is-warning">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
-                  <div class="source-row-body">
-                    <div class="source-row-head">
-                      <span class="acadia-badge acadia-badge-warning source-status" data-airnow-source-status>API key needed</span>
-                      <strong class="source-name">AirNow current observations</strong>
-                      <a class="source-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">
-                        View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
-                      </a>
-                    </div>
-                    <dl class="source-meta-grid">
-                      <div>
-                        <dt>Scope</dt>
-                        <dd data-airnow-source-scope>ZIP 10001, 25-mile radius</dd>
-                      </div>
-                      <div>
-                        <dt>Freshness</dt>
-                        <dd data-airnow-source-freshness>AirNow API key not configured</dd>
-                      </div>
-                      <div>
-                        <dt>Observed</dt>
-                        <dd data-airnow-source-observed>Available after AirNow is configured</dd>
-                      </div>
-                      <div>
-                        <dt>Reporting area</dt>
-                        <dd data-airnow-area-match>Available after AirNow is configured</dd>
-                      </div>
-                      <div>
-                        <dt>Why this AQI</dt>
-                        <dd data-airnow-aqi-basis>Available after AirNow is configured</dd>
-                      </div>
-                      <div>
-                        <dt>Severity band</dt>
-                        <dd data-airnow-severity-band>Available after AirNow is configured</dd>
-                      </div>
-                      <div>
-                        <dt>Health guidance</dt>
-                        <dd data-airnow-health-guidance>Available after AirNow is configured</dd>
-                      </div>
-                      <div>
-                        <dt>Limit</dt>
-                        <dd>Preliminary AQI observations when configured</dd>
-                      </div>
-                    </dl>
-                    <form class="airnow-form" data-airnow-form>
-                      <div class="airnow-form-grid">
-                        <div class="acadia-field">
-                          <label class="acadia-label" for="airnowZip">ZIP code</label>
-                          <input class="acadia-control form-control" id="airnowZip" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" aria-describedby="airnowFormHelp airnowZipFeedback" required>
-                          <div class="acadia-field-error invalid-feedback" id="airnowZipFeedback">Enter a 5-digit ZIP code.</div>
-                        </div>
-                        <div class="acadia-field">
-                          <label class="acadia-label" for="airnowDistance">Radius</label>
-                          <select class="acadia-control form-select" id="airnowDistance" name="distance">
-                            <option value="10">10 mi</option>
-                            <option value="25">25 mi</option>
-                            <option value="50">50 mi</option>
-                            <option value="100">100 mi</option>
-                            <option value="250">250 mi</option>
-                          </select>
-                        </div>
-                        <button class="acadia-button acadia-button-secondary airnow-submit" type="submit">
-                          <i class="fa-solid fa-location-dot acadia-icon" aria-hidden="true"></i>
-                          Update
-                        </button>
-                      </div>
-                      <p class="acadia-field-hint" id="airnowFormHelp" data-airnow-location-note aria-live="polite">Showing ZIP 10001, 25-mile radius.</p>
-                    </form>
-                  </div>
-                </li>
-                <li class="acadia-status-row is-warning">
-                  <span class="acadia-status-icon"><i class="fa-solid fa-layer-group acadia-icon" aria-hidden="true"></i></span>
-                  <div class="source-row-body">
-                    <div class="source-row-head">
-                      <span class="acadia-badge acadia-badge-warning source-status is-warning">Pending</span>
-                      <strong class="source-name">Additional human health sources</strong>
-                    </div>
-                    <dl class="source-meta-grid">
-                      <div>
-                        <dt>Scope</dt>
-                        <dd>Planned CDC, access, and well-being metrics</dd>
-                      </div>
-                      <div>
-                        <dt>Freshness</dt>
-                        <dd>Not connected yet</dd>
-                      </div>
-                      <div>
-                        <dt>Limit</dt>
-                        <dd>Not included in source readiness until connected</dd>
-                      </div>
-                    </dl>
-                  </div>
-                </li>
-              </ul>
             </article>
           </aside>
         </section>

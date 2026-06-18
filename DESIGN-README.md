@@ -76,12 +76,18 @@ Default to Acadia's system theme behavior and token names.
 
 Use Acadia's responsive page frame and dashboard density rules.
 
+- Pulse follows an Apollo-style information architecture: the home page is an at-a-glance dashboard that should fit the important current state into one compact scan, while richer evidence lives on dedicated pages.
+- Dashboard page: show product identity, source readiness, global refresh state, five-pillar quick stats, and compact cards linking to Environment, Disease, Sources, and Model. Avoid full notice lists, long source metadata, and large chart panels on the dashboard.
+- Environment detail page: own AirNow location controls, AQI basis, severity band, health guidance, and source-specific metadata.
+- Disease detail page: own WHO affected-area rows, notice trend, recent notice list, and WHO source context.
+- Sources detail page: own source readiness, freshness, limits, API-key/route states, and future source coverage.
+- Model detail page: own the five-pillar framework and future source roadmap.
 - Ultra desktop and desktop: `128px` page margin.
 - Small desktop: `64px` page margin.
 - Tablet: `32px` page margin.
 - Phone: `16px` page margin.
 - Dashboard and source panels use Acadia dense section padding, `24px` desktop and `16px` mobile.
-- Use `.acadia-shell`, `.acadia-stack`, `.acadia-grid`, and `.acadia-dashboard-layout` before introducing local layout rules.
+- Use `.acadia-shell`, `.acadia-stack`, `.acadia-grid`, Acadia page headers, and Acadia surface/card primitives before introducing local layout rules.
 
 ## Spacing Scale
 
@@ -124,7 +130,8 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 
 - Dashboard surfaces use a restrained `1px` border with a soft shadow to separate content from the page background without creating heavy elevation.
 - The hero summary surface may use a narrow accent rail when it helps establish the primary page hierarchy.
-- Metric cards use restrained state rails and matching icon tones so users can distinguish live, attention-needed, and pending sources without reading every note. Use Pulse accent for live source cards, warning tone for unavailable or unconfigured live-source cards, and muted treatment for planned sources that are not connected yet.
+- Metric cards keep neutral Acadia card borders; use matching icon tones, badges, and copy so users can distinguish live, attention-needed, and pending sources without reading every note. Use Pulse accent for live source status, warning tone for unavailable or unconfigured live sources, and muted treatment for planned sources that are not connected yet.
+- Dashboard summary cards should stay compact and navigational. Use a short state summary plus a compact detail link instead of duplicating full detail-page evidence.
 - Dense evidence rows, such as outbreak geography, WHO notices, and source coverage, should use low-contrast row panels with `8px` radius, restrained borders, and short hover/focus transitions so metadata feels grouped without becoming decorative.
 - Long official notice summaries may be visually clamped in repeated rows to preserve scan density while keeping source links prominent.
 - Compact chart visuals, such as the WHO notice trend, should sit in low-contrast chart wells with `8px` radius, a restrained border, and mobile-specific height reduction so the data view feels intentional without overpowering surrounding evidence rows.

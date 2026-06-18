@@ -94,6 +94,11 @@ const setStatusBadge = (label, isWarning = false) => {
   badge.classList.toggle("is-warning", isWarning);
 };
 
+const getPulsePage = () => {
+  if (typeof document === "undefined") return "dashboard";
+  return document.body?.dataset?.pulsePage || "dashboard";
+};
+
 const METRIC_CARD_STATE_CLASSES = ["is-live", "is-warning", "is-pending"];
 
 const setMetricCardState = (metricKey, state = "pending") => {
@@ -568,26 +573,28 @@ const formatWhoTrendSummary = (trend = []) => {
 
 const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   const grid = document.querySelector("[data-who-trend-grid]");
+  const summaryText = isLive && trend.length
+    ? formatWhoTrendSummary(trend)
+    : isLive
+      ? "No dated WHO notices were available for the trend."
+      : "WHO notice trend is unavailable until live notices load.";
+
+  setText("[data-who-trend-summary]", summaryText);
   if (!grid) return;
 
   grid.innerHTML = "";
 
   if (!isLive || !trend.length) {
     grid.classList?.add("is-empty");
-    const summary = isLive
-      ? "No dated WHO notices were available for the trend."
-      : "WHO notice trend is unavailable until live notices load.";
     const empty = document.createElement("p");
     empty.className = "empty-copy";
-    empty.textContent = summary;
+    empty.textContent = summaryText;
     grid.append(empty);
-    setText("[data-who-trend-summary]", summary);
     setText("[data-who-trend-updated]", isLive ? "No dated notices" : "Source unavailable");
     return;
   }
 
   grid.classList?.remove("is-empty");
-  setText("[data-who-trend-summary]", formatWhoTrendSummary(trend));
   const maxCount = Math.max(...trend.map((item) => Number(item.count) || 0), 1);
 
   trend.forEach((item) => {
@@ -888,25 +895,33 @@ const setAirNowFormState = (isRefreshing) => {
 };
 
 const loadDashboard = async () => {
+  const loadersByPage = {
+    dashboard: [loadWhoNotices, loadAirQuality],
+    disease: [loadWhoNotices],
+    environment: [loadAirQuality],
+    model: [loadWhoNotices, loadAirQuality],
+    sources: [loadWhoNotices, loadAirQuality]
+  };
+  const pageType = getPulsePage();
+  const loaders = loadersByPage[pageType] || loadersByPage.dashboard;
+
   setRefreshState(true);
   setAirNowFormState(true);
   updateSourceReadiness(0, 0);
-  setStatusBadge("Checking sources");
-  setText("[data-dashboard-status]", "Refreshing sources");
+  setStatusBadge(loaders.length === 1 ? "Checking source" : "Checking sources");
+  setText("[data-dashboard-status]", loaders.length === 1 ? "Refreshing source" : "Refreshing sources");
 
   try {
-    const results = await Promise.allSettled([
-      loadWhoNotices(),
-      loadAirQuality()
-    ]);
+    const results = await Promise.allSettled(loaders.map((loader) => loader()));
     const fallbackCount = results.filter((result) => result.status === "rejected" || !result.value).length;
     const liveCount = results.length - fallbackCount;
     const isPartial = liveCount > 0 && fallbackCount > 0;
     const hasNoLiveSources = liveCount === 0;
+    const sourceLabel = results.length === 1 ? "source" : "sources";
 
     updateSourceReadiness(liveCount, results.length);
-    setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : "Sources refreshed");
-    setStatusBadge(liveCount ? `${liveCount}/${results.length} live sources` : "No live sources", isPartial || hasNoLiveSources);
+    setText("[data-dashboard-status]", fallbackCount ? "Some sources need attention" : `${sourceLabel[0].toUpperCase()}${sourceLabel.slice(1)} refreshed`);
+    setStatusBadge(liveCount ? `${liveCount}/${results.length} live ${sourceLabel}` : `No live ${sourceLabel}`, isPartial || hasNoLiveSources);
     setText("[data-dashboard-checked]", formatLastChecked());
   } finally {
     setRefreshState(false);

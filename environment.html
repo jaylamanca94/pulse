@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en" data-acadia-theme="system">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Environment | Pulse</title>
+    <link href="assets/favicon.svg" rel="icon" type="image/svg+xml">
+    <link href="site.webmanifest" rel="manifest">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="acadia.css?v=20260617" rel="stylesheet">
+    <link href="styles.css?v=20260617-multipage" rel="stylesheet">
+    <script src="config.js" defer></script>
+    <script src="app.js?v=20260617-multipage" defer></script>
+  </head>
+  <body data-pulse-page="environment">
+    <div class="acadia-app pulse-app">
+      <header class="acadia-chrome">
+        <div class="acadia-chrome-inner pulse-chrome-inner">
+          <a class="acadia-brand" href="./index.html" aria-label="Pulse home">
+            <span class="acadia-mark"><i class="fa-solid fa-heart-pulse acadia-icon" aria-hidden="true"></i></span>
+            <span>Pulse</span>
+          </a>
+          <nav class="acadia-nav pulse-primary-nav" aria-label="Pulse pages">
+            <a class="acadia-nav-item" href="./index.html">Dashboard</a>
+            <a class="acadia-nav-item" href="./environment.html" aria-current="page">Environment</a>
+            <a class="acadia-nav-item" href="./disease.html">Disease</a>
+            <a class="acadia-nav-item" href="./sources.html">Sources</a>
+            <a class="acadia-nav-item" href="./model.html">Model</a>
+          </nav>
+          <div class="acadia-page-actions pulse-header-actions">
+            <span class="acadia-badge status-badge" data-status-badge>Loading source</span>
+            <button class="acadia-button acadia-button-secondary" id="refreshButton" type="button" aria-label="Refresh environmental source data">
+              <i class="fa-solid fa-rotate acadia-icon" aria-hidden="true"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="acadia-shell pulse-shell">
+        <section class="acadia-surface acadia-panel pulse-hero" aria-labelledby="environment-title">
+          <header class="acadia-page-header">
+            <div class="acadia-page-header-copy">
+              <span class="acadia-kicker">Environment</span>
+              <h1 id="environment-title" class="acadia-display">Air quality</h1>
+              <p class="acadia-text-muted pulse-lead">Live AirNow observations, selected geography, severity band, and health guidance for the current environmental signal.</p>
+            </div>
+            <div class="pulse-readiness" aria-label="Environment source readiness">
+              <span class="acadia-kicker">Source readiness</span>
+              <div class="pulse-readiness-value">
+                <span data-source-readiness-value>--</span>
+                <span class="acadia-badge" data-source-readiness-label>checking</span>
+              </div>
+              <span class="acadia-text-muted" data-dashboard-checked>Not checked yet</span>
+            </div>
+          </header>
+        </section>
+
+        <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="local-aqi-title">
+          <div class="acadia-section-header">
+            <div class="acadia-section-header-copy">
+              <span class="acadia-kicker">Local environment</span>
+              <h2 id="local-aqi-title" class="acadia-title">Environmental snapshot</h2>
+            </div>
+            <span class="acadia-badge acadia-badge-warning source-status is-warning" data-airnow-snapshot-status>API key needed</span>
+          </div>
+          <div class="pulse-snapshot">
+            <div class="acadia-metric pulse-snapshot-primary">
+              <span class="acadia-text-muted pulse-metric-label">Current AQI</span>
+              <strong class="acadia-metric-value" data-airnow-snapshot-aqi>--</strong>
+              <span class="acadia-text-muted" data-airnow-snapshot-category>AirNow API key not configured</span>
+            </div>
+            <dl class="pulse-detail-grid">
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Selected scope</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-scope>ZIP 10001, 25-mile radius</dd>
+              </div>
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Reporting area</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-area>Available after AirNow is configured</dd>
+              </div>
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Observed</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-observed>Available after AirNow is configured</dd>
+              </div>
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Why this AQI</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-basis>Available after AirNow is configured</dd>
+              </div>
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Severity band</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-band>Available after AirNow is configured</dd>
+              </div>
+              <div class="acadia-review-item">
+                <dt class="acadia-review-label">Health guidance</dt>
+                <dd class="acadia-review-value" data-airnow-snapshot-health>Available after AirNow is configured</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="acadia-surface acadia-panel-dense acadia-stack" aria-labelledby="airnow-source-title">
+          <div class="acadia-section-header">
+            <div class="acadia-section-header-copy">
+              <span class="acadia-kicker">Source controls</span>
+              <h2 id="airnow-source-title" class="acadia-title">AirNow source detail</h2>
+            </div>
+          </div>
+          <ul class="acadia-status-list source-list source-detail-list">
+            <li class="acadia-status-row is-warning">
+              <span class="acadia-status-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
+              <div class="source-row-body">
+                <div class="source-row-head">
+                  <span class="acadia-badge acadia-badge-warning source-status" data-airnow-source-status>API key needed</span>
+                  <strong class="source-name">AirNow current observations</strong>
+                  <a class="source-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">
+                    View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
+                  </a>
+                </div>
+                <dl class="source-meta-grid">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd data-airnow-source-scope>ZIP 10001, 25-mile radius</dd>
+                  </div>
+                  <div>
+                    <dt>Freshness</dt>
+                    <dd data-airnow-source-freshness>AirNow API key not configured</dd>
+                  </div>
+                  <div>
+                    <dt>Observed</dt>
+                    <dd data-airnow-source-observed>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Reporting area</dt>
+                    <dd data-airnow-area-match>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Why this AQI</dt>
+                    <dd data-airnow-aqi-basis>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Severity band</dt>
+                    <dd data-airnow-severity-band>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Health guidance</dt>
+                    <dd data-airnow-health-guidance>Available after AirNow is configured</dd>
+                  </div>
+                  <div>
+                    <dt>Limit</dt>
+                    <dd>Preliminary AQI observations when configured</dd>
+                  </div>
+                </dl>
+                <form class="airnow-form" data-airnow-form>
+                  <div class="airnow-form-grid">
+                    <div class="acadia-field">
+                      <label class="acadia-label" for="airnowZip">ZIP code</label>
+                      <input class="acadia-control form-control" id="airnowZip" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" aria-describedby="airnowFormHelp airnowZipFeedback" required>
+                      <div class="acadia-field-error invalid-feedback" id="airnowZipFeedback">Enter a 5-digit ZIP code.</div>
+                    </div>
+                    <div class="acadia-field">
+                      <label class="acadia-label" for="airnowDistance">Radius</label>
+                      <select class="acadia-control form-select" id="airnowDistance" name="distance">
+                        <option value="10">10 mi</option>
+                        <option value="25">25 mi</option>
+                        <option value="50">50 mi</option>
+                        <option value="100">100 mi</option>
+                        <option value="250">250 mi</option>
+                      </select>
+                    </div>
+                    <button class="acadia-button acadia-button-secondary airnow-submit" type="submit">
+                      <i class="fa-solid fa-location-dot acadia-icon" aria-hidden="true"></i>
+                      Update
+                    </button>
+                  </div>
+                  <p class="acadia-field-hint" id="airnowFormHelp" data-airnow-location-note aria-live="polite">Showing ZIP 10001, 25-mile radius.</p>
+                </form>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
