@@ -42,8 +42,14 @@
           <div class="pulse-brief-main">
             <div class="pulse-brief-title-row">
               <div>
-                <span class="acadia-kicker" data-community-location>Selected community</span>
-                <h1 id="brief-title" class="acadia-display">Community Health</h1>
+                <span class="acadia-kicker">Community Health Dashboard</span>
+                <h1 id="brief-title" class="pulse-location-title">
+                  <a class="pulse-location-control" href="./environment.html#airnow-controls" aria-label="Change dashboard community">
+                    <i class="fa-solid fa-location-dot acadia-icon" aria-hidden="true"></i>
+                    <span data-community-location>Selected community</span>
+                    <i class="fa-solid fa-chevron-down acadia-icon pulse-location-chevron" aria-hidden="true"></i>
+                  </a>
+                </h1>
               </div>
               <strong class="pulse-brief-state" data-community-brief-status>Checking</strong>
             </div>
@@ -55,7 +61,7 @@
           <div class="pulse-signal-panel">
             <div class="acadia-section-header">
               <div class="acadia-section-header-copy">
-                <span class="acadia-kicker">New York City Region</span>
+                <span class="acadia-kicker" data-community-location>Selected community</span>
                 <h2 id="overview-title" class="acadia-title">Five community signals</h2>
               </div>
               <div class="pulse-status-copy">

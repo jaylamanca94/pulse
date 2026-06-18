@@ -152,9 +152,51 @@ a {
 .pulse-brief-title-row {
   align-items: end;
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   justify-content: space-between;
   min-width: 0;
+}
+
+.pulse-location-title {
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  line-height: 1;
+  margin: 0;
+}
+
+.pulse-location-control {
+  align-items: center;
+  color: var(--acadia-color-text);
+  display: inline-flex;
+  gap: 0.625rem;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.pulse-location-control:hover {
+  color: var(--acadia-color-primary-ink);
+}
+
+.pulse-location-control:focus-visible {
+  border-radius: var(--acadia-radius-sm);
+  box-shadow: var(--acadia-focus-ring);
+  outline: 0;
+}
+
+.pulse-location-control [data-community-location] {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pulse-location-control .acadia-icon {
+  color: var(--acadia-color-primary);
+  flex: 0 0 auto;
+  font-size: 0.5em;
+}
+
+.pulse-location-control .pulse-location-chevron {
+  color: var(--acadia-color-text-muted);
+  font-size: 0.32em;
+  transform: translateY(0.08em);
 }
 
 .pulse-brief-state-row {
@@ -951,6 +993,14 @@ a {
     align-items: start;
     display: grid;
     gap: 0.5rem;
+  }
+
+  .pulse-location-title {
+    font-size: 2.5rem;
+  }
+
+  .pulse-location-control {
+    align-items: flex-start;
   }
 
   .pulse-readiness-compact {
