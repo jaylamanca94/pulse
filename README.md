@@ -2,7 +2,7 @@
 
 Pulse is a live, source-backed dashboard for understanding how people, communities, and society are doing across environment, disease, healthcare, well-being, and population signals.
 
-Core question: How are people doing?
+Core question: Are communities healthy?
 
 ## Tech Stack
 
@@ -18,9 +18,11 @@ Core question: How are people doing?
 
 - WHO Disease Outbreak News, live when `/api/who` is available
 - AirNow current observations, live when `/api/airnow` has `AIRNOW_API_KEY`
+- HRSA Health Professional Shortage Areas, selected for healthcare access and not connected yet
+- CDC PLACES local health measures, selected for well-being and not connected yet
+- U.S. Census Population Estimates Program, selected for population trends and not connected yet
 - CDC National Notifiable Diseases Surveillance System data, not connected yet
 - CDC National Outbreak Reporting System data, not connected yet
-- Healthcare access and community well-being datasets, not connected yet
 
 ## Configuration
 
@@ -48,7 +50,7 @@ When live AirNow observations are available, Pulse uses restrained official AQI 
 It also translates the returned AQI category into concise health guidance in the local environmental snapshot and source coverage panel.
 The local environmental snapshot summarizes the selected ZIP/radius, returned reporting area, observation time, why the AQI was selected, severity band, and health guidance before users inspect the full source metadata.
 
-The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist.
+The hero readiness score is computed from current WHO and AirNow source states, such as `2/2 live`, `1/2 partial`, or `0/2 unavailable`, so the prototype does not imply a synthetic public-health risk score before enough live inputs exist. HRSA, CDC PLACES, and Census are named as first source targets for the remaining pillars, but they do not count toward readiness until connected.
 
 ## Local Setup
 

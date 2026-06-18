@@ -684,6 +684,10 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .pulse-app .acadia-section-header {
+    grid-template-columns: 1fr;
+  }
+
   .pulse-status-copy {
     align-items: flex-start;
     justify-items: start;

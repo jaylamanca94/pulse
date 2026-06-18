@@ -2,8 +2,8 @@
 
 ## Goals
 
-- Help users see the health of the world.
-- Give people a clear place to understand how people, communities, and society are doing when environmental, health, care, well-being, or population signals are changing.
+- Help users see whether communities are healthy.
+- Give people a clear place to understand how people, communities, and society are doing when environmental, disease, care, well-being, or population signals are changing.
 - Bring the clarity of COVID-era case trackers, maps, county/state/country views, and update timestamps to a broader set of human health and society signals.
 - Turn live health, environmental, healthcare, well-being, and population data into clear situational awareness.
 - Start with official public sources for air quality, disease activity, outbreak reports, healthcare access, community well-being, and population trends.
@@ -23,7 +23,7 @@ Pulse must stay focused on its core job: clear situational awareness for source-
 
 Pulse is a live, source-backed dashboard for understanding how people and society are doing. It is not only an outbreak tracker, a daily wellness app, or a CDC-style disease dashboard. Users should be able to open it during an environmental, public health, healthcare access, well-being, or population event and quickly answer:
 
-- How are people doing?
+- Are communities healthy?
 - What is changing?
 - Where is it happening?
 - How severe or widespread is it?
@@ -35,11 +35,11 @@ Pulse should lead with five pillars:
 
 1. Environment: air quality first, with future heat, wildfire smoke, water quality, and severe-weather impact signals.
 2. Disease & Outbreaks: WHO notices first, with future CDC notices, emerging diseases, and regional alerts.
-3. Healthcare: future provider shortages, hospital capacity, wait times, and insurance trend signals.
-4. Well-Being: future life expectancy, mental health, obesity, physical activity, and substance-use indicators.
-5. Population & Society: future birth rates, population growth, aging, migration, and demographic change.
+3. Healthcare: HRSA shortage areas first, with future hospital capacity, wait times, and insurance trend signals.
+4. Well-Being: CDC PLACES first for physical activity, obesity, mental health, and sleep, with future life expectancy and substance-use indicators.
+5. Population & Society: Census population estimates first for growth, aging, births, deaths, and migration.
 
-Disease and outbreaks should remain important, but they should not dominate the first impression. The dashboard should read as `How are people doing?`, not `Pandemic tracker`.
+Disease and outbreaks should remain important, but they should not dominate the first impression. The dashboard should read as `Are communities healthy?`, not `Pandemic tracker`.
 
 ## Scope
 
@@ -48,7 +48,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Features
 
 - Human health and society signal summary
-- Metric cards ordered around Environment, Community Well-Being, Healthcare, Disease Activity, Population Trends, and Source Status
+- Metric cards ordered around Environment, Disease Activity, Healthcare Access, Community Well-Being, Population Trends, and Source Status
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
@@ -75,6 +75,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Distinct no-data source state when a configured source responds without nearby observations
 - WHO-derived signal trend snapshot
 - WHO notice trend plain-language summary that mirrors the visual bar chart and names the latest notice represented in the trend
+- Named first source target for each pillar: AirNow, WHO, HRSA HPSA, CDC PLACES, and Census PEP
 - Priority list for first public data areas
 - Pending-source labels so the prototype does not imply live tracking where source wiring is incomplete
 - Responsive desktop, tablet, and mobile layout
@@ -84,8 +85,9 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 - Use Acadia conventions for layout, surfaces, controls, metrics, rows, forms, states, icons, focus, motion, density, and responsive behavior before creating any custom Pulse UI.
 - Lead the dashboard with the five-pillar human-health model, not disease-first source ordering.
+- Frame Pulse around community health rather than a Mercury-style indicator board.
 - Keep disease and outbreak surfaces clearly labeled as one pillar of Pulse rather than the product's full identity.
-- Use pending states until real data sources are selected.
+- Use pending states until selected data sources are wired.
 - Use graceful unavailable or no-data states when public APIs are unavailable.
 - Keep API-key-dependent sources in a clear configured/unconfigured state.
 - Proxy WHO Disease Outbreak News through `/api/who` for normalization, timeout handling, and caching.
@@ -120,6 +122,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
 - Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
+- Name the first source target for each unconnected pillar so placeholders feel intentional rather than empty.
 - Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
 - Pair WHO trend visuals with a concise text summary of notice count, publication-day coverage, peak day, and the latest notice title so the chart is understandable without relying on bar height.
 
@@ -127,6 +130,9 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 - Add live AirNow API key in deployment environment variables.
 - Deploy to Vercel.
+- Wire HRSA Health Professional Shortage Areas as the first healthcare access source.
+- Wire CDC PLACES local health measures as the first well-being source.
+- Wire U.S. Census Population Estimates Program as the first population source.
 - Replace the legacy AirNow ZIP/lat-long observation flow before AirNow's fall 2026 retirement window by moving to the newer reporting-area-centered API model. The target flow should resolve a user-entered ZIP code or browser geolocation to an AirNow reporting area, then store and display the reporting area name, state, AQI, category, and dominant pollutant as the source for Pulse AQI cards.
 - Evaluate AirNow historical observations and forecasts for a future `Air Quality Trends` card with today AQI, 7-day average, 30-day average, best day this month, and worst day this month.
 - Expand outbreak-focused geography views from the WHO-derived scan into richer country, state, county, or local views as source quality permits.
@@ -138,7 +144,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 
 ## Known Limitations
 
-- WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; planned CDC, access, well-being, and population sources are still pending.
+- WHO Disease Outbreak News is live when the serverless route is available; AirNow requires `AIRNOW_API_KEY`; HRSA, CDC PLACES, and Census source targets are selected but still pending.
 - The current AirNow integration still uses the legacy ZIP-code current-observation web service. AirNow's public docs list legacy ZIP and latitude/longitude web services for retirement in fall 2026, so Pulse should migrate to reporting-area-based endpoints before that window.
 - No authentication or database exists yet.
 - Charts are simple CSS/HTML indicators, not a charting library.
