@@ -51,6 +51,15 @@ test("Dashboard keeps a visible source freshness timestamp", () => {
   assert.match(html, /Not checked yet/);
 });
 
+test("Mobile dock keeps safe-area positioning and visible keyboard focus", () => {
+  const css = fs.readFileSync("styles.css", "utf8");
+
+  assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock\s*\{[^}]*bottom:\s*calc\(var\(--acadia-mobile-tabbar-bottom,\s*1\.25rem\) \+ env\(safe-area-inset-bottom\)\)/s);
+  assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock\s*\{[^}]*top:\s*auto/s);
+  assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock \.acadia-nav-item:focus-visible\s*\{[^}]*var\(--acadia-focus-ring\)/s);
+  assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock \.acadia-nav-item:focus-visible\s*\{[^}]*outline:\s*0/s);
+});
+
 test("AirNow reading normalization selects the highest AQI observation", () => {
   const result = runAppHelper(`(() => {
     const reading = normalizeAirNowReading([

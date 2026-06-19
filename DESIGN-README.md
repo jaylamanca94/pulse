@@ -88,7 +88,7 @@ Use Acadia's responsive page frame and dashboard density rules.
 - Phone: `16px` page margin.
 - Dashboard and source panels use Acadia dense section padding, `24px` desktop and `16px` mobile.
 - Use `.acadia-shell`, `.acadia-stack`, `.acadia-grid`, Acadia page headers, and Acadia surface/card primitives before introducing local layout rules.
-- Header navigation uses Acadia's no-capsule treatment on desktop: transparent nav group, 8px active/hover targets, visible focus, and `aria-current="page"` on the active page. On phone widths, those same destinations use Acadia's floating glass dock with icon-first tabs.
+- Header navigation uses Acadia's no-capsule treatment on desktop: transparent nav group, 8px active/hover targets, visible focus, and `aria-current="page"` on the active page. On phone widths, those same destinations use Acadia's safe-area-aware floating glass dock with icon-first tabs and a visible keyboard focus ring.
 
 ## Spacing Scale
 
