@@ -8,7 +8,7 @@
     <link href="site.webmanifest" rel="manifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="acadia.css?v=20260617" rel="stylesheet">
-    <link href="styles.css?v=20260620-visual" rel="stylesheet">
+    <link href="styles.css?v=20260620-dock-placement" rel="stylesheet">
     <script src="config.js" defer></script>
     <script src="app.js?v=20260620-visual" defer></script>
   </head>
@@ -20,7 +20,7 @@
             <span class="acadia-mark"><i class="fa-solid fa-heart-pulse acadia-icon" aria-hidden="true"></i></span>
             <span>Pulse</span>
           </a>
-          <nav class="acadia-nav pulse-primary-nav acadia-mobile-dock" aria-label="Pulse pages">
+          <nav class="acadia-nav pulse-primary-nav" aria-label="Pulse pages">
             <a class="acadia-nav-item" href="./index.html"><i class="fa-solid fa-heart-pulse acadia-icon" aria-hidden="true"></i><span>Dashboard</span></a>
             <a class="acadia-nav-item" href="./environment.html" aria-current="page"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
             <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
@@ -36,6 +36,13 @@
           </div>
         </div>
       </header>
+      <nav class="acadia-nav pulse-primary-nav acadia-mobile-dock" aria-label="Pulse pages">
+        <a class="acadia-nav-item" href="./index.html"><i class="fa-solid fa-heart-pulse acadia-icon" aria-hidden="true"></i><span>Dashboard</span></a>
+        <a class="acadia-nav-item" href="./environment.html" aria-current="page"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
+        <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
+        <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
+        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+      </nav>
 
       <main class="acadia-shell pulse-shell">
         <section class="acadia-surface acadia-panel pulse-hero" aria-labelledby="environment-title">

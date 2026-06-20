@@ -91,6 +91,10 @@ a {
   display: none;
 }
 
+.pulse-primary-nav.acadia-mobile-dock {
+  display: none;
+}
+
 .pulse-primary-nav::-webkit-scrollbar {
   display: none;
 }
@@ -1020,6 +1024,10 @@ a {
 }
 
 @media (max-width: 767.98px) {
+  .acadia-chrome .pulse-primary-nav:not(.acadia-mobile-dock) {
+    display: none;
+  }
+
   .pulse-primary-nav.acadia-mobile-dock {
     -webkit-backdrop-filter: blur(1.125rem) saturate(145%);
     align-items: center;
