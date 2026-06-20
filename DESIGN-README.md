@@ -132,8 +132,10 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 - Dashboard surfaces use a restrained `1px` border with a soft shadow to separate content from the page background without creating heavy elevation.
 - The hero summary surface may use a narrow accent rail when it helps establish the primary page hierarchy.
 - Metric cards keep neutral Acadia card borders; use matching icon tones, badges, and copy so users can distinguish live, attention-needed, and pending sources without reading every note. Use Pulse accent for live source status, warning tone for unavailable or unconfigured live sources, and muted treatment for planned sources that are not connected yet.
+- Top-level signal cards use a quiet 3px state rail and a matching icon-chip background/border so live, attention-needed, and pending states read as intentional without becoming separate alert cards.
 - Dashboard summary cards should stay compact and navigational. Use a short state summary plus a compact detail link instead of duplicating full detail-page evidence.
 - Dense evidence rows, such as outbreak geography, WHO notices, and source coverage, should use low-contrast row panels with `8px` radius, restrained borders, and short hover/focus transitions so metadata feels grouped without becoming decorative.
+- Dashboard watch and movement lists should use compact raised evidence-row panels, not plain divider lists, when the rows carry operational status or source-backed interpretation.
 - Long official notice summaries may be visually clamped in repeated rows to preserve scan density while keeping source links prominent.
 - Compact chart visuals, such as the WHO notice trend, should sit in low-contrast chart wells with `8px` radius, a restrained border, and mobile-specific height reduction so the data view feels intentional without overpowering surrounding evidence rows.
 - Metadata groups should use dividers, spacing, and compact labels before adding nested card treatments.

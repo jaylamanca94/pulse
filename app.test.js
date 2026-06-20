@@ -39,8 +39,8 @@ test("HTML pages request the current shared app assets", () => {
   htmlPages.forEach((page) => {
     const html = fs.readFileSync(page, "utf8");
 
-    assert.match(html, /styles\.css\?v=20260618-signals/);
-    assert.match(html, /app\.js\?v=20260618-signals/);
+    assert.match(html, /styles\.css\?v=20260620-visual/);
+    assert.match(html, /app\.js\?v=20260620-visual/);
   });
 });
 
@@ -58,6 +58,16 @@ test("Mobile dock keeps safe-area positioning and visible keyboard focus", () =>
   assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock\s*\{[^}]*top:\s*auto/s);
   assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock \.acadia-nav-item:focus-visible\s*\{[^}]*var\(--acadia-focus-ring\)/s);
   assert.match(css, /\.pulse-primary-nav\.acadia-mobile-dock \.acadia-nav-item:focus-visible\s*\{[^}]*outline:\s*0/s);
+});
+
+test("Dashboard signal cards keep state rails and evidence row surfaces", () => {
+  const css = fs.readFileSync("styles.css", "utf8");
+
+  assert.match(css, /\.pulse-signal-card::before\s*\{[^}]*height:\s*0\.1875rem/s);
+  assert.match(css, /\.pulse-signal-card\.is-warning::before\s*\{[^}]*var\(--acadia-color-warning\)/s);
+  assert.match(css, /\.pulse-signal-card\.is-live \.pulse-card-icon\s*\{[^}]*var\(--acadia-color-success-bg\)/s);
+  assert.match(css, /\.pulse-watch-list li\s*\{[^}]*border-radius:\s*var\(--acadia-radius-md\)/s);
+  assert.match(css, /\.pulse-watch-list li\s*\{[^}]*box-shadow:\s*var\(--acadia-shadow-control\)/s);
 });
 
 test("AirNow reading normalization selects the highest AQI observation", () => {
