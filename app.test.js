@@ -39,7 +39,8 @@ test("HTML pages request the current shared app assets", () => {
   htmlPages.forEach((page) => {
     const html = fs.readFileSync(page, "utf8");
 
-    assert.match(html, /styles\.css\?v=20260620-dock-placement/);
+    assert.match(html, /theme\.js\?v=20260621/);
+    assert.match(html, /styles\.css\?v=20260621-visual/);
     assert.match(html, /app\.js\?v=20260620-visual/);
   });
 });

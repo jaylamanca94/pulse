@@ -21,7 +21,8 @@ test("mobile dock is outside the sticky header on every page", () => {
   for (const file of pageFiles) {
     const html = readPage(file);
 
-    assert.match(html, /styles\.css\?v=20260620-dock-placement/);
+    assert.match(html, /theme\.js\?v=20260621/);
+    assert.match(html, /styles\.css\?v=20260621-visual/);
     assert.match(html, /<nav class="acadia-nav pulse-primary-nav" aria-label="Pulse pages">/);
     assert.match(html, /<\/header>\s*<nav class="acadia-nav pulse-primary-nav acadia-mobile-dock" aria-label="Pulse pages">/);
   }
@@ -40,5 +41,20 @@ test("mobile dock stays viewport-bottom anchored", () => {
   assert.match(
     styles,
     /@media \(max-width: 767\.98px\)[\s\S]*\.pulse-shell\s*{[^}]*padding-bottom: calc\(6\.5rem \+ env\(safe-area-inset-bottom\)\);/s,
+  );
+});
+
+test("header utilities preserve status space on small phones", () => {
+  assert.match(
+    styles,
+    /@media \(max-width: 767\.98px\)[\s\S]*\.pulse-header-actions\s*{[^}]*grid-template-columns: 2\.5rem minmax\(0, 1fr\) auto;/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 24\.3125rem\)[\s\S]*\.pulse-header-actions #refreshButton\s*{[^}]*width: 2\.5rem;/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 24\.3125rem\)[\s\S]*\.pulse-refresh-label\s*{[^}]*display: none;/s,
   );
 });

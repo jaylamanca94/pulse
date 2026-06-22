@@ -116,6 +116,7 @@ npm test
 - `acadia.css` - vendored Acadia CSS primitives used by the Pulse dashboard
 - `styles.css` - thin Pulse adapter for product identity, AQI tones, and source-specific data views
 - `app.js` - frontend data loading and rendering
+- `theme.js` - Acadia-aligned light/dark theme preference utility used by every page
 - `assets/favicon.svg` - vector heart-pulse favicon/app icon with theme-aware gradient background
 - `site.webmanifest` - browser app manifest pointing to the SVG icon
 - `config.js` - optional static prototype API configuration

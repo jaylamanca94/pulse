@@ -63,7 +63,7 @@ Pulse vendors the current Acadia CSS primitives into `acadia.css` for deployment
 
 ## Color
 
-Default to Acadia's system theme behavior and token names.
+Default to Acadia's system theme behavior and token names. Use the Acadia light/dark icon toggle as a header utility, separate from source refresh and status controls.
 
 - Page background: `--acadia-color-page`
 - Content surface: `--acadia-color-surface`
@@ -89,6 +89,7 @@ Use Acadia's responsive page frame and dashboard density rules.
 - Dashboard and source panels use Acadia dense section padding, `24px` desktop and `16px` mobile.
 - Use `.acadia-shell`, `.acadia-stack`, `.acadia-grid`, Acadia page headers, and Acadia surface/card primitives before introducing local layout rules.
 - Header navigation uses Acadia's no-capsule treatment on desktop: transparent nav group, 8px active/hover targets, visible focus, and `aria-current="page"` on the active page. On phone widths, those same destinations use Acadia's safe-area-aware floating glass dock with icon-first tabs and a visible keyboard focus ring.
+- Header utilities keep the theme toggle as a 40px icon action before source status and refresh controls. On small phones, the refresh control may collapse to its icon-only form with an `aria-label` so the status badge keeps enough room to remain legible.
 
 ## Spacing Scale
 

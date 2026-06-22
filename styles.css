@@ -100,7 +100,42 @@ a {
 }
 
 .pulse-header-actions {
+  align-items: center;
+  gap: 0.5rem;
   margin-left: auto;
+}
+
+.pulse-header-actions .status-badge {
+  align-items: center;
+  display: inline-flex;
+  min-height: 2.5rem;
+}
+
+.pulse-header-actions .acadia-theme-toggle {
+  border: 1px solid transparent;
+}
+
+.pulse-header-actions .acadia-theme-toggle:hover,
+.pulse-header-actions .acadia-theme-toggle:focus-visible {
+  background: var(--acadia-color-surface-muted);
+  border-color: var(--acadia-color-border);
+  box-shadow: var(--acadia-shadow-control);
+  color: var(--acadia-color-text);
+}
+
+.pulse-header-actions .acadia-theme-toggle.is-dark {
+  color: var(--acadia-color-brand-ink);
+}
+
+.pulse-header-actions .acadia-theme-toggle .acadia-icon {
+  display: inline-flex;
+  font-size: 1.25rem;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.pulse-refresh-label {
+  display: inline-flex;
 }
 
 .pulse-shell {
@@ -1097,9 +1132,23 @@ a {
   }
 
   .pulse-header-actions {
-    justify-content: flex-start;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    justify-content: stretch;
     margin-left: 0;
     width: 100%;
+  }
+
+  .pulse-header-actions .status-badge {
+    justify-self: start;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .pulse-header-actions #refreshButton {
+    justify-self: end;
   }
 
   .pulse-shell {
@@ -1209,5 +1258,17 @@ a {
 
   .pulse-signal-card-featured {
     grid-row: auto;
+  }
+}
+
+@media (max-width: 24.3125rem) {
+  .pulse-header-actions #refreshButton {
+    min-width: 2.5rem;
+    padding-inline: 0;
+    width: 2.5rem;
+  }
+
+  .pulse-refresh-label {
+    display: none;
   }
 }

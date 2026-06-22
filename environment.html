@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en" data-acadia-theme="system">
+<html lang="en" data-acadia-theme="system" data-acadia-theme-storage-key="pulse-theme">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Environment | Pulse</title>
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml">
     <link href="site.webmanifest" rel="manifest">
+    <script src="theme.js?v=20260621"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="acadia.css?v=20260617" rel="stylesheet">
-    <link href="styles.css?v=20260620-dock-placement" rel="stylesheet">
+    <link href="styles.css?v=20260621-visual" rel="stylesheet">
     <script src="config.js" defer></script>
     <script src="app.js?v=20260620-visual" defer></script>
   </head>
@@ -28,10 +29,11 @@
             <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
           </nav>
           <div class="acadia-page-actions pulse-header-actions">
+            <button class="acadia-icon-action acadia-theme-toggle" type="button" data-acadia-theme-toggle aria-label="Switch theme" title="Theme"><i class="fa-solid fa-toggle-off acadia-icon" data-acadia-theme-toggle-icon aria-hidden="true"></i></button>
             <span class="acadia-badge status-badge" data-status-badge>Loading source</span>
             <button class="acadia-button acadia-button-secondary" id="refreshButton" type="button" aria-label="Refresh environmental source data">
               <i class="fa-solid fa-rotate acadia-icon" aria-hidden="true"></i>
-              Refresh
+              <span class="pulse-refresh-label">Refresh</span>
             </button>
           </div>
         </div>
