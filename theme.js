@@ -10,12 +10,17 @@
     return value === "light" || value === "dark";
   }
 
+  function getCurrentThemePreference() {
+    const currentTheme = root.getAttribute("data-acadia-theme");
+    return isThemeMode(currentTheme) || currentTheme === "system" ? currentTheme : "system";
+  }
+
   function getStoredTheme() {
     try {
       const storedTheme = window.localStorage.getItem(storageKey);
-      return isThemeMode(storedTheme) ? storedTheme : "system";
+      return isThemeMode(storedTheme) ? storedTheme : getCurrentThemePreference();
     } catch (_) {
-      return "system";
+      return getCurrentThemePreference();
     }
   }
 
