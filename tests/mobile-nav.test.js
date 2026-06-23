@@ -23,6 +23,7 @@ test("mobile dock is outside the sticky header on every page", () => {
 
     assert.match(html, /theme\.js\?v=20260621/);
     assert.match(html, /styles\.css\?v=20260621-visual/);
+    assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">/);
     assert.match(html, /<nav class="acadia-nav pulse-primary-nav" aria-label="Pulse pages">/);
     assert.match(html, /<\/header>\s*<nav class="acadia-nav pulse-primary-nav acadia-mobile-dock" aria-label="Pulse pages">/);
   }
