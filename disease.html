@@ -11,7 +11,7 @@
     <link href="acadia.css?v=20260617" rel="stylesheet">
     <link href="styles.css?v=20260621-visual" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260620-visual" defer></script>
+    <script src="app.js?v=20260624-clarity" defer></script>
   </head>
   <body data-pulse-page="disease">
     <div class="acadia-app pulse-app">
@@ -26,7 +26,7 @@
             <a class="acadia-nav-item" href="./environment.html"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
             <a class="acadia-nav-item" href="./disease.html" aria-current="page"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
             <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
           </nav>
           <div class="acadia-page-actions pulse-header-actions">
             <button class="acadia-icon-action acadia-theme-toggle" type="button" data-acadia-theme-toggle aria-label="Switch theme" title="Theme"><i class="fa-solid fa-toggle-off acadia-icon" data-acadia-theme-toggle-icon aria-hidden="true"></i></button>
@@ -43,7 +43,7 @@
         <a class="acadia-nav-item" href="./environment.html"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
         <a class="acadia-nav-item" href="./disease.html" aria-current="page"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
         <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
       </nav>
 
       <main class="acadia-shell pulse-shell">
@@ -52,7 +52,7 @@
             <div class="acadia-page-header-copy">
               <span class="acadia-kicker">Disease & outbreaks</span>
               <h1 id="disease-title" class="acadia-display">Disease activity</h1>
-              <p class="acadia-text-muted pulse-lead">Current outbreak signals by geography, publication movement, and recent official notices.</p>
+              <p class="acadia-text-muted pulse-lead">WHO outbreak notices by affected geography, publication trend, and latest official notice.</p>
             </div>
             <div class="pulse-readiness" aria-label="Disease source readiness">
               <span class="acadia-kicker">Source readiness</span>
@@ -71,7 +71,7 @@
               <div class="acadia-section-header">
                 <div class="acadia-section-header-copy">
                   <span class="acadia-kicker">Geography</span>
-                  <h2 id="geography-title" class="acadia-title">Outbreak geography scan</h2>
+                  <h2 id="geography-title" class="acadia-title">Affected areas</h2>
                 </div>
                 <span class="acadia-text-muted pulse-section-meta" data-who-area-updated>Checking source</span>
               </div>
@@ -84,7 +84,7 @@
               <div class="acadia-section-header">
                 <div class="acadia-section-header-copy">
                   <span class="acadia-kicker">Movement</span>
-                  <h2 class="acadia-title">Notice trend</h2>
+                  <h2 class="acadia-title">Publication trend</h2>
                 </div>
                 <span class="acadia-text-muted pulse-section-meta" data-who-trend-updated>Checking source</span>
               </div>
@@ -119,7 +119,7 @@
               </div>
               <dl class="pulse-compact-list disease-snapshot-list">
                 <div>
-                  <dt>Most active geography</dt>
+                  <dt>Most repeated area</dt>
                   <dd data-disease-most-active>Checking source</dd>
                 </div>
                 <div>
@@ -131,7 +131,7 @@
                   <dd data-disease-frequency>Checking source</dd>
                 </div>
                 <div>
-                  <dt>Primary topic</dt>
+                  <dt>Most repeated topic</dt>
                   <dd data-disease-primary-topic>Checking source</dd>
                 </div>
               </dl>

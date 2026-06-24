@@ -48,7 +48,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Features
 
 - Community health and society signal summary
-- Metric cards ordered around Environment, Disease Activity, Healthcare Access, Community Well-Being, Population Trends, and Source Status
+- Metric cards ordered around Environment, Disease Activity, Healthcare Access, Community Well-Being, and Population Trends
 - Recent WHO Disease Outbreak News notices through a cached serverless proxy
 - Per-notice WHO metadata for source publication time, geography, and DON identifier when available
 - WHO-derived outbreak geography scan that groups recent notices by affected area, ranked by repeated notice concentration and recency
@@ -76,7 +76,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - WHO-derived signal trend snapshot
 - WHO notice trend plain-language summary that mirrors the visual bar chart and names the latest notice represented in the trend
 - Community Brief synthesis that translates connected source states into qualitative community-health meaning without inventing a composite score
-- Homepage signal dashboard that prioritizes Community Health, Air Quality, Disease Activity, Healthcare Access, Well-Being, Population, Watch Areas, and What Changed before source/model explanation
+- Homepage signal dashboard that prioritizes Community Health, Air Quality, Disease Activity, Healthcare Access, Well-Being, Population, Watch Areas, and What Changed before source or framework explanation
 - Named first source target for each pillar: AirNow, WHO, HRSA HPSA, CDC PLACES, and Census PEP
 - Priority list for first public data areas
 - Pending-source labels so the prototype does not imply live tracking where source wiring is incomplete
@@ -86,10 +86,10 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 ## Design Decisions
 
 - Use Acadia conventions for layout, surfaces, controls, metrics, rows, forms, states, icons, focus, motion, density, and responsive behavior before creating any custom Pulse UI.
-- Lead the dashboard with the five-signal community health model, not disease-first source ordering.
+- Lead the dashboard with the five-signal community health framework, not disease-first source ordering.
 - Frame Pulse around community health rather than a Mercury-style indicator board.
 - Use `Community Health Dashboard`, `Pulse`, and `Five signals for community health` as the homepage hierarchy.
-- Keep framework, source coverage, and model explanation off the homepage unless they directly support a live signal or watch area.
+- Keep framework and source coverage explanation off the homepage unless it directly supports a live signal or watch area.
 - Keep disease and outbreak surfaces clearly labeled as one pillar of Pulse rather than the product's full identity.
 - Use pending states until selected data sources are wired.
 - Use graceful unavailable or no-data states when public APIs are unavailable.
@@ -126,7 +126,7 @@ Current scope is a static dashboard MVP with serverless proxies for first live p
 - Show top-level source readiness from current source states before presenting broader health signal levels.
 - Do not present aggregate signal levels without nearby source-basis context while the dashboard mixes live and pending inputs.
 - Use qualitative synthesis labels such as `Stable`, `Mixed`, `Under Pressure`, and `Coverage Building` when connected data supports interpretation, but do not create numeric health scores across sources with different cadence and scope.
-- Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs and `API key not configured` for AirNow, instead of implementation instructions like `add server API key`.
+- Keep user-facing source states plain and audience-facing: use language such as `not connected yet` for planned inputs, `API key not configured` for AirNow, and `route unavailable in this preview` for missing serverless routes, instead of implementation instructions like `add server API key` or `run with server API routes`.
 - Name the first source target for each unconnected pillar so placeholders feel intentional rather than empty.
 - Label WHO-only summaries as WHO notices or WHO notice trends so they do not read like whole-product signal trends.
 - Pair WHO trend visuals with a concise text summary of notice count, publication-day coverage, peak day, and the latest notice title so the chart is understandable without relying on bar height.

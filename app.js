@@ -34,11 +34,11 @@ const AIRNOW_FALLBACK_STATES = {
     areaMatch: "Available after AirNow is configured",
     aqiBasis: "Available after AirNow is configured",
     severityBand: "Available after AirNow is configured",
-    statusLabel: "API key needed"
+    statusLabel: "API key not configured"
   },
   routeUnavailable: {
     category: "AirNow route unavailable",
-    freshness: "Run with server API routes for live AQI",
+    freshness: "AirNow route unavailable in this preview",
     healthGuidance: "Available when the AirNow route responds",
     observed: "AirNow route unavailable",
     areaMatch: "AirNow route unavailable",
@@ -264,8 +264,8 @@ const getCommunityBrief = () => {
     return {
       status: "Mixed",
       summary: `Air Quality ${airnow.category} • Disease ${noticeShort} • Healthcare ${healthcareShort} • Well-Being ${wellbeingShort} • Population ${populationShort}`,
-      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; healthcare is ${healthcare.accessStatus.toLowerCase()} with ${healthcareLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
-      change: "This refresh updated AQI, WHO notices, HRSA shortage areas, CDC PLACES well-being measures, Census population context, and source readiness.",
+      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO notices` : who.statusLabel}; healthcare is ${healthcare.accessStatus.toLowerCase()} with ${healthcareLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated AQI, WHO notices, HRSA shortage areas, CDC PLACES well-being measures, Census population context, and source availability.",
       watch: "Healthcare access shortages, heat risk, new outbreak notices, and well-being measures that move slowly.",
       tone: "warning"
     };
@@ -275,8 +275,8 @@ const getCommunityBrief = () => {
     return {
       status: "Mixed",
       summary: `Air Quality ${airnow.category} • Disease ${noticeShort} • Healthcare ${healthcareShort} • Well-Being ${wellbeingShort} • Population ${populationShort}`,
-      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO feed` : who.statusLabel}; ${healthcare.isLive ? `${healthcare.accessStatus} with ${healthcareLabel}` : healthcare.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
-      change: "This refresh updated connected community signals and source readiness.",
+      current: `Air quality is ${airnow.category}; ${who.isLive ? `${noticeLabel} are present in the connected WHO notices` : who.statusLabel}; ${healthcare.isLive ? `${healthcare.accessStatus} with ${healthcareLabel}` : healthcare.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
+      change: "This refresh updated connected community signals and source availability.",
       watch: "Healthcare access shortages, heat risk, new outbreak notices, and any source that is not yet live.",
       tone: "warning"
     };
@@ -287,7 +287,7 @@ const getCommunityBrief = () => {
       status: "Mixed",
       summary: `${airnow.isLive ? `Air Quality ${airnow.category}` : airnow.statusLabel} • Disease ${noticeShort} • Healthcare ${healthcareShort} • Well-Being ${wellbeingShort} • Population ${populationShort}`,
       current: `${airnow.isLive ? `Air quality is ${airnow.category}` : airnow.statusLabel}; ${who.isLive ? noticeLabel : who.statusLabel}; ${healthcare.isLive ? healthcareLabel : healthcare.statusLabel}; ${places.isLive ? wellbeingLabel : places.statusLabel}; ${population.isLive ? populationLabel : population.statusLabel}.`,
-      change: "This refresh updated connected source readiness and any live community signals.",
+      change: "This refresh updated source availability and any live community signals.",
       watch: "Healthcare access, well-being, population change, and any source that is not yet live.",
       tone: "warning"
     };
@@ -295,10 +295,10 @@ const getCommunityBrief = () => {
 
   return {
     status: "Coverage Building",
-    summary: "Pulse is still building its live community health read.",
-    current: "AirNow and WHO need live responses before Pulse can interpret connected conditions.",
+    summary: "No live source responses yet.",
+    current: "Pulse needs live source responses before it can summarize this community.",
     change: "This refresh checked source availability.",
-    watch: "Air quality setup, WHO availability, healthcare access, local well-being, and population context.",
+    watch: "AirNow setup, WHO availability, healthcare access, well-being measures, and population context.",
     tone: "warning"
   };
 };
@@ -322,7 +322,7 @@ const updateSourceReadiness = (liveCount, totalCount) => {
   setText("[data-source-status-card-value]", value);
   setText("[data-source-status-card-note]", totalCount === 0
     ? "Checking live sources"
-    : `${label} source readiness across ${totalCount} connected ${totalCount === 1 ? "source" : "sources"}`);
+    : `${label} source availability across ${totalCount} connected ${totalCount === 1 ? "source" : "sources"}`);
   setMetricCardState("source", label === "live" ? "live" : label === "checking" ? "pending" : "warning");
 };
 
@@ -1006,7 +1006,9 @@ const renderNotices = (notices, isLive, sourceMeta = {}) => {
     whoNote.classList.toggle("text-secondary", isLive);
   }
   setMetricCardState("who", isLive ? "live" : "warning");
-  setText("[data-who-updated]", isLive ? "WHO proxy cache" : sourceMeta.freshness || "Source unavailable");
+  setText("[data-who-updated]", isLive
+    ? joinDetails("WHO notices", formatCheckedAt(sourceMeta.fetchedAt), formatCacheWindow(sourceMeta.cacheSeconds))
+    : sourceMeta.freshness || "Source unavailable");
   setText("[data-who-signal-basis]", isLive ? "Live event notices" : sourceMeta.statusLabel || "Source unavailable");
   setText("[data-who-source-window]", isLive
     ? formatWhoNoticeWindow(sourceMeta.noticeWindow)
@@ -1032,7 +1034,7 @@ const getWhoUnavailableState = (error = {}) => {
 
   return {
     areaStatus: isRouteUnavailable ? "WHO route unavailable" : "WHO geography unavailable",
-    freshness: isRouteUnavailable ? "Run with server API routes for WHO notices" : "Try refreshing again later",
+    freshness: isRouteUnavailable ? "WHO route unavailable in this preview" : "Try refreshing again later",
     sourceWindow: isRouteUnavailable ? "WHO route unavailable" : "Live notice window unavailable",
     statusLabel: isRouteUnavailable ? "Route unavailable" : "Unavailable"
   };
@@ -1089,7 +1091,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
     : sourceMeta.observed || "Waiting for live observations";
   const areaMatch = sourceMeta.areaMatch || formatAirNowAreaMatch(reading, isLive);
   const aqiBasis = sourceMeta.aqiBasis || formatAirNowAqiBasis(reading, isLive);
-  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "API key needed";
+  const statusLabel = isLive ? "Live" : sourceMeta.statusLabel || "API key not configured";
 
   communityBriefState.airnow = {
     isLive,
@@ -1101,7 +1103,7 @@ const renderAirQuality = (reading, isLive, sourceMeta = {}) => {
 
   setText("[data-airnow-aqi]", String(reading.aqi));
   setText("[data-airnow-note]", isLive ? `${pollutantLabel} near ${areaLabel}` : reading.category);
-  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "API key needed");
+  setText("[data-airnow-signal-basis]", isLive ? `Live near ${areaLabel}` : sourceMeta.statusLabel || "API key not configured");
   setText("[data-airnow-source-observed]", observed);
   setText("[data-airnow-area-match]", areaMatch);
   setText("[data-airnow-aqi-basis]", aqiBasis);
@@ -1234,12 +1236,12 @@ const renderHealthcare = (data, isLive, sourceMeta = {}) => {
   updateCommunityBrief();
 
   setText("[data-healthcare-value]", Number.isFinite(primaryCount) ? String(primaryCount) : "--");
-  setText("[data-healthcare-label]", isLive ? "primary care HPSAs" : "shortage signal unavailable");
+  setText("[data-healthcare-label]", isLive ? "primary care shortage areas" : "shortage areas unavailable");
   setText("[data-healthcare-note]", isLive
     ? `${accessStatus} in ${geography}: ${disciplineSummary}.`
     : sourceMeta.note || "HRSA shortage designations are unavailable right now.");
   setText("[data-healthcare-signal-basis]", isLive
-    ? `${Number.isFinite(totalDesignations) ? totalDesignations : "--"} active HRSA designations`
+    ? `${Number.isFinite(totalDesignations) ? totalDesignations : "--"} active shortage designations`
     : statusLabel);
   setMetricCardState("access", isLive ? "live" : "warning");
   setSourceDetail("healthcare", {
@@ -1266,8 +1268,8 @@ const loadHealthcare = async () => {
       summaries: [],
       totalDesignations: null
     }, false, {
-      freshness: error.status === 404 ? "Healthcare route unavailable" : "Try refreshing again later",
-      note: error.status === 404 ? "Run with server API routes for HRSA shortage areas." : "HRSA shortage areas could not be loaded.",
+      freshness: error.status === 404 ? "Healthcare route unavailable in this preview" : "Try refreshing again later",
+      note: error.status === 404 ? "HRSA shortage areas are unavailable in this preview." : "HRSA shortage areas could not be loaded.",
       statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
     });
     return false;
@@ -1339,8 +1341,8 @@ const loadPlaces = async () => {
       measures: [],
       primary: null
     }, false, {
-      freshness: error.status === 404 ? "PLACES route unavailable" : "Try refreshing again later",
-      note: error.status === 404 ? "Run with server API routes for CDC PLACES." : "CDC PLACES could not be loaded.",
+      freshness: error.status === 404 ? "PLACES route unavailable in this preview" : "Try refreshing again later",
+      note: error.status === 404 ? "CDC PLACES measures are unavailable in this preview." : "CDC PLACES could not be loaded.",
       statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
     });
     return false;
@@ -1400,8 +1402,8 @@ const loadPopulation = async () => {
     renderPopulation({
       record: {}
     }, false, {
-      freshness: error.status === 404 ? "Population route unavailable" : "Try refreshing again later",
-      note: error.status === 404 ? "Run with server API routes for Census population estimates." : "Census estimates could not be loaded.",
+      freshness: error.status === 404 ? "Population route unavailable in this preview" : "Try refreshing again later",
+      note: error.status === 404 ? "Census population estimates are unavailable in this preview." : "Census estimates could not be loaded.",
       statusLabel: error.status === 404 ? "Route unavailable" : "Unavailable"
     });
     return false;

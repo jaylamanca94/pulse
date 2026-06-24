@@ -11,7 +11,7 @@
     <link href="acadia.css?v=20260617" rel="stylesheet">
     <link href="styles.css?v=20260621-visual" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260620-visual" defer></script>
+    <script src="app.js?v=20260624-clarity" defer></script>
   </head>
   <body data-pulse-page="dashboard">
     <div class="acadia-app pulse-app">
@@ -26,7 +26,7 @@
             <a class="acadia-nav-item" href="./environment.html"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
             <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
             <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
           </nav>
           <div class="acadia-page-actions pulse-header-actions">
             <button class="acadia-icon-action acadia-theme-toggle" type="button" data-acadia-theme-toggle aria-label="Switch theme" title="Theme"><i class="fa-solid fa-toggle-off acadia-icon" data-acadia-theme-toggle-icon aria-hidden="true"></i></button>
@@ -43,7 +43,7 @@
         <a class="acadia-nav-item" href="./environment.html"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
         <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
         <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
       </nav>
 
       <main class="acadia-shell pulse-shell">
@@ -53,7 +53,7 @@
               <div>
                 <span class="acadia-kicker">Community Health Dashboard</span>
                 <h1 id="brief-title" class="pulse-location-title">
-                  <a class="pulse-location-control" href="./environment.html#airnow-controls" aria-label="Change dashboard community">
+                  <a class="pulse-location-control" href="./environment.html#airnow-controls" aria-label="Change AirNow area">
                     <i class="fa-solid fa-location-dot acadia-icon" aria-hidden="true"></i>
                     <span data-community-location>Selected community</span>
                     <i class="fa-solid fa-chevron-down acadia-icon pulse-location-chevron" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
               </div>
               <strong class="pulse-brief-state" data-community-brief-status>Checking</strong>
             </div>
-            <p class="pulse-brief-summary" data-community-brief-summary>Reading connected sources before synthesizing the community health picture.</p>
+            <p class="pulse-brief-summary" data-community-brief-summary>Checking live sources before summarizing this community.</p>
           </div>
         </section>
 
@@ -118,7 +118,7 @@
                 </div>
                 <div class="pulse-signal-value-row">
                   <strong data-healthcare-value>--</strong>
-                  <span data-healthcare-label>shortage signal loading</span>
+                  <span data-healthcare-label>Checking shortage areas</span>
                 </div>
               </article>
 
@@ -132,7 +132,7 @@
                 </div>
                 <div class="pulse-signal-value-row">
                   <strong data-places-primary-value>--</strong>
-                  <span data-places-primary-label>local measures loading</span>
+                  <span data-places-primary-label>Checking local measures</span>
                 </div>
               </article>
 
@@ -146,7 +146,7 @@
                 </div>
                 <div class="pulse-signal-value-row">
                   <strong data-population-value>--</strong>
-                  <span data-population-label>demographic trend loading</span>
+                  <span data-population-label>Checking population trend</span>
                 </div>
               </article>
             </div>
@@ -158,13 +158,13 @@
                 <span class="pulse-card-icon"><i class="fa-solid fa-triangle-exclamation acadia-icon" aria-hidden="true"></i></span>
                 <div>
                   <span class="acadia-kicker">Watch Areas</span>
-                  <h2 class="acadia-title">Current pressures</h2>
+                  <h2 class="acadia-title">What needs attention</h2>
                 </div>
               </div>
               <ul class="pulse-watch-list">
                 <li><strong>Healthcare access</strong><span data-healthcare-signal-basis>HRSA shortage areas loading.</span></li>
                 <li><strong>Disease activity</strong><span data-community-brief-watch>Disease activity remains a monitored watch area.</span></li>
-                <li><strong>Heat risk</strong><span>Environmental expansion should add heat and smoke context next.</span></li>
+                <li><strong>Heat risk</strong><span>Heat and smoke context are not connected yet.</span></li>
               </ul>
             </article>
 
@@ -173,14 +173,14 @@
                 <span class="pulse-card-icon"><i class="fa-solid fa-clock-rotate-left acadia-icon" aria-hidden="true"></i></span>
                 <div>
                   <span class="acadia-kicker">What Changed</span>
-                  <h2 class="acadia-title">Latest movement</h2>
+                  <h2 class="acadia-title">Latest source movement</h2>
                 </div>
               </div>
               <p class="trend-summary" data-community-brief-change>Waiting for the latest source responses.</p>
               <dl class="pulse-compact-list">
                 <div>
                   <dt>Air quality</dt>
-                  <dd data-airnow-signal-basis>AirNow API key needed</dd>
+                  <dd data-airnow-signal-basis>AirNow API key not configured</dd>
                 </div>
                 <div>
                   <dt>Disease</dt>

@@ -77,11 +77,11 @@ Default to Acadia's system theme behavior and token names. Use the Acadia light/
 Use Acadia's responsive page frame and dashboard density rules.
 
 - Pulse follows an Apollo-style information architecture: the home page is an at-a-glance dashboard that should fit the important current state into one compact scan, while richer evidence lives on dedicated pages.
-- Dashboard page: lead with a large qualitative Community Brief, then show Air Quality, Disease Activity, Healthcare Access, Well-Being, Population, Watch Areas, and What Changed. Keep framework, source readiness, source coverage, and model explanation secondary to the live dashboard story.
+- Dashboard page: lead with a large qualitative Community Brief, then show Air Quality, Disease Activity, Healthcare Access, Well-Being, Population, Watch Areas, and What Changed. Keep framework and source coverage explanation secondary to the live dashboard story.
 - Environment detail page: own AirNow location controls, AQI basis, severity band, health guidance, and source-specific metadata.
 - Disease detail page: own WHO affected-area rows, notice trend, recent notice list, and WHO source context.
 - Sources detail page: own source readiness, freshness, limits, API-key/route states, and future source coverage.
-- Model detail page: own the five-signal community health framework and future source roadmap.
+- Framework detail page: own the five-signal community health framework and future source roadmap.
 - Ultra desktop and desktop: `128px` page margin.
 - Small desktop: `64px` page margin.
 - Tablet: `32px` page margin.

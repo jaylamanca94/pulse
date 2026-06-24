@@ -113,6 +113,10 @@ npm test
 - `PRODUCT-README.md` - Pulse mission, goals, scope, decisions, roadmap, and known limitations
 - `DESIGN-README.md` - Pulse design standards, UI utilities, and interaction guidance
 - `index.html` - dashboard markup
+- `environment.html` - AirNow area controls, AQI snapshot, and source details
+- `disease.html` - WHO affected areas, publication trend, recent notices, and disease snapshot
+- `sources.html` - official source coverage, freshness, limits, and availability states
+- `model.html` - community health framework and first-source plan
 - `acadia.css` - vendored Acadia CSS primitives used by the Pulse dashboard
 - `styles.css` - thin Pulse adapter for product identity, AQI tones, and source-specific data views
 - `app.js` - frontend data loading and rendering

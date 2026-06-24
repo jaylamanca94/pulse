@@ -41,7 +41,7 @@ test("HTML pages request the current shared app assets", () => {
 
     assert.match(html, /theme\.js\?v=20260621/);
     assert.match(html, /styles\.css\?v=20260621-visual/);
-    assert.match(html, /app\.js\?v=20260620-visual/);
+    assert.match(html, /app\.js\?v=20260624-clarity/);
   });
 });
 
@@ -783,7 +783,7 @@ test("AirNow fallback state distinguishes missing API routes from source outages
   const result = runAppHelper(`(() => getAirNowFallbackState({ status: 404 }))()`);
 
   assert.equal(result.category, "AirNow route unavailable");
-  assert.equal(result.freshness, "Run with server API routes for live AQI");
+  assert.equal(result.freshness, "AirNow route unavailable in this preview");
   assert.equal(result.observed, "AirNow route unavailable");
   assert.equal(result.statusLabel, "Route unavailable");
 });
@@ -792,7 +792,7 @@ test("WHO fallback state uses route-unavailable status language", () => {
   const result = runAppHelper(`(() => getWhoUnavailableState({ status: 404 }))()`);
 
   assert.equal(result.areaStatus, "WHO route unavailable");
-  assert.equal(result.freshness, "Run with server API routes for WHO notices");
+  assert.equal(result.freshness, "WHO route unavailable in this preview");
   assert.equal(result.sourceWindow, "WHO route unavailable");
   assert.equal(result.statusLabel, "Route unavailable");
 });
@@ -803,7 +803,7 @@ test("AirNow fallback state uses audience-facing unconfigured language", () => {
   assert.equal(result.category, "AirNow API key not configured");
   assert.equal(result.freshness, "AirNow API key not configured");
   assert.equal(result.observed, "Available after AirNow is configured");
-  assert.equal(result.statusLabel, "API key needed");
+  assert.equal(result.statusLabel, "API key not configured");
 });
 
 test("AirNow fallback state keeps source outages distinct from setup states", () => {

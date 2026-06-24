@@ -11,7 +11,7 @@
     <link href="acadia.css?v=20260617" rel="stylesheet">
     <link href="styles.css?v=20260621-visual" rel="stylesheet">
     <script src="config.js" defer></script>
-    <script src="app.js?v=20260620-visual" defer></script>
+    <script src="app.js?v=20260624-clarity" defer></script>
   </head>
   <body data-pulse-page="environment">
     <div class="acadia-app pulse-app">
@@ -26,7 +26,7 @@
             <a class="acadia-nav-item" href="./environment.html" aria-current="page"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
             <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
             <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+            <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
           </nav>
           <div class="acadia-page-actions pulse-header-actions">
             <button class="acadia-icon-action acadia-theme-toggle" type="button" data-acadia-theme-toggle aria-label="Switch theme" title="Theme"><i class="fa-solid fa-toggle-off acadia-icon" data-acadia-theme-toggle-icon aria-hidden="true"></i></button>
@@ -43,7 +43,7 @@
         <a class="acadia-nav-item" href="./environment.html" aria-current="page"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i><span>Environment</span></a>
         <a class="acadia-nav-item" href="./disease.html"><i class="fa-solid fa-virus-covid acadia-icon" aria-hidden="true"></i><span>Disease</span></a>
         <a class="acadia-nav-item" href="./sources.html"><i class="fa-solid fa-database acadia-icon" aria-hidden="true"></i><span>Sources</span></a>
-        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Model</span></a>
+        <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
       </nav>
 
       <main class="acadia-shell pulse-shell">
@@ -52,7 +52,7 @@
             <div class="acadia-page-header-copy">
               <span class="acadia-kicker">Environment</span>
               <h1 id="environment-title" class="acadia-display">Air quality</h1>
-              <p class="acadia-text-muted pulse-lead">Live AirNow observations, selected geography, severity band, and health guidance for the current environmental signal.</p>
+              <p class="acadia-text-muted pulse-lead">Live AirNow observations, selected geography, severity band, and health guidance for the selected community.</p>
             </div>
             <div class="pulse-readiness" aria-label="Environment source readiness">
               <span class="acadia-kicker">Source readiness</span>
@@ -69,9 +69,9 @@
           <div class="acadia-section-header">
             <div class="acadia-section-header-copy">
               <span class="acadia-kicker">Local environment</span>
-              <h2 id="local-aqi-title" class="acadia-title">Environmental snapshot</h2>
+              <h2 id="local-aqi-title" class="acadia-title">Air quality snapshot</h2>
             </div>
-            <span class="acadia-badge acadia-badge-warning source-status is-warning" data-airnow-snapshot-status>API key needed</span>
+            <span class="acadia-badge acadia-badge-warning source-status is-warning" data-airnow-snapshot-status>API key not configured</span>
           </div>
           <div class="pulse-snapshot">
             <div class="acadia-metric pulse-snapshot-primary">
@@ -111,8 +111,8 @@
         <section class="acadia-surface acadia-panel-dense acadia-stack" id="airnow-controls" aria-labelledby="airnow-source-title">
           <div class="acadia-section-header">
             <div class="acadia-section-header-copy">
-              <span class="acadia-kicker">Source controls</span>
-              <h2 id="airnow-source-title" class="acadia-title">AirNow source detail</h2>
+              <span class="acadia-kicker">Location and source</span>
+              <h2 id="airnow-source-title" class="acadia-title">AirNow details</h2>
             </div>
           </div>
           <ul class="acadia-status-list source-list source-detail-list">
@@ -120,7 +120,7 @@
               <span class="acadia-status-icon"><i class="fa-solid fa-wind acadia-icon" aria-hidden="true"></i></span>
               <div class="source-row-body">
                 <div class="source-row-head">
-                  <span class="acadia-badge acadia-badge-warning source-status" data-airnow-source-status>API key needed</span>
+                  <span class="acadia-badge acadia-badge-warning source-status" data-airnow-source-status>API key not configured</span>
                   <strong class="source-name">AirNow current observations</strong>
                   <a class="source-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">
                     View source <i class="fa-solid fa-arrow-up-right-from-square acadia-icon" aria-hidden="true"></i>
@@ -179,7 +179,7 @@
                     </div>
                     <button class="acadia-button acadia-button-secondary airnow-submit" type="submit">
                       <i class="fa-solid fa-location-dot acadia-icon" aria-hidden="true"></i>
-                      Update
+                      Update area
                     </button>
                   </div>
                   <p class="acadia-field-hint" id="airnowFormHelp" data-airnow-location-note aria-live="polite">Showing ZIP 10001, 25-mile radius.</p>
