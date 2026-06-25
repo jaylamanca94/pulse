@@ -70,6 +70,35 @@ a {
   color: inherit;
 }
 
+.pulse-skip-link {
+  background: var(--acadia-color-surface);
+  border: 1px solid var(--acadia-color-border);
+  border-radius: var(--acadia-radius-md);
+  box-shadow: var(--acadia-shadow-lg);
+  color: var(--acadia-color-text);
+  font-weight: 700;
+  left: 1rem;
+  padding: 0.75rem 1rem;
+  position: fixed;
+  top: 1rem;
+  transform: translateY(calc(-100% - 2rem));
+  transition: transform 0.16s ease;
+  z-index: 2000;
+}
+
+.pulse-skip-link:focus,
+.pulse-skip-link:focus-visible {
+  box-shadow: var(--acadia-focus-ring), var(--acadia-shadow-lg);
+  outline: 0;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-skip-link {
+    transition: none;
+  }
+}
+
 .pulse-app {
   min-height: 100vh;
 }

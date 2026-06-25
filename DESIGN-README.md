@@ -186,6 +186,7 @@ Use `8px` or less for normal cards and repeated list items unless a larger conta
 ## Accessibility And Responsiveness
 
 - Support keyboard navigation for interactive controls.
+- Provide a visible-on-focus skip link on every top-level Pulse page so keyboard and switch users can bypass repeated header and dock navigation.
 - Preserve visible focus states.
 - Use semantic HTML whenever practical.
 - Keep text readable in both light and dark mode.

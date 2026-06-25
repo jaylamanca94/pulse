@@ -894,6 +894,8 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
 
   if (!isLive || !trend.length) {
     grid.classList?.add("is-empty");
+    grid.removeAttribute?.("role");
+    grid.removeAttribute?.("aria-label");
     const empty = document.createElement("p");
     empty.className = "empty-copy";
     empty.textContent = summaryText;
@@ -903,6 +905,8 @@ const renderWhoTrend = (trend = [], isLive, sourceMeta = {}) => {
   }
 
   grid.classList?.remove("is-empty");
+  grid.setAttribute?.("role", "list");
+  grid.setAttribute?.("aria-label", "Recent WHO notice trend");
   const maxCount = Math.max(...trend.map((item) => Number(item.count) || 0), 1);
 
   trend.forEach((item) => {

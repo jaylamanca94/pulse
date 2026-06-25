@@ -14,6 +14,7 @@
     <script src="app.js?v=20260624-clarity" defer></script>
   </head>
   <body data-pulse-page="disease">
+    <a class="pulse-skip-link" href="#main-content">Skip to main content</a>
     <div class="acadia-app pulse-app">
       <header class="acadia-chrome">
         <div class="acadia-chrome-inner pulse-chrome-inner">
@@ -46,7 +47,7 @@
         <a class="acadia-nav-item" href="./model.html"><i class="fa-solid fa-diagram-project acadia-icon" aria-hidden="true"></i><span>Framework</span></a>
       </nav>
 
-      <main class="acadia-shell pulse-shell">
+      <main class="acadia-shell pulse-shell" id="main-content" tabindex="-1">
         <section class="acadia-surface acadia-panel pulse-hero" aria-labelledby="disease-title">
           <header class="acadia-page-header">
             <div class="acadia-page-header-copy">
@@ -89,7 +90,7 @@
                 <span class="acadia-text-muted pulse-section-meta" data-who-trend-updated>Checking source</span>
               </div>
               <p class="acadia-text-muted trend-summary" data-who-trend-summary>Checking WHO notice dates.</p>
-              <div class="acadia-muted-panel trend-grid is-empty" data-who-trend-grid role="list" aria-label="Recent WHO notice trend">
+              <div class="acadia-muted-panel trend-grid is-empty" data-who-trend-grid>
                 <p class="empty-copy">Checking WHO notice trend.</p>
               </div>
             </article>

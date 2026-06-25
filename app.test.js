@@ -52,6 +52,15 @@ test("Dashboard keeps a visible source freshness timestamp", () => {
   assert.match(html, /Not checked yet/);
 });
 
+test("HTML pages provide a keyboard skip link to main content", () => {
+  htmlPages.forEach((page) => {
+    const html = fs.readFileSync(page, "utf8");
+
+    assert.match(html, /<a class="pulse-skip-link" href="#main-content">Skip to main content<\/a>/);
+    assert.match(html, /<main class="acadia-shell pulse-shell" id="main-content" tabindex="-1">/);
+  });
+});
+
 test("Mobile dock keeps safe-area positioning and visible keyboard focus", () => {
   const css = fs.readFileSync("styles.css", "utf8");
 
@@ -591,6 +600,8 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
       ariaLabel: bar.attributes.get("aria-label"),
       fillAriaHidden: fill.attributes.get("aria-hidden"),
       fillTitle: fill.title,
+      gridAriaLabel: grid.attributes.get("aria-label"),
+      gridRole: grid.attributes.get("role"),
       role: bar.attributes.get("role"),
       summary: summary.textContent,
       visibleCount: bar.children[2].textContent
@@ -598,6 +609,8 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
   })()`);
 
   assert.equal(result.role, "listitem");
+  assert.equal(result.gridRole, "list");
+  assert.equal(result.gridAriaLabel, "Recent WHO notice trend");
   assert.match(result.ariaLabel, /^2 notices on /);
   assert.match(result.ariaLabel, /latest notice: Marburg virus disease, Germany$/);
   assert.equal(result.fillAriaHidden, "true");
@@ -610,8 +623,13 @@ test("WHO trend bars expose notice counts to assistive technology", () => {
 test("WHO trend empty state collapses chart spacing", () => {
   const result = runAppHelper(`(() => {
     const classes = new Set();
+    const attributes = new Map([
+      ["role", "list"],
+      ["aria-label", "Recent WHO notice trend"]
+    ]);
     const makeElement = (tagName) => ({
       tagName,
+      attributes,
       children: [],
       className: "",
       textContent: "",
@@ -625,6 +643,12 @@ test("WHO trend empty state collapses chart spacing", () => {
         remove(name) {
           classes.delete(name);
         }
+      },
+      removeAttribute(name) {
+        attributes.delete(name);
+      },
+      setAttribute(name, value) {
+        attributes.set(name, value);
       },
       set innerHTML(value) {
         this.children = [];
@@ -650,11 +674,15 @@ test("WHO trend empty state collapses chart spacing", () => {
     return {
       classes: Array.from(classes),
       emptyText: grid.children[0].textContent,
+      role: attributes.get("role"),
+      ariaLabel: attributes.get("aria-label"),
       summary: targets.get("[data-who-trend-summary]").textContent
     };
   })()`);
 
   assert.equal(JSON.stringify(result.classes), JSON.stringify(["is-empty"]));
+  assert.equal(result.role, undefined);
+  assert.equal(result.ariaLabel, undefined);
   assert.equal(result.emptyText, "WHO notice trend is unavailable until live notices load.");
   assert.equal(result.summary, "WHO notice trend is unavailable until live notices load.");
 });
