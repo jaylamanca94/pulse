@@ -61,6 +61,16 @@ Pulse vendors the current Acadia CSS primitives into `acadia.css` for deployment
 - Map Pulse variables onto Acadia-style adapter variables in `styles.css` before creating a new one-off component rule.
 - If a Pulse pattern becomes useful for another product, graduate the neutral part into Acadia and keep the Pulse wording/data treatment here.
 
+### Relay-Informed Mobile Standard
+
+Relay is the current Acadia reference for mobile product judgment. Pulse should adopt the neutral lessons without copying Relay's media styling:
+
+- Each phone screen should answer one question: what is happening, where, from which source, and what should I check next?
+- Keep source, freshness, severity, geography, and the next useful action attached to the affected signal row or card.
+- Let focused source lookup or place-selection flows use bottom-friendly controls and suppress nonessential chrome when it helps completion.
+- Never let sample, planned, route-unavailable, unconfigured, or stale data look like live public-health evidence.
+- Keep mobile dashboards out of diagnostics mode; detailed source management belongs on deeper source pages.
+
 ## Color
 
 Default to Acadia's system theme behavior and token names. Use the Acadia light/dark icon toggle as a header utility, separate from source refresh and status controls.

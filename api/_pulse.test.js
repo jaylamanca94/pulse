@@ -6,6 +6,8 @@ const {
   getText,
   normalizeDistance,
   normalizeZipCode,
+  parseCsv,
+  parseCsvLine,
   safeHttpUrl,
   setCached
 } = require("./_pulse");
@@ -14,6 +16,22 @@ test("getText trims strings and falls back for empty values", () => {
   assert.equal(getText("  AirNow  "), "AirNow");
   assert.equal(getText("   ", "fallback"), "fallback");
   assert.equal(getText(null, "fallback"), "fallback");
+});
+
+test("CSV parser preserves quoted commas and escaped quotes", () => {
+  assert.deepEqual(parseCsvLine('"New York County","a, b","Health ""A"""'), [
+    "New York County",
+    "a, b",
+    "Health \"A\""
+  ]);
+
+  assert.deepEqual(parseCsv('STATE,CTYNAME,NOTE\r\n36,"New York County","a, b"\r\n'), [
+    {
+      STATE: "36",
+      CTYNAME: "New York County",
+      NOTE: "a, b"
+    }
+  ]);
 });
 
 test("normalizes AirNow ZIP codes", () => {

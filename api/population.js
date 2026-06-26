@@ -1,6 +1,7 @@
 const {
   getCached,
   getText,
+  parseCsv,
   requestText,
   sendJson,
   setCached
@@ -10,44 +11,6 @@ const CENSUS_COUNTY_TOTALS_URL = "https://www2.census.gov/programs-surveys/popes
 const POPULATION_CACHE_SECONDS = 60 * 60 * 24;
 const DEFAULT_STATE = "New York";
 const DEFAULT_COUNTY = "New York County";
-
-function parseCsvLine(line) {
-  const values = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let index = 0; index < line.length; index += 1) {
-    const character = line[index];
-
-    if (character === "\"") {
-      if (inQuotes && line[index + 1] === "\"") {
-        current += "\"";
-        index += 1;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (character === "," && !inQuotes) {
-      values.push(current);
-      current = "";
-    } else {
-      current += character;
-    }
-  }
-
-  values.push(current);
-  return values;
-}
-
-function parseCsv(text) {
-  const lines = getText(text).split(/\r?\n/).filter(Boolean);
-  if (!lines.length) return [];
-
-  const headers = parseCsvLine(lines[0]);
-  return lines.slice(1).map((line) => {
-    const values = parseCsvLine(line);
-    return Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
-  });
-}
 
 function normalizeCountyName(value) {
   const county = getText(value, DEFAULT_COUNTY);

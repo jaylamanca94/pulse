@@ -36,6 +36,44 @@ function getText(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function parseCsvLine(line) {
+  const values = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+
+    if (character === "\"") {
+      if (inQuotes && line[index + 1] === "\"") {
+        current += "\"";
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (character === "," && !inQuotes) {
+      values.push(current);
+      current = "";
+    } else {
+      current += character;
+    }
+  }
+
+  values.push(current);
+  return values;
+}
+
+function parseCsv(text) {
+  const lines = getText(text).split(/\r?\n/).filter(Boolean);
+  if (!lines.length) return [];
+
+  const headers = parseCsvLine(lines[0]);
+  return lines.slice(1).map((line) => {
+    const values = parseCsvLine(line);
+    return Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
+  });
+}
+
 function normalizeZipCode(value, fallback = "10001") {
   return /^\d{5}$/.test(String(value || "").trim()) ? String(value).trim() : fallback;
 }
@@ -107,6 +145,8 @@ module.exports = {
   getText,
   normalizeDistance,
   normalizeZipCode,
+  parseCsv,
+  parseCsvLine,
   requestJson,
   requestText,
   safeHttpUrl,

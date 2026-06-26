@@ -1,6 +1,7 @@
 const {
   getCached,
   getText,
+  parseCsv,
   requestText,
   sendJson,
   setCached
@@ -31,33 +32,6 @@ const DISCIPLINES = [
     url: `${HRSA_BASE_URL}/BCD_HPSA_FCT_DET_MH.csv`
   }
 ];
-
-function parseCsvLine(line) {
-  const values = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let index = 0; index < line.length; index += 1) {
-    const character = line[index];
-
-    if (character === "\"") {
-      if (inQuotes && line[index + 1] === "\"") {
-        current += "\"";
-        index += 1;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (character === "," && !inQuotes) {
-      values.push(current);
-      current = "";
-    } else {
-      current += character;
-    }
-  }
-
-  values.push(current);
-  return values;
-}
 
 function decodeHtml(value) {
   return getText(value)
@@ -108,18 +82,15 @@ function normalizeHpsaRecord(row, discipline) {
 }
 
 function normalizeHpsaRows(text, discipline, filters = {}) {
-  const lines = getText(text).split(/\r?\n/).filter(Boolean);
-  if (!lines.length) return [];
+  const rows = parseCsv(text);
+  if (!rows.length) return [];
 
-  const headers = parseCsvLine(lines[0]);
   const countyFips = getText(filters.countyFips, DEFAULT_COUNTY_FIPS);
   const stateName = getText(filters.state, DEFAULT_STATE).toLowerCase();
   const countyName = normalizeCountyName(filters.county).toLowerCase();
   const recordsById = new Map();
 
-  lines.slice(1).forEach((line) => {
-    const values = parseCsvLine(line);
-    const row = Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
+  rows.forEach((row) => {
     const rowCountyFips = getText(row["Common State County FIPS Code"]);
     const rowState = getText(row["Common State Name"]).toLowerCase();
     const rowCounty = getText(row["County Equivalent Name"]);
