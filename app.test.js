@@ -40,7 +40,7 @@ test("HTML pages request the current shared app assets", () => {
     const html = fs.readFileSync(page, "utf8");
 
     assert.match(html, /theme\.js\?v=20260621/);
-    assert.match(html, /styles\.css\?v=20260621-visual/);
+    assert.match(html, /styles\.css\?v=20260630-a11y-cache/);
     assert.match(html, /app\.js\?v=20260624-clarity/);
   });
 });
