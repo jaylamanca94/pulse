@@ -92,13 +92,21 @@ function safeHttpUrl(value) {
   }
 }
 
-async function requestJson(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
+async function fetchWithTimeout(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  const response = await fetch(url, {
-    signal: controller.signal
-  }).finally(() => clearTimeout(timeoutId));
+  try {
+    return await fetch(url, {
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function requestJson(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  const response = await fetchWithTimeout(url, timeoutMs);
   const payload = await response.json().catch(() => null);
 
   if (!response.ok) {
@@ -117,12 +125,7 @@ async function requestJson(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
 }
 
 async function requestText(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  const response = await fetch(url, {
-    signal: controller.signal
-  }).finally(() => clearTimeout(timeoutId));
+  const response = await fetchWithTimeout(url, timeoutMs);
   const payload = await response.text().catch(() => "");
 
   if (!response.ok) {

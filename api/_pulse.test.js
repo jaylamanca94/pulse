@@ -8,6 +8,8 @@ const {
   normalizeZipCode,
   parseCsv,
   parseCsvLine,
+  requestJson,
+  requestText,
   safeHttpUrl,
   setCached
 } = require("./_pulse");
@@ -62,4 +64,71 @@ test("cache returns live entries and removes expired entries", async () => {
 
   setCached("test:expired", { status: "expired" }, 0);
   assert.equal(getCached("test:expired"), null);
+});
+
+test("requestJson preserves upstream error payloads", async () => {
+  const originalFetch = global.fetch;
+  const upstreamPayload = {
+    error: {
+      code: "UPSTREAM_BUSY",
+      message: "Try again later."
+    }
+  };
+
+  global.fetch = async (url, options) => {
+    assert.equal(url, "https://example.test/data.json");
+    assert.ok(options.signal instanceof AbortSignal);
+
+    return {
+      ok: false,
+      status: 503,
+      json: async () => upstreamPayload
+    };
+  };
+
+  try {
+    await assert.rejects(
+      () => requestJson("https://example.test/data.json"),
+      (error) => {
+        assert.equal(error.status, 503);
+        assert.deepEqual(error.payload, upstreamPayload);
+        return true;
+      }
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("requestText wraps upstream text errors consistently", async () => {
+  const originalFetch = global.fetch;
+
+  global.fetch = async (url, options) => {
+    assert.equal(url, "https://example.test/data.csv");
+    assert.ok(options.signal instanceof AbortSignal);
+
+    return {
+      ok: false,
+      status: 502,
+      text: async () => "Gateway unavailable"
+    };
+  };
+
+  try {
+    await assert.rejects(
+      () => requestText("https://example.test/data.csv"),
+      (error) => {
+        assert.equal(error.status, 502);
+        assert.deepEqual(error.payload, {
+          error: {
+            code: "UPSTREAM_REQUEST_FAILED",
+            message: "Gateway unavailable"
+          }
+        });
+        return true;
+      }
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
 });
