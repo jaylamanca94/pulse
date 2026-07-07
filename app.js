@@ -1158,7 +1158,7 @@ const normalizeAirNowReading = (items) => {
 };
 
 const getAirNowFallbackState = (error = {}) => {
-  const isUnconfigured = error.status === 503 || error.payload?.status === "unconfigured";
+  const isUnconfigured = error.payload?.status === "unconfigured";
   const isRouteUnavailable = error.status === 404;
 
   if (isUnconfigured) {

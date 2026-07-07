@@ -834,6 +834,15 @@ test("AirNow fallback state uses audience-facing unconfigured language", () => {
   assert.equal(result.statusLabel, "API key not configured");
 });
 
+test("AirNow fallback state does not treat upstream 503 as unconfigured", () => {
+  const result = runAppHelper(`(() => getAirNowFallbackState({ status: 503, payload: { error: { code: "UPSTREAM_BUSY" } } }))()`);
+
+  assert.equal(result.category, "Live AQI unavailable");
+  assert.equal(result.freshness, "Try refreshing again later");
+  assert.equal(result.healthGuidance, "Unavailable until the source responds");
+  assert.equal(result.statusLabel, "Unavailable");
+});
+
 test("AirNow fallback state keeps source outages distinct from setup states", () => {
   const result = runAppHelper(`(() => getAirNowFallbackState({ status: 502 }))()`);
 
