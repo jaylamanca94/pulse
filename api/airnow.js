@@ -3,6 +3,7 @@ const {
   normalizeDistance,
   normalizeZipCode,
   requestJson,
+  sendMethodNotAllowed,
   sendJson,
   setCached
 } = require("./_pulse");
@@ -12,12 +13,7 @@ const AIRNOW_CACHE_SECONDS = 60 * 15;
 
 module.exports = async (request, response) => {
   if (request.method !== "GET") {
-    sendJson(response, 405, {
-      error: {
-        code: "METHOD_NOT_ALLOWED",
-        message: "Use GET for this endpoint."
-      }
-    });
+    sendMethodNotAllowed(response);
     return;
   }
 

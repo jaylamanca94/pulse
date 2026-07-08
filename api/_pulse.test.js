@@ -11,6 +11,7 @@ const {
   requestJson,
   requestText,
   safeHttpUrl,
+  sendMethodNotAllowed,
   setCached
 } = require("./_pulse");
 
@@ -64,6 +65,31 @@ test("cache returns live entries and removes expired entries", async () => {
 
   setCached("test:expired", { status: "expired" }, 0);
   assert.equal(getCached("test:expired"), null);
+});
+
+test("sendMethodNotAllowed returns the shared GET-only route error", () => {
+  const headers = {};
+  let body = "";
+  const response = {
+    setHeader(name, value) {
+      headers[name] = value;
+    },
+    end(payload) {
+      body = payload;
+    }
+  };
+
+  sendMethodNotAllowed(response);
+
+  assert.equal(response.statusCode, 405);
+  assert.equal(headers["Content-Type"], "application/json");
+  assert.equal(headers["Cache-Control"], "no-store");
+  assert.deepEqual(JSON.parse(body), {
+    error: {
+      code: "METHOD_NOT_ALLOWED",
+      message: "Use GET for this endpoint."
+    }
+  });
 });
 
 test("requestJson preserves upstream error payloads", async () => {

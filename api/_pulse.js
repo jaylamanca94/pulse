@@ -14,6 +14,15 @@ function sendJson(response, statusCode, payload, maxAgeSeconds = 0) {
   response.end(JSON.stringify(payload));
 }
 
+function sendMethodNotAllowed(response) {
+  sendJson(response, 405, {
+    error: {
+      code: "METHOD_NOT_ALLOWED",
+      message: "Use GET for this endpoint."
+    }
+  });
+}
+
 function getCached(cacheKey) {
   const cached = cache.get(cacheKey);
 
@@ -153,6 +162,7 @@ module.exports = {
   requestJson,
   requestText,
   safeHttpUrl,
+  sendMethodNotAllowed,
   sendJson,
   setCached
 };

@@ -2,6 +2,7 @@ const {
   getCached,
   getText,
   requestJson,
+  sendMethodNotAllowed,
   sendJson,
   setCached
 } = require("./_pulse");
@@ -125,12 +126,7 @@ async function requestPlacesCounty({ stateAbbr = DEFAULT_STATE, county = DEFAULT
 
 async function handler(request, response) {
   if (request.method !== "GET") {
-    sendJson(response, 405, {
-      error: {
-        code: "METHOD_NOT_ALLOWED",
-        message: "Use GET for this endpoint."
-      }
-    });
+    sendMethodNotAllowed(response);
     return;
   }
 
