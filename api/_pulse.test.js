@@ -37,6 +37,21 @@ test("CSV parser preserves quoted commas and escaped quotes", () => {
   ]);
 });
 
+test("CSV parser preserves quoted newlines inside records", () => {
+  assert.deepEqual(parseCsv('ID,NOTE,VALUE\n1,"line one\nline two",ok\n2,plain,done\n'), [
+    {
+      ID: "1",
+      NOTE: "line one\nline two",
+      VALUE: "ok"
+    },
+    {
+      ID: "2",
+      NOTE: "plain",
+      VALUE: "done"
+    }
+  ]);
+});
+
 test("normalizes AirNow ZIP codes", () => {
   assert.equal(normalizeZipCode(" 10001 "), "10001");
   assert.equal(normalizeZipCode("abcde"), "10001");

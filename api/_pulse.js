@@ -72,8 +72,46 @@ function parseCsvLine(line) {
   return values;
 }
 
+function parseCsvRecords(text) {
+  const records = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+
+    if (character === "\"") {
+      current += character;
+
+      if (inQuotes && text[index + 1] === "\"") {
+        current += text[index + 1];
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if ((character === "\n" || character === "\r") && !inQuotes) {
+      if (current) {
+        records.push(current);
+        current = "";
+      }
+
+      if (character === "\r" && text[index + 1] === "\n") {
+        index += 1;
+      }
+    } else {
+      current += character;
+    }
+  }
+
+  if (current) {
+    records.push(current);
+  }
+
+  return records;
+}
+
 function parseCsv(text) {
-  const lines = getText(text).split(/\r?\n/).filter(Boolean);
+  const lines = parseCsvRecords(getText(text));
   if (!lines.length) return [];
 
   const headers = parseCsvLine(lines[0]);
