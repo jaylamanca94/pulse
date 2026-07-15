@@ -1,5 +1,6 @@
 const {
   getCached,
+  getQueryValue,
   getText,
   parseCsv,
   requestText,
@@ -119,8 +120,8 @@ async function handler(request, response) {
 
   try {
     const payload = await requestCountyPopulation({
-      state: request.query.state,
-      county: request.query.county
+      state: getQueryValue(request.query, "state"),
+      county: getQueryValue(request.query, "county")
     });
     sendJson(response, 200, payload, POPULATION_CACHE_SECONDS);
   } catch (error) {

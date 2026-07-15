@@ -45,6 +45,12 @@ function getText(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function getQueryValue(query, key, fallback = "") {
+  const value = query?.[key];
+  const normalizedValue = Array.isArray(value) ? value[0] : value;
+  return getText(normalizedValue, fallback);
+}
+
 function parseCsvLine(line) {
   const values = [];
   let current = "";
@@ -192,6 +198,7 @@ async function requestText(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
 
 module.exports = {
   getCached,
+  getQueryValue,
   getText,
   normalizeDistance,
   normalizeZipCode,

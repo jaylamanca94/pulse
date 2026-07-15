@@ -1,5 +1,6 @@
 const {
   getCached,
+  getQueryValue,
   getText,
   parseCsv,
   requestText,
@@ -192,11 +193,12 @@ async function handler(request, response) {
   }
 
   try {
+    const query = request.query;
     const payload = await requestHealthcareAccess({
-      county: request.query.county,
-      countyFips: request.query.countyFips,
-      state: request.query.state,
-      stateAbbr: request.query.stateAbbr
+      county: getQueryValue(query, "county"),
+      countyFips: getQueryValue(query, "countyFips"),
+      state: getQueryValue(query, "state"),
+      stateAbbr: getQueryValue(query, "stateAbbr")
     });
     sendJson(response, 200, payload, HEALTHCARE_CACHE_SECONDS);
   } catch (error) {

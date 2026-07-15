@@ -1,5 +1,6 @@
 const {
   getCached,
+  getQueryValue,
   normalizeDistance,
   normalizeZipCode,
   requestJson,
@@ -27,8 +28,8 @@ module.exports = async (request, response) => {
     return;
   }
 
-  const zipCode = normalizeZipCode(request.query.zipCode || "10001");
-  const distance = normalizeDistance(request.query.distance || "25");
+  const zipCode = normalizeZipCode(getQueryValue(request.query, "zipCode", "10001"));
+  const distance = normalizeDistance(getQueryValue(request.query, "distance", "25"));
   const cacheKey = `airnow:${zipCode}:${distance}`;
   const cached = getCached(cacheKey);
 

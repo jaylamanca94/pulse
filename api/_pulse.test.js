@@ -3,6 +3,7 @@ const test = require("node:test");
 
 const {
   getCached,
+  getQueryValue,
   getText,
   normalizeDistance,
   normalizeZipCode,
@@ -19,6 +20,13 @@ test("getText trims strings and falls back for empty values", () => {
   assert.equal(getText("  AirNow  "), "AirNow");
   assert.equal(getText("   ", "fallback"), "fallback");
   assert.equal(getText(null, "fallback"), "fallback");
+});
+
+test("getQueryValue safely normalizes optional route query values", () => {
+  assert.equal(getQueryValue(undefined, "zipCode", "10001"), "10001");
+  assert.equal(getQueryValue({ zipCode: " 10001 " }, "zipCode"), "10001");
+  assert.equal(getQueryValue({ zipCode: ["90210", "10001"] }, "zipCode"), "90210");
+  assert.equal(getQueryValue({ zipCode: "" }, "zipCode", "10001"), "10001");
 });
 
 test("CSV parser preserves quoted commas and escaped quotes", () => {

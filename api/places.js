@@ -1,5 +1,6 @@
 const {
   getCached,
+  getQueryValue,
   getText,
   requestJson,
   sendMethodNotAllowed,
@@ -131,9 +132,10 @@ async function handler(request, response) {
   }
 
   try {
+    const query = request.query;
     const payload = await requestPlacesCounty({
-      stateAbbr: request.query.state || request.query.stateAbbr,
-      county: request.query.county
+      stateAbbr: getQueryValue(query, "state", getQueryValue(query, "stateAbbr")),
+      county: getQueryValue(query, "county")
     });
     sendJson(response, 200, payload, PLACES_CACHE_SECONDS);
   } catch (error) {
